@@ -19,6 +19,9 @@ export default {
       screens: {
         dark: { raw: "(prefers-color-scheme: dark)" },
       },
+      fontSize: {
+        md: "1.0625rem",
+      },
     },
   },
 };
