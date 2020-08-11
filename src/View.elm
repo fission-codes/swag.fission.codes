@@ -8,9 +8,9 @@ import Pages.PagePath as PagePath
 import Tailwind exposing (..)
 
 
-swagPage : Html msg
+swagPage : List (Html msg)
 swagPage =
-    div
+    [ div
         [ bg_gray_600
         , flex
         , flex_col
@@ -45,6 +45,7 @@ swagPage =
             ]
             [ text "We've had fun creating some developer-centric memes, characters, and illustrations. Fill out your postal mail address below and we'll send you some stickers... plus we're going to sign you up for our Fission Product Updates newsletter :)" ]
         ]
+    ]
 
 
 header : List (Attribute msg) -> Html msg

@@ -33,7 +33,7 @@ manifest =
     }
 
 
-main : Pages.Platform.Program Model Msg Metadata (Html Msg)
+main : Pages.Platform.Program Model Msg Metadata (List (Html Msg))
 main =
     Pages.Platform.init
         { init = \_ -> init
@@ -74,7 +74,11 @@ generateFiles siteMetadata =
         ]
 
 
-yamlDocument : { extension : String, metadata : Json.Decode.Decoder Metadata, body : String -> Result error (Html msg) }
+yamlDocument :
+    { extension : String
+    , metadata : Json.Decode.Decoder Metadata
+    , body : String -> Result error (List (Html msg))
+    }
 yamlDocument =
     { extension = "yml"
     , metadata = Json.Decode.succeed Metadata.LandingPage
@@ -117,7 +121,7 @@ view :
         }
     ->
         StaticHttp.Request
-            { view : Model -> Html Msg -> { title : String, body : Html Msg }
+            { view : Model -> List (Html Msg) -> { title : String, body : Html Msg }
             , head : List (Head.Tag Pages.PathKey)
             }
 view siteMetadata page =

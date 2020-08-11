@@ -4,10 +4,9 @@ import Html exposing (Html)
 import Metadata exposing (Metadata(..))
 
 
-view : Metadata -> Html msg -> { title : String, body : List (Html msg) }
+view : Metadata -> List (Html msg) -> { title : String, body : List (Html msg) }
 view LandingPage viewForPage =
     { title = "Get Fission Swag"
     , body =
-        [ viewForPage
-        ]
+        viewForPage
     }
