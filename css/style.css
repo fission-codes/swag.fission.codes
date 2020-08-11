@@ -1,0 +1,25 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css?family=Karla:400,400i,700,700i|Work+Sans:500,600,700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-white font-body min-h-screen text-gray-100;
+  text-rendering: optimizeLegibility;
+}
+
+p a[href] {
+  @apply underline;
+  text-decoration-color: rgb(100, 70, 250);
+  text-decoration-thickness: 1.5px;
+}
+
+/* Forms
+   ----- */
+
+input::placeholder,
+textarea::placeholder {
+  @apply opacity-100 text-gray-500;
+}

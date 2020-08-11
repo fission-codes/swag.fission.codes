@@ -1,7 +1,7 @@
-import "./style.css";
+import "./css/built.css";
 
-const { Elm } = require("./src/Main.elm");
-const pagesInit = require("elm-pages");
+import { Elm } from "./src/Main.elm";
+import pagesInit from "elm-pages";
 
 pagesInit({
   mainElmModule: Elm.Main,
