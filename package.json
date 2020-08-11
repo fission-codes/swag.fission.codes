@@ -9,8 +9,8 @@
     "serve": "http-server -p 3000 dist/",
     "pages:build": "elm-pages build",
     "pages:dev": "elm-pages develop",
-    "styles:dev": "etc css/style.css --config css/tailwind.config.js --elm-path gen/Tailwind.elm --output css/built.css",
-    "styles:prod": "NODE_ENV=production etc css/style.css --config css/tailwind.config.js --elm-path gen/Tailwind.elm --output css/built.css --purge-content dist/main.js"
+    "styles:dev": "etc css/style.css --config css/tailwind.config.js --elm-path src/Tailwind.elm --output css/built.css",
+    "styles:prod": "NODE_ENV=production etc css/style.css --config css/tailwind.config.js --elm-path src/Tailwind.elm --output css/built.css --purge-content dist/main.js"
   },
   "devDependencies": {
     "elm": "^0.19.1-3",
