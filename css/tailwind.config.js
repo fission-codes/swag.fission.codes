@@ -1,5 +1,6 @@
 import defaultTheme from "tailwindcss/defaultTheme.js";
 import * as kit from "fission-kit";
+import tailwindui from "@tailwindcss/ui";
 
 export default {
   theme: {
@@ -24,4 +25,7 @@ export default {
       },
     },
   },
+  plugins: [
+    tailwindui,
+  ],
 };

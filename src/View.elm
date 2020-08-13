@@ -1,7 +1,7 @@
 module View exposing (swagPage)
 
 import Html exposing (..)
-import Html.Attributes exposing (alt, height, href, src, style, title, width)
+import Html.Attributes exposing (alt, for, height, href, id, src, style, title, type_, width)
 import Pages exposing (images, pages)
 import Pages.ImagePath as ImagePath
 import Pages.PagePath as PagePath
@@ -170,20 +170,13 @@ textInput attributes info =
         , text_gray_300
         ]
         [ text info.title ]
-
     , input
         [ id info.id
-        , appearance_none
-        , type_ "text"
+        , form_input
         , block
         , w_full
-        , rounded_lg
-        , border_2
-        , border_gray_300
-        , p_2
-        , mt_2
-        , focus__border_purple
-        , hover__border_purple
+        , sm__text_sm
+        , sm__leading_5
         ]
         []
     ]
