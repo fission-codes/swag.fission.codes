@@ -45,6 +45,34 @@ swagPage =
             ]
             [ text "We've had fun creating some developer-centric memes, characters, and illustrations. Fill out your postal mail address below and we'll send you some stickers... plus we're going to sign you up for our Fission Product Updates newsletter :)" ]
         ]
+    , div
+        [ bg_white
+        , flex
+        , flex_col
+        , overflow_hidden
+        , px_8
+        , pt_12
+        , pb_16
+        , md__pb_24
+        ]
+        [ form
+            []
+            (List.concat
+                [ textInput []
+                    { id = "first-name"
+                    , title = "Your first name"
+                    }
+                , textInput []
+                    { id = "last-name"
+                    , title = "Your last name"
+                    }
+                , textInput []
+                    { id = "company-name"
+                    , title = "Company name"
+                    }
+                ]
+            )
+        ]
     ]
 
 
@@ -68,6 +96,10 @@ header attributes =
             [ ml_auto ]
             []
         ]
+
+
+
+-- IMAGES
 
 
 image : List (Attribute msg) -> { src : ImagePath.ImagePath pathKey, alt : String, title : String } -> Html msg
@@ -123,3 +155,35 @@ fissionLogo =
         , width = 144
         , height = 30
         }
+
+
+
+-- FORMS
+
+
+textInput : List (Attribute msg) -> { id : String, title : String } -> List (Html msg)
+textInput attributes info =
+    [ label
+        [ for info.id
+        , font_body
+        , text_md
+        , text_gray_300
+        ]
+        [ text info.title ]
+
+    , input
+        [ id info.id
+        , appearance_none
+        , type_ "text"
+        , block
+        , w_full
+        , rounded_lg
+        , border_2
+        , border_gray_300
+        , p_2
+        , mt_2
+        , focus__border_purple
+        , hover__border_purple
+        ]
+        []
+    ]
