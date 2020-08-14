@@ -1,6 +1,5 @@
 {
   "name": "swag-landing-page",
-  "type": "module",
   "private": true,
   "main": "index.js",
   "scripts": {

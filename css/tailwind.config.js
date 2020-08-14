@@ -1,8 +1,8 @@
-import defaultTheme from "tailwindcss/defaultTheme.js";
-import * as kit from "fission-kit";
-import tailwindui from "@tailwindcss/ui";
+const defaultTheme = require("tailwindcss/defaultTheme.js");
+const kit = require("fission-kit");
+const tailwindui = require("@tailwindcss/ui");
 
-export default {
+module.exports = {
   purge: [
     './src/*.elm',
     './src/**/*.elm',
