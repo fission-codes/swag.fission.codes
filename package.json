@@ -4,13 +4,13 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "build": "npm run pages:build && npm run styles:prod && npm run pages:build",
-    "dev": "npm run styles:dev && npm run pages:dev",
+    "build": "npm run pages:build && npm run styles:build && npm run pages:build",
+    "dev": "npm run styles:build && npm run pages:dev & npm run styles:watch",
     "serve": "http-server -p 3000 dist/",
     "pages:build": "elm-pages build",
     "pages:dev": "elm-pages develop",
-    "styles:dev": "etc css/style.css --config css/tailwind.config.js --elm-path src/Tailwind.elm --output css/built.css",
-    "styles:prod": "NODE_ENV=production etc css/style.css --config css/tailwind.config.js --elm-path src/Tailwind.elm --output css/built.css --purge-content dist/main.js"
+    "styles:build": "npx postcss css/style.css -o css/built.css --config css/postcss.config.js",
+    "styles:watch": "npx postcss css/style.css -o css/built.css --config css/postcss.config.js --watch"
   },
   "devDependencies": {
     "@tailwindcss/ui": "^0.5.0",

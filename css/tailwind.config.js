@@ -3,6 +3,11 @@ import * as kit from "fission-kit";
 import tailwindui from "@tailwindcss/ui";
 
 export default {
+  purge: [
+    './src/*.elm',
+    './src/**/*.elm',
+  ],
+
   theme: {
     colors: {
       ...kit.dasherizeObjectKeys(kit.colors),
@@ -25,6 +30,7 @@ export default {
       },
     },
   },
+
   plugins: [
     tailwindui,
   ],

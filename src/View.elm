@@ -1,59 +1,37 @@
 module View exposing (swagPage)
 
 import Html exposing (..)
-import Html.Attributes exposing (alt, for, height, href, id, src, style, title, type_, width)
+import Html.Attributes exposing (alt, class, for, height, href, id, src, style, title, type_, width)
 import Pages exposing (images, pages)
 import Pages.ImagePath as ImagePath
 import Pages.PagePath as PagePath
-import Tailwind exposing (..)
 
 
 swagPage : List (Html msg)
 swagPage =
     [ div
-        [ bg_gray_600
-        , flex
-        , flex_col
-        , overflow_hidden
-        , px_8
-        , pb_16
-        , md__pb_24
-        , md__min_h_screen
+        [ class "bg_gray_600 flex flex_col overflow_hidden px_8 pb_16 md__pb_24 md__min_h_screen"
         ]
         [ header []
-        , image [ mt_6 ]
+        , image [ class "mt_6" ]
             { src = images.headerIllustration
             , alt = "Swag Stickers Illustration"
             , title = "Swag Stickers Illustration"
             }
         , image
-            [ mt_6
-            , w_48
-            , mx_auto
+            [ class "mt_6 w_48 mx_auto"
             ]
             { src = images.swagLogoVertical
             , alt = "Swag Logo"
             , title = "Swag Logo"
             }
         , p
-            [ mt_6
-            , text_center
-            , text_gray_300
-            , font_body
-            , text_md
-            , leading_relaxed
+            [ class "mt_6 text_center text_gray_300 font_body text_md leading_relaxed"
             ]
             [ text "We've had fun creating some developer-centric memes, characters, and illustrations. Fill out your postal mail address below and we'll send you some stickers... plus we're going to sign you up for our Fission Product Updates newsletter :)" ]
         ]
     , div
-        [ bg_white
-        , flex
-        , flex_col
-        , overflow_hidden
-        , px_8
-        , pt_12
-        , pb_16
-        , md__pb_24
+        [ class "bg_white flex flex_col overflow_hidden px_8 pt_12 pb_16 md__pb_24"
         ]
         [ form
             []
@@ -79,13 +57,8 @@ swagPage =
 header : List (Attribute msg) -> Html msg
 header attributes =
     div
-        ([ border_b
-         , style "border-bottom-color" "rgba(165, 167, 184, 0.5)"
-         , container
-         , flex
-         , items_center
-         , mx_auto
-         , py_6
+        ([ style "border-bottom-color" "rgba(165, 167, 184, 0.5)"
+         , class "border_b container flex items_center mx_auto py_6"
          ]
             ++ attributes
         )
@@ -93,7 +66,7 @@ header attributes =
             [ href (PagePath.toString pages.index) ]
             [ fissionLogo ]
         , div
-            [ ml_auto ]
+            [ class "ml_auto" ]
             []
         ]
 
@@ -165,18 +138,12 @@ textInput : List (Attribute msg) -> { id : String, title : String } -> List (Htm
 textInput attributes info =
     [ label
         [ for info.id
-        , font_body
-        , text_md
-        , text_gray_300
+        , class "font_body text_md text_gray_300"
         ]
         [ text info.title ]
     , input
         [ id info.id
-        , form_input
-        , block
-        , w_full
-        , sm__text_sm
-        , sm__leading_5
+        , class "form_input text_purple block w_full sm__text_sm sm__leading_5"
         ]
         []
     ]
