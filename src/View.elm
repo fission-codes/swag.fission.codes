@@ -10,28 +10,28 @@ import Pages.PagePath as PagePath
 swagPage : List (Html msg)
 swagPage =
     [ div
-        [ class "bg_gray_600 flex flex_col overflow_hidden px_8 pb_16 md__pb_24 md__min_h_screen"
+        [ class "bg-gray-600 flex flex-col overflow-hidden px-8 pb-16 md:pb-24 md:min-h-screen"
         ]
         [ header []
-        , image [ class "mt_6" ]
+        , image [ class "mt-6" ]
             { src = images.headerIllustration
             , alt = "Swag Stickers Illustration"
             , title = "Swag Stickers Illustration"
             }
         , image
-            [ class "mt_6 w_48 mx_auto"
+            [ class "mt-6 w-48 mx-auto"
             ]
             { src = images.swagLogoVertical
             , alt = "Swag Logo"
             , title = "Swag Logo"
             }
         , p
-            [ class "mt_6 text_center text_gray_300 font_body text_md leading_relaxed"
+            [ class "mt-6 text-center text-gray-300 font-body text-md leading-relaxed"
             ]
             [ text "We've had fun creating some developer-centric memes, characters, and illustrations. Fill out your postal mail address below and we'll send you some stickers... plus we're going to sign you up for our Fission Product Updates newsletter :)" ]
         ]
     , div
-        [ class "bg_white flex flex_col overflow_hidden px_8 pt_12 pb_16 md__pb_24"
+        [ class "bg-white flex flex-col overflow-hidden px-8 pt-12 pb-16 md:pb-24"
         ]
         [ form
             []
@@ -58,7 +58,7 @@ header : List (Attribute msg) -> Html msg
 header attributes =
     div
         ([ style "border-bottom-color" "rgba(165, 167, 184, 0.5)"
-         , class "border_b container flex items_center mx_auto py_6"
+         , class "border-b container flex items-center mx-auto py-6"
          ]
             ++ attributes
         )
@@ -66,7 +66,7 @@ header attributes =
             [ href (PagePath.toString pages.index) ]
             [ fissionLogo ]
         , div
-            [ class "ml_auto" ]
+            [ class "ml-auto" ]
             []
         ]
 
@@ -138,12 +138,12 @@ textInput : List (Attribute msg) -> { id : String, title : String } -> List (Htm
 textInput attributes info =
     [ label
         [ for info.id
-        , class "font_body text_md text_gray_300"
+        , class "font-body text-md text-gray-300"
         ]
         [ text info.title ]
     , input
         [ id info.id
-        , class "form_input text_purple block w_full sm__text_sm sm__leading_5"
+        , class "form-input text-purple block w-full sm:text-sm sm:leading-5"
         ]
         []
     ]
