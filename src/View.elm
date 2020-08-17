@@ -9,27 +9,7 @@ import Pages.PagePath as PagePath
 
 swagPage : List (Html msg)
 swagPage =
-    [ div
-        [ class "bg-gray-600 flex flex-col overflow-hidden px-8 pb-16 md:pb-24 md:min-h-screen"
-        ]
-        [ header []
-        , image [ class "mt-6" ]
-            { src = images.headerIllustration
-            , alt = "Swag Stickers Illustration"
-            , title = "Swag Stickers Illustration"
-            }
-        , image
-            [ class "mt-6 w-48 mx-auto"
-            ]
-            { src = images.swagLogoVertical
-            , alt = "Swag Logo"
-            , title = "Swag Logo"
-            }
-        , p
-            [ class "mt-6 text-center text-gray-300 font-body text-md leading-relaxed"
-            ]
-            [ text "We've had fun creating some developer-centric memes, characters, and illustrations. Fill out your postal mail address below and we'll send you some stickers... plus we're going to sign you up for our Fission Product Updates newsletter :)" ]
-        ]
+    [ hero
     , div
         [ class "bg-white flex flex-col overflow-hidden px-8 py-10 md:py-24"
         ]
@@ -79,6 +59,10 @@ swagPage =
     ]
 
 
+
+-- HEADER
+
+
 header : List (Attribute msg) -> Html msg
 header attributes =
     div
@@ -94,6 +78,10 @@ header attributes =
             [ class "ml-auto" ]
             []
         ]
+
+
+
+-- FOOTER
 
 
 footer : List (Attribute msg) -> List (Html msg) -> Html msg
@@ -132,6 +120,46 @@ footerLink label url =
         , class "ml-4 text-gray-300 underline"
         ]
         [ text label ]
+
+
+
+-- HERO
+
+
+hero : Html msg
+hero =
+    div
+        [ class "bg-gray-600 flex flex-col overflow-hidden px-8 pb-16"
+        , class "md:pb-24"
+        ]
+        [ header []
+        , div
+            [ class "flex flex-col container mx-auto"
+            , class "md:grid md:grid-cols-11 md:gap-3 md:mt-10"
+            ]
+            [ image
+                [ class "mt-6"
+                , class "md:col-start-1 md:col-end-6 md:row-span-2"
+                ]
+                { src = images.headerIllustration
+                , alt = "Swag Stickers Illustration"
+                , title = "Swag Stickers Illustration"
+                }
+            , image
+                [ class "mt-6 w-48 mx-auto"
+                , class "md:col-start-6 md:col-end-9 md:self-end md:ml-0 md:w-full"
+                ]
+                { src = images.swagLogoVertical
+                , alt = "Swag Logo"
+                , title = "Swag Logo"
+                }
+            , p
+                [ class "mt-6 text-center text-gray-300 font-body text-md leading-relaxed"
+                , class "md:col-start-6 md:col-end-10 md:text-left md:text-lg"
+                ]
+                [ text "We've had fun creating some developer-centric memes, characters, and illustrations. Fill out your postal mail address below and we'll send you some stickers... plus we're going to sign you up for our Fission Product Updates newsletter :)" ]
+            ]
+        ]
 
 
 
