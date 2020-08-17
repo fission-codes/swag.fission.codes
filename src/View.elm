@@ -31,7 +31,7 @@ swagPage =
             [ text "We've had fun creating some developer-centric memes, characters, and illustrations. Fill out your postal mail address below and we'll send you some stickers... plus we're going to sign you up for our Fission Product Updates newsletter :)" ]
         ]
     , div
-        [ class "bg-white flex flex-col overflow-hidden px-8 pt-12 pb-16 md:pb-24"
+        [ class "bg-white flex flex-col overflow-hidden px-8 py-10 md:py-24"
         ]
         [ form
             []
@@ -75,6 +75,7 @@ swagPage =
                 ]
             )
         ]
+    , footer [] []
     ]
 
 
@@ -93,6 +94,44 @@ header attributes =
             [ class "ml-auto" ]
             []
         ]
+
+
+footer : List (Attribute msg) -> List (Html msg) -> Html msg
+footer attributes content =
+    div
+        [ class "bg-white px-6" ]
+        [ div
+            [ id "footer"
+            , class "border-t border-gray-500 container flex items-center mx-auto py-8"
+            ]
+            [ badge
+            , div
+                [ class "block w-full text-center text-gray-300 ml-4 sm:text-left"
+                ]
+                [ text "Fission Internet Software" ]
+            , div [ class "ml-auto" ] content
+            ]
+        ]
+
+
+badge : Html msg
+badge =
+    Html.img
+        [ src (ImagePath.toString images.badgeSolidFaded)
+        , title "FISSION"
+        , width 30
+        ]
+        []
+
+
+footerLink : String -> String -> Html msg
+footerLink label url =
+    a
+        [ href url
+        , title (label ++ " Link")
+        , class "ml-4 text-gray-300 underline"
+        ]
+        [ text label ]
 
 
 
@@ -194,9 +233,11 @@ subtextHelp attributes content =
 
 callToActionButton : List (Attribute msg) -> String -> Html msg
 callToActionButton attributes content =
-    div [ class "my-10 flex flex-col" ]
+    div [ class "mt-10 flex flex-col" ]
         [ input
-            (class "mx-auto px-4 py-1 appearance-none bg-gray-200 cursor-pointer text-lg font-display font-medium leading-relaxed rounded-lg text-gray-600"
+            (class "mx-auto px-4 py-1 rounded-lg"
+                :: class "appearance-none bg-gray-200 cursor-pointer"
+                :: class "text-lg font-display font-medium leading-relaxed text-gray-600"
                 :: type_ "submit"
                 :: value content
                 :: attributes
