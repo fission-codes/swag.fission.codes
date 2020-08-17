@@ -30,6 +30,7 @@ const tailwindConfig = {
                 dark: { raw: "(prefers-color-scheme: dark)" },
             },
             fontSize: {
+                mds: "0.9375rem",
                 md: "1.0625rem",
             },
         },

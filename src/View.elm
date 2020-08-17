@@ -1,7 +1,7 @@
 module View exposing (swagPage)
 
 import Html exposing (..)
-import Html.Attributes exposing (alt, class, for, height, href, id, src, style, title, type_, width)
+import Html.Attributes exposing (alt, class, for, height, href, id, src, style, title, type_, value, width)
 import Pages exposing (images, pages)
 import Pages.ImagePath as ImagePath
 import Pages.PagePath as PagePath
@@ -39,15 +39,39 @@ swagPage =
                 [ textInput []
                     { id = "first-name"
                     , title = "Your first name"
+                    , subtext = []
                     }
                 , textInput []
                     { id = "last-name"
                     , title = "Your last name"
+                    , subtext = []
                     }
                 , textInput []
                     { id = "company-name"
                     , title = "Company name"
+                    , subtext = [ subtextHelp [] "Company or business name if this mailing address goes to an office" ]
                     }
+                , textInput []
+                    { id = "street-address"
+                    , title = "Street Address"
+                    , subtext = []
+                    }
+                , textInput []
+                    { id = "city-and-state"
+                    , title = "City and State"
+                    , subtext = [ subtextHelp [] "e.g. “Vancour, BC”, or “Nixa, Missouri”" ]
+                    }
+                , textInput []
+                    { id = "postal-code"
+                    , title = "Postal / ZIP Code"
+                    , subtext = []
+                    }
+                , textInput []
+                    { id = "country"
+                    , title = "Country"
+                    , subtext = []
+                    }
+                , [ callToActionButton [] "Get some stickers!" ]
                 ]
             )
         ]
@@ -134,16 +158,48 @@ fissionLogo =
 -- FORMS
 
 
-textInput : List (Attribute msg) -> { id : String, title : String } -> List (Html msg)
+textInput :
+    List (Attribute msg)
+    ->
+        { id : String
+        , title : String
+        , subtext : List (Html msg)
+        }
+    -> List (Html msg)
 textInput attributes info =
     [ label
         [ for info.id
-        , class "font-body text-md text-gray-300"
+        , class "block font-body text-md text-gray-300 mt-2"
         ]
         [ text info.title ]
-    , input
-        [ id info.id
-        , class "form-input text-purple block w-full sm:text-sm sm:leading-5"
-        ]
-        []
+    , div [ class "mt-2 relative rounded-md shadow-sm" ]
+        (input
+            [ id info.id
+            , class "form-input block w-full sm:text-sm sm:leading-5"
+            ]
+            []
+            :: info.subtext
+        )
     ]
+
+
+subtextHelp : List (Attribute msg) -> String -> Html msg
+subtextHelp attributes content =
+    p
+        (class "mt-2 text-mds text-gray-300"
+            :: attributes
+        )
+        [ text content ]
+
+
+callToActionButton : List (Attribute msg) -> String -> Html msg
+callToActionButton attributes content =
+    div [ class "my-10 flex flex-col" ]
+        [ input
+            (class "mx-auto px-4 py-1 appearance-none bg-gray-200 cursor-pointer text-lg font-display font-medium leading-relaxed rounded-lg text-gray-600"
+                :: type_ "submit"
+                :: value content
+                :: attributes
+            )
+            []
+        ]
