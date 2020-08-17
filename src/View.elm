@@ -2,6 +2,7 @@ module View exposing (swagPage)
 
 import Html exposing (..)
 import Html.Attributes exposing (alt, attribute, class, for, height, href, id, placeholder, src, style, title, type_, value, width)
+import Html.Extra exposing (..)
 import Pages exposing (images, pages)
 import Pages.ImagePath as ImagePath
 import Pages.PagePath as PagePath
@@ -138,56 +139,56 @@ formSection =
                 { attributes = []
                 , id = "first-name"
                 , title = "Your first name"
-                , subtext = []
+                , subtext = nothing
                 , error = Nothing
                 }
             , textInput
                 { attributes = []
                 , id = "last-name"
                 , title = "Your last name"
-                , subtext = []
+                , subtext = nothing
                 , error = Nothing
                 }
             , textInput
                 { attributes = []
                 , id = "email"
                 , title = "Your email address"
-                , subtext = []
+                , subtext = nothing
                 , error = Just { id = "email-error", description = "You have to enter a valid email address." }
                 }
             , textInput
                 { attributes = []
                 , id = "company-name"
                 , title = "Company name"
-                , subtext = [ subtextHelp [] "Company or business name if this mailing address goes to an office" ]
+                , subtext = helpSubtext [] "Company or business name if this mailing address goes to an office"
                 , error = Nothing
                 }
             , textInput
                 { attributes = []
                 , id = "street-address"
                 , title = "Street Address"
-                , subtext = []
+                , subtext = nothing
                 , error = Nothing
                 }
             , textInput
                 { attributes = []
                 , id = "city-and-state"
                 , title = "City and State"
-                , subtext = [ subtextHelp [] "e.g. “Vancour, BC”, or “Nixa, Missouri”" ]
+                , subtext = helpSubtext [] "e.g. “Vancour, BC”, or “Nixa, Missouri”"
                 , error = Nothing
                 }
             , textInput
                 { attributes = []
                 , id = "postal-code"
                 , title = "Postal / ZIP Code"
-                , subtext = []
+                , subtext = nothing
                 , error = Nothing
                 }
             , textInput
                 { attributes = []
                 , id = "country"
                 , title = "Country"
-                , subtext = []
+                , subtext = nothing
                 , error = Nothing
                 }
             , callToActionButton [] "Get some stickers!"
@@ -262,7 +263,7 @@ textInput :
     { attributes : List (Attribute msg)
     , id : String
     , title : String
-    , subtext : List (Html msg)
+    , subtext : Html msg
     , error : Maybe { id : String, description : String }
     }
     -> Html msg
@@ -283,53 +284,45 @@ textInput info =
                         , class "pr-10 border-red text-red placeholder-red focus:border-red focus:shadow-outline-red"
                         ]
                     , errorIcon =
-                        [ div [ class "absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" ]
+                        div [ class "absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" ]
                             [ warningIcon ]
-                        ]
                     , errorSubtext =
-                        [ p [ class "mt-2 text-mds text-red", id error.id ]
+                        p [ class "mt-2 text-mds text-red", id error.id ]
                             [ text error.description ]
-                        ]
                     }
 
                 Nothing ->
                     { errorInputAttributes = []
-                    , errorIcon = []
-                    , errorSubtext = []
+                    , errorIcon = nothing
+                    , errorSubtext = nothing
                     }
     in
     div [ class "lg:col-start-3 lg:col-end-10" ]
-        (List.concat
-            [ [ label
-                    [ for info.id
-                    , class "block font-body text-md text-gray-300 mt-2"
-                    ]
-                    [ text info.title ]
-              , div [ class "mt-2 relative rounded-md shadow-sm" ]
-                    (List.concat
-                        [ [ input
-                                (List.concat
-                                    [ [ id info.id
-                                      , class "form-input block w-full sm:text-sm sm:leading-5"
-                                      ]
-                                    , info.attributes
-                                    , errorInputAttributes
-                                    ]
-                                )
-                                []
-                          ]
-                        , errorIcon
-                        ]
-                    )
-              ]
-            , errorSubtext
-            , info.subtext
+        [ label
+            [ for info.id
+            , class "block font-body text-md text-gray-300 mt-2"
             ]
-        )
+            [ text info.title ]
+        , div [ class "mt-2 relative rounded-md shadow-sm" ]
+            [ input
+                (List.concat
+                    [ [ id info.id
+                      , class "form-input block w-full sm:text-sm sm:leading-5"
+                      ]
+                    , info.attributes
+                    , errorInputAttributes
+                    ]
+                )
+                []
+            , errorIcon
+            ]
+        , errorSubtext
+        , info.subtext
+        ]
 
 
-subtextHelp : List (Attribute msg) -> String -> Html msg
-subtextHelp attributes content =
+helpSubtext : List (Attribute msg) -> String -> Html msg
+helpSubtext attributes content =
     p
         (class "mt-2 text-mds text-gray-300"
             :: attributes
