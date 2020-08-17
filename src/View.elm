@@ -1,10 +1,12 @@
 module View exposing (swagPage)
 
 import Html exposing (..)
-import Html.Attributes exposing (alt, class, for, height, href, id, src, style, title, type_, value, width)
+import Html.Attributes exposing (alt, attribute, class, for, height, href, id, placeholder, src, style, title, type_, value, width)
 import Pages exposing (images, pages)
 import Pages.ImagePath as ImagePath
 import Pages.PagePath as PagePath
+import Svg
+import Svg.Attributes as SvgA
 
 
 swagPage : List (Html msg)
@@ -48,7 +50,7 @@ footer attributes content =
             [ id "footer"
             , class "border-t border-gray-500 container flex items-center mx-auto py-8"
             ]
-            [ badge
+            [ fissionBadge
             , div
                 [ class "block w-full text-center text-gray-300 ml-4 sm:text-left"
                 ]
@@ -58,9 +60,9 @@ footer attributes content =
         ]
 
 
-badge : Html msg
-badge =
-    Html.img
+fissionBadge : Html msg
+fissionBadge =
+    img
         [ src (ImagePath.toString images.badgeSolidFaded)
         , title "FISSION"
         , width 30
@@ -137,42 +139,56 @@ formSection =
                 , id = "first-name"
                 , title = "Your first name"
                 , subtext = []
+                , error = Nothing
                 }
             , textInput
                 { attributes = []
                 , id = "last-name"
                 , title = "Your last name"
                 , subtext = []
+                , error = Nothing
+                }
+            , textInput
+                { attributes = []
+                , id = "email"
+                , title = "Your email address"
+                , subtext = []
+                , error = Just { id = "email-error", description = "You have to enter a valid email address." }
                 }
             , textInput
                 { attributes = []
                 , id = "company-name"
                 , title = "Company name"
                 , subtext = [ subtextHelp [] "Company or business name if this mailing address goes to an office" ]
+                , error = Nothing
                 }
             , textInput
                 { attributes = []
                 , id = "street-address"
                 , title = "Street Address"
                 , subtext = []
+                , error = Nothing
                 }
             , textInput
                 { attributes = []
                 , id = "city-and-state"
                 , title = "City and State"
                 , subtext = [ subtextHelp [] "e.g. “Vancour, BC”, or “Nixa, Missouri”" ]
+                , error = Nothing
                 }
             , textInput
                 { attributes = []
                 , id = "postal-code"
                 , title = "Postal / ZIP Code"
                 , subtext = []
+                , error = Nothing
                 }
             , textInput
                 { attributes = []
                 , id = "country"
                 , title = "Country"
                 , subtext = []
+                , error = Nothing
                 }
             , callToActionButton [] "Get some stickers!"
             ]
@@ -247,25 +263,69 @@ textInput :
     , id : String
     , title : String
     , subtext : List (Html msg)
+    , error : Maybe { id : String, description : String }
     }
     -> Html msg
 textInput info =
+    let
+        warningIcon =
+            Svg.svg [ attribute "class" "h-5 w-5 text-red", SvgA.fill "currentColor", SvgA.viewBox "0 0 20 20" ]
+                [ Svg.path [ attribute "clip-rule" "evenodd", SvgA.d "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z", attribute "fill-rule" "evenodd" ]
+                    []
+                ]
+
+        { errorInputAttributes, errorIcon, errorSubtext } =
+            case info.error of
+                Just error ->
+                    { errorInputAttributes =
+                        [ attribute "aria-describedby" error.id
+                        , attribute "aria-invalid" "true"
+                        , class "pr-10 border-red text-red placeholder-red focus:border-red focus:shadow-outline-red"
+                        ]
+                    , errorIcon =
+                        [ div [ class "absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" ]
+                            [ warningIcon ]
+                        ]
+                    , errorSubtext =
+                        [ p [ class "mt-2 text-mds text-red", id error.id ]
+                            [ text error.description ]
+                        ]
+                    }
+
+                Nothing ->
+                    { errorInputAttributes = []
+                    , errorIcon = []
+                    , errorSubtext = []
+                    }
+    in
     div [ class "lg:col-start-3 lg:col-end-10" ]
-        [ label
-            [ for info.id
-            , class "block font-body text-md text-gray-300 mt-2"
+        (List.concat
+            [ [ label
+                    [ for info.id
+                    , class "block font-body text-md text-gray-300 mt-2"
+                    ]
+                    [ text info.title ]
+              , div [ class "mt-2 relative rounded-md shadow-sm" ]
+                    (List.concat
+                        [ [ input
+                                (List.concat
+                                    [ [ id info.id
+                                      , class "form-input block w-full sm:text-sm sm:leading-5"
+                                      ]
+                                    , info.attributes
+                                    , errorInputAttributes
+                                    ]
+                                )
+                                []
+                          ]
+                        , errorIcon
+                        ]
+                    )
+              ]
+            , errorSubtext
+            , info.subtext
             ]
-            [ text info.title ]
-        , div [ class "mt-2 relative rounded-md shadow-sm" ]
-            (input
-                (id info.id
-                    :: class "form-input block w-full sm:text-sm sm:leading-5"
-                    :: info.attributes
-                )
-                []
-                :: info.subtext
-            )
-        ]
+        )
 
 
 subtextHelp : List (Attribute msg) -> String -> Html msg
