@@ -38,10 +38,11 @@ const tailwindConfig = {
             default: {
                 input: {
                     borderRadius: theme('borderRadius.lg'),
-                    borderColor: theme('colors.gray.300'),
+                    borderColor: kit.colors.gray_300,
                     borderWidth: '2px',
                     '&:focus': {
-                        border: theme('colors.purple'),
+                        borderColor: theme('colors.purple'),
+                        boxShadow: undefined,
                     }
                 },
             },
@@ -52,7 +53,6 @@ const tailwindConfig = {
         tailwindui,
     ],
 };
-
 
 export default process.env["NODE_ENV"] === "production" ?
     [
