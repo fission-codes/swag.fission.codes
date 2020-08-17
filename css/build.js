@@ -1,70 +1,15 @@
-import { promises as fs, watchFile } from "fs";
+import { promises as fs, watch, watchFile } from "fs";
 import postcss from "postcss";
 
-import tailwindcss from "tailwindcss";
-import autoprefixer from "autoprefixer";
 
-import defaultTheme from "tailwindcss/defaultTheme.js";
-import * as kit from "fission-kit";
-import tailwindui from "@tailwindcss/ui";
-
-
-// CONFIG
-
-
-const tailwindConfig = {
-    purge: [
-        './src/*.elm',
-        './src/**/*.elm',
-    ],
-
-    theme: {
-        colors: {
-            ...kit.dasherizeObjectKeys(kit.colors),
-        },
-
-        fontFamily: {
-            ...defaultTheme.fontFamily,
-
-            body: [`"${kit.fonts.body}"`, ...defaultTheme.fontFamily.sans],
-            display: [`"${kit.fonts.display}"`, ...defaultTheme.fontFamily.serif],
-            mono: [`"${kit.fonts.mono}"`, ...defaultTheme.fontFamily.mono],
-        },
-
-        extend: {
-            screens: {
-                dark: { raw: "(prefers-color-scheme: dark)" },
-            },
-            fontSize: {
-                md: "1.0625rem",
-            },
-        },
-    },
-
-    plugins: [
-        tailwindui,
-    ],
-};
-
-
-const plugins = process.env["NODE_ENV"] === "production" ?
-    [
-        tailwindcss(tailwindConfig),
-        autoprefixer,
-    ] : [
-        tailwindcss(tailwindConfig),
-    ];
-
-
-// THE BUILD ITSELF
-
-
+const configFile = "./config.js"
 const from = "./css/style.css";
 const to = "./css/built.css";
 
 async function build() {
+    const { default: config } = await import(configFile);
     const input = await fs.readFile(from);
-    const result = await postcss(plugins).process(input, { from, to });
+    const result = await postcss(config).process(input, { from, to });
     await fs.writeFile(to, result.css);
 }
 
@@ -73,13 +18,16 @@ async function watchAndBuild() {
 
     console.log("Watching for file changes.");
 
-    watchFile(from, {}, async () => {
-        console.log(from + " changed. Rebuilding.");
+    const rebuild = file => async () => {
+        console.log(file + " changed. Rebuilding.");
 
         await build();
 
         console.log("Built.");
-    });
+    }
+
+    watchFile(from, {}, rebuild(from));
+    watchFile("./css/config.js", {}, rebuild("./css/config.js"));
 }
 
 if (process.argv.find(arg => arg === "--watch") != null) {
