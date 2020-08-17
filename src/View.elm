@@ -10,51 +10,7 @@ import Pages.PagePath as PagePath
 swagPage : List (Html msg)
 swagPage =
     [ hero
-    , div
-        [ class "bg-white flex flex-col overflow-hidden px-8 py-10 md:py-24"
-        ]
-        [ form
-            []
-            (List.concat
-                [ textInput []
-                    { id = "first-name"
-                    , title = "Your first name"
-                    , subtext = []
-                    }
-                , textInput []
-                    { id = "last-name"
-                    , title = "Your last name"
-                    , subtext = []
-                    }
-                , textInput []
-                    { id = "company-name"
-                    , title = "Company name"
-                    , subtext = [ subtextHelp [] "Company or business name if this mailing address goes to an office" ]
-                    }
-                , textInput []
-                    { id = "street-address"
-                    , title = "Street Address"
-                    , subtext = []
-                    }
-                , textInput []
-                    { id = "city-and-state"
-                    , title = "City and State"
-                    , subtext = [ subtextHelp [] "e.g. “Vancour, BC”, or “Nixa, Missouri”" ]
-                    }
-                , textInput []
-                    { id = "postal-code"
-                    , title = "Postal / ZIP Code"
-                    , subtext = []
-                    }
-                , textInput []
-                    { id = "country"
-                    , title = "Country"
-                    , subtext = []
-                    }
-                , [ callToActionButton [] "Get some stickers!" ]
-                ]
-            )
-        ]
+    , formSection
     , footer [] []
     ]
 
@@ -159,6 +115,59 @@ hero =
                 ]
                 [ text "We've had fun creating some developer-centric memes, characters, and illustrations. Fill out your postal mail address below and we'll send you some stickers... plus we're going to sign you up for our Fission Product Updates newsletter :)" ]
             ]
+        ]
+
+
+
+-- FORM SECTION
+
+
+formSection : Html msg
+formSection =
+    div
+        [ class "bg-white flex flex-col overflow-hidden px-8 py-10 md:py-24"
+        ]
+        [ form
+            []
+            (List.concat
+                [ textInput []
+                    { id = "first-name"
+                    , title = "Your first name"
+                    , subtext = []
+                    }
+                , textInput []
+                    { id = "last-name"
+                    , title = "Your last name"
+                    , subtext = []
+                    }
+                , textInput []
+                    { id = "company-name"
+                    , title = "Company name"
+                    , subtext = [ subtextHelp [] "Company or business name if this mailing address goes to an office" ]
+                    }
+                , textInput []
+                    { id = "street-address"
+                    , title = "Street Address"
+                    , subtext = []
+                    }
+                , textInput []
+                    { id = "city-and-state"
+                    , title = "City and State"
+                    , subtext = [ subtextHelp [] "e.g. “Vancour, BC”, or “Nixa, Missouri”" ]
+                    }
+                , textInput []
+                    { id = "postal-code"
+                    , title = "Postal / ZIP Code"
+                    , subtext = []
+                    }
+                , textInput []
+                    { id = "country"
+                    , title = "Country"
+                    , subtext = []
+                    }
+                , [ callToActionButton [] "Get some stickers!" ]
+                ]
+            )
         ]
 
 
