@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npm run styles:build && npm run pages:build",
-    "dev": "npm run styles:build && npm run pages:dev & npm run styles:watch",
+    "start": "npm run styles:build && npm run pages:dev & npm run styles:watch",
     "serve": "http-server -p 3000 dist/",
     "pages:build": "elm-pages build",
     "pages:dev": "elm-pages develop",

@@ -135,56 +135,61 @@ formSection =
             [ class "flex flex-col container mx-auto"
             , class "lg:grid lg:grid-cols-11 lg:gap-3"
             ]
-            [ textInput
-                { attributes = []
-                , id = "first-name"
-                , title = "Your first name"
-                , subtext = nothing
-                , error = Nothing
-                }
-            , textInput
-                { attributes = []
-                , id = "last-name"
-                , title = "Your last name"
-                , subtext = nothing
-                , error = Nothing
-                }
-            , textInput
+            [ div
+                [ class "flex flex-col w-full"
+                , class "lg:flex-row lg:col-start-3 lg:col-end-10"
+                ]
+                [ textInput [ class "w-full", style "margin-right" "6px" ]
+                    { attributes = []
+                    , id = "first-name"
+                    , title = "Your first name"
+                    , subtext = nothing
+                    , error = Nothing
+                    }
+                , textInput [ class "w-full", style "margin-left" "6px" ]
+                    { attributes = []
+                    , id = "last-name"
+                    , title = "Your last name"
+                    , subtext = nothing
+                    , error = Nothing
+                    }
+                ]
+            , textInput [ class "lg:col-start-3 lg:col-end-10" ]
                 { attributes = []
                 , id = "email"
-                , title = "Your email address"
+                , title = "Email"
                 , subtext = nothing
-                , error = Just { id = "email-error", description = "You have to enter a valid email address." }
+                , error = Nothing
                 }
-            , textInput
+            , textInput [ class "lg:col-start-3 lg:col-end-10" ]
                 { attributes = []
                 , id = "company-name"
                 , title = "Company name"
                 , subtext = helpSubtext [] "Company or business name if this mailing address goes to an office"
                 , error = Nothing
                 }
-            , textInput
+            , textInput [ class "lg:col-start-3 lg:col-end-7" ]
                 { attributes = []
                 , id = "street-address"
                 , title = "Street Address"
                 , subtext = nothing
                 , error = Nothing
                 }
-            , textInput
+            , textInput [ class "lg:col-start-7 lg:col-end-10" ]
                 { attributes = []
                 , id = "city-and-state"
                 , title = "City and State"
                 , subtext = helpSubtext [] "e.g. “Vancour, BC”, or “Nixa, Missouri”"
                 , error = Nothing
                 }
-            , textInput
+            , textInput [ class "lg:col-start-3 lg:col-end-6" ]
                 { attributes = []
                 , id = "postal-code"
                 , title = "Postal / ZIP Code"
                 , subtext = nothing
                 , error = Nothing
                 }
-            , textInput
+            , textInput [ class "lg:col-start-6 lg:col-end-10" ]
                 { attributes = []
                 , id = "country"
                 , title = "Country"
@@ -260,14 +265,16 @@ fissionLogo =
 
 
 textInput :
-    { attributes : List (Attribute msg)
-    , id : String
-    , title : String
-    , subtext : Html msg
-    , error : Maybe { id : String, description : String }
-    }
+    List (Attribute msg)
+    ->
+        { attributes : List (Attribute msg)
+        , id : String
+        , title : String
+        , subtext : Html msg
+        , error : Maybe { id : String, description : String }
+        }
     -> Html msg
-textInput info =
+textInput attributes info =
     let
         warningIcon =
             Svg.svg [ attribute "class" "h-5 w-5 text-red", SvgA.fill "currentColor", SvgA.viewBox "0 0 20 20" ]
@@ -297,7 +304,7 @@ textInput info =
                     , errorSubtext = nothing
                     }
     in
-    div [ class "lg:col-start-3 lg:col-end-10" ]
+    div attributes
         [ label
             [ for info.id
             , class "block font-body text-md text-gray-300 mt-2"
