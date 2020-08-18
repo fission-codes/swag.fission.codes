@@ -139,14 +139,14 @@ formSection =
                 [ class "flex flex-col w-full"
                 , class "lg:flex-row lg:col-start-3 lg:col-end-10"
                 ]
-                [ textInput [ class "w-full", style "margin-right" "6px" ]
+                [ textInput [ class "w-full lg:mr-6px" ]
                     { attributes = []
                     , id = "first-name"
                     , title = "Your first name"
                     , subtext = nothing
                     , error = Nothing
                     }
-                , textInput [ class "w-full", style "margin-left" "6px" ]
+                , textInput [ class "w-full lg:ml-6px" ]
                     { attributes = []
                     , id = "last-name"
                     , title = "Your last name"
@@ -314,7 +314,7 @@ textInput attributes info =
             [ input
                 (List.concat
                     [ [ id info.id
-                      , class "form-input block w-full sm:text-sm sm:leading-5"
+                      , class "form-input block w-full text-xl text-gray-200 sm:text-lg sm:leading-5"
                       ]
                     , info.attributes
                     , errorInputAttributes
@@ -347,6 +347,7 @@ callToActionButton attributes content =
             (class "mx-auto px-4 py-1 rounded-lg"
                 :: class "appearance-none bg-gray-200 cursor-pointer"
                 :: class "text-lg font-display font-medium leading-relaxed text-gray-600"
+                :: class "hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-300"
                 :: type_ "submit"
                 :: value content
                 :: attributes

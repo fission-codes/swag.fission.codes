@@ -33,6 +33,9 @@ const tailwindConfig = {
                 mds: "0.9375rem",
                 md: "1.0625rem",
             },
+            margin: {
+                "6px": "6px",
+            },
         },
 
         customForms: theme => ({
