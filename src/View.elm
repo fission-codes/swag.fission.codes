@@ -1,7 +1,7 @@
 module View exposing (swagPage)
 
 import Html exposing (..)
-import Html.Attributes exposing (alt, attribute, class, for, height, href, id, placeholder, src, style, title, type_, value, width)
+import Html.Attributes exposing (alt, attribute, autofocus, class, for, height, href, id, placeholder, src, style, title, type_, value, width)
 import Html.Extra exposing (..)
 import Pages exposing (images, pages)
 import Pages.ImagePath as ImagePath
@@ -140,7 +140,9 @@ formSection =
                 , class "lg:flex-row lg:col-start-3 lg:col-end-10"
                 ]
                 [ textInput [ class "w-full lg:mr-6px" ]
-                    { attributes = []
+                    { attributes =
+                        [ autofocus True -- Not sufficient. Loses focus on hydration :/ Need to Dom.focus on init
+                        ]
                     , id = "first-name"
                     , title = "Your first name"
                     , subtext = nothing

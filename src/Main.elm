@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import Browser.Dom as Dom
 import Color
 import Head
 import Head.Seo as Seo
@@ -14,6 +15,7 @@ import Pages.Manifest.Category
 import Pages.PagePath exposing (PagePath)
 import Pages.Platform
 import Pages.StaticHttp as StaticHttp
+import Task
 import View
 
 
@@ -94,7 +96,9 @@ type alias Model =
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model, Cmd.none )
+    ( Model
+    , Dom.focus "first-name" |> Task.attempt (\_ -> ())
+    )
 
 
 type alias Msg =
