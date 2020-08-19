@@ -98,7 +98,7 @@ hero =
             ]
             [ image
                 [ class "mt-6"
-                , class "lg:col-start-1 lg:col-end-6 lg:row-span-2"
+                , class "lg:col-start-1 lg:col-end-7 lg:row-span-2"
                 ]
                 { src = images.headerIllustration
                 , alt = "Swag Stickers Illustration"
@@ -106,7 +106,7 @@ hero =
                 }
             , image
                 [ class "mt-6 w-48 mx-auto"
-                , class "lg:col-start-6 lg:col-end-9 lg:self-end lg:ml-0 lg:w-full"
+                , class "lg:col-start-7 lg:col-end-10 lg:self-end lg:ml-0 lg:w-full"
                 ]
                 { src = images.swagLogoVertical
                 , alt = "Swag Logo"
@@ -114,7 +114,7 @@ hero =
                 }
             , p
                 [ class "mt-6 text-center text-gray-300 font-body text-lg leading-relaxed"
-                , class "lg:col-start-6 lg:col-end-10 lg:text-left lg:text-lg"
+                , class "lg:col-start-7 lg:col-end-11 lg:text-left lg:text-lg"
                 ]
                 [ text "We've had fun creating some developer-centric memes, characters, and illustrations. Fill out your postal mail address below and we'll send you some stickers... plus we're going to sign you up for our Fission Product Updates newsletter :)" ]
             ]
