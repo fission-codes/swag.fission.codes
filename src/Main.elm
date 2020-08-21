@@ -15,8 +15,8 @@ import Pages.Manifest.Category
 import Pages.PagePath exposing (PagePath)
 import Pages.Platform
 import Pages.StaticHttp as StaticHttp
+import SwagForm.View
 import Task
-import View
 
 
 manifest : Manifest.Config Pages.PathKey
@@ -83,10 +83,10 @@ yamlDocument :
     }
 yamlDocument =
     { extension = "yml"
-    , metadata = Json.Decode.succeed Metadata.LandingPage
+    , metadata = Json.Decode.succeed Metadata.PageSwagForm
     , body =
         \body ->
-            Ok View.swagPage
+            Ok SwagForm.View.swagPage
     }
 
 

@@ -1,4 +1,4 @@
-module View exposing (swagPage)
+module SwagForm.View exposing (swagPage)
 
 import Html exposing (..)
 import Html.Attributes exposing (action, alt, attribute, autofocus, class, for, height, href, id, method, name, placeholder, required, src, style, title, type_, value, width)
