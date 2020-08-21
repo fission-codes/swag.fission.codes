@@ -10,16 +10,7 @@ type alias ImagePath =
 
 
 type alias Model =
-    { swagForm :
-        { firstname : FormField
-        , lastname : FormField
-        , email : FormField
-        , company : FormField
-        , addressStreet : FormField
-        , addressCitystate : FormField
-        , addressPostal : FormField
-        , addressCountry : FormField
-        }
+    { swagForm : Dict String FormField
     }
 
 
@@ -27,5 +18,7 @@ type alias FormField =
     String
 
 
-type alias Msg =
-    ()
+type Msg
+    = OnFormFieldInput { id : String, value : String }
+    | OnFormSubmit
+    | FocusedForm

@@ -9,26 +9,15 @@ import Types exposing (..)
 
 init : ( Model, Cmd Msg )
 init =
-    ( { swagForm =
-            { firstname = ""
-            , lastname = ""
-            , email = ""
-            , company = ""
-            , addressStreet = ""
-            , addressCitystate = ""
-            , addressPostal = ""
-            , addressCountry = ""
-            }
+    ( { swagForm = Dict.empty
       }
-    , Dom.focus "FIRSTNAME" |> Task.attempt (\_ -> ())
+    , Dom.focus "FIRSTNAME" |> Task.attempt (\_ -> FocusedForm)
     )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        () ->
-            ( model, Cmd.none )
+    ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg

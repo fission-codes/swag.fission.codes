@@ -17,6 +17,7 @@ import Html.Attributes
         , value
         , width
         )
+import Html.Events as Events
 import Html.Extra exposing (..)
 import Pages exposing (images, pages)
 import Pages.ImagePath as ImagePath
@@ -29,6 +30,7 @@ swagPage :
     { form :
         { attributes : List (Attribute msg)
         , content : List (Html msg)
+        , onSubmit : msg
         }
     }
     -> Html msg
@@ -150,6 +152,7 @@ hero =
 formSection :
     { attributes : List (Attribute msg)
     , content : List (Html msg)
+    , onSubmit : msg
     }
     -> Html msg
 formSection element =
@@ -160,6 +163,7 @@ formSection element =
         [ form
             ([ class "flex flex-col container mx-auto"
              , class "lg:grid lg:grid-cols-22 lg:gap-3"
+             , Events.onSubmit element.onSubmit
              ]
                 ++ element.attributes
             )
@@ -306,10 +310,14 @@ textInput :
     , id : String
     , title : String
     , subtext : Html msg
-    , error : Maybe { id : String, description : String }
     }
+    ->
+        { value : String
+        , onInput : String -> msg
+        , error : Maybe { id : String, description : String }
+        }
     -> Html msg
-textInput info =
+textInput info state =
     let
         warningIcon =
             Svg.svg [ attribute "class" "h-5 w-5 text-red", SvgA.fill "currentColor", SvgA.viewBox "0 0 20 20" ]
@@ -318,7 +326,7 @@ textInput info =
                 ]
 
         { errorInputAttributes, errorIcon, errorSubtext } =
-            case info.error of
+            case state.error of
                 Just error ->
                     { errorInputAttributes =
                         [ attribute "aria-describedby" error.id
@@ -350,6 +358,8 @@ textInput info =
                 (List.concat
                     [ [ id info.id
                       , class "form-input block w-full text-xl text-gray-200 sm:text-lg sm:leading-5"
+                      , value state.value
+                      , Events.onInput state.onInput
                       ]
                     , info.attributes
                     , errorInputAttributes
@@ -372,8 +382,12 @@ helpSubtext attributes content =
         [ text content ]
 
 
-callToActionButton : List (Attribute msg) -> String -> Html msg
-callToActionButton attributes content =
+callToActionButton :
+    { attributes : List (Attribute msg)
+    , message : String
+    }
+    -> Html msg
+callToActionButton { attributes, message } =
     div
         [ class "mt-10 flex flex-col"
         , gridColumnStyle { start = First, end = Last }
@@ -384,7 +398,7 @@ callToActionButton attributes content =
                 :: class "text-lg font-display font-medium leading-relaxed text-gray-600"
                 :: class "hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-300"
                 :: type_ "submit"
-                :: value content
+                :: value message
                 :: attributes
             )
             []
