@@ -22,7 +22,7 @@ import View.SwagForm
 yamlDocument :
     { extension : String
     , metadata : Json.Decode.Decoder Frontmatter
-    , body : String -> Result error (Html Msg)
+    , body : String -> Result error (Model -> Html Msg)
     }
 yamlDocument =
     { extension = "yml"
@@ -35,127 +35,128 @@ yamlDocument =
                     "https://5d04d668.sibforms.com/serve/MUIEAE1F1kMPvB_leq-apIe4FvZagp1EgtljkIf1EQ-BDERfIN98YQhjbWjdTi-2eKy9IPUovj6kMItaZTVAodVJlyoTX8BPhS0LjzVaP6XSMnXu6Xey9Ez4VGzSV62IuIsnDS55QQiwcA7oRtB8aPU0EQ3AJG0dyICWT82taqDKeisgU1jdlnvk2Fj5oRFUiwsqYVIsHCL5ASEN"
             in
             Ok <|
-                View.SwagForm.swagPage
-                    { form =
-                        -- The hidden inputs and method + action attributes make it possible to submit with javascript turned off
-                        { attributes =
-                            [ method "POST"
-                            , action submissionUrl
-                            ]
-                        , onSubmit = OnFormSubmit { submissionUrl = submissionUrl }
-                        , content =
-                            [ Html.input [ type_ "hidden", name "locale", value "en" ] []
-                            , Html.input [ type_ "hidden", name "html_type", value "simple" ] []
-                            , View.SwagForm.textInput
-                                { attributes =
-                                    [ autofocus True
-                                    , name "FIRSTNAME"
-                                    ]
-                                , column = { start = View.SwagForm.First, end = View.SwagForm.Middle }
-                                , id = "FIRSTNAME"
-                                , title = "Your first name"
-                                , subtext = Html.nothing
-                                }
-                                { value = ""
-                                , error = Nothing
-                                , onInput = \value -> OnFormFieldInput { id = "FIRSTNAME", value = value }
-                                }
-                            , View.SwagForm.textInput
-                                { attributes =
-                                    [ name "LASTNAME"
-                                    ]
-                                , column = { start = View.SwagForm.Middle, end = View.SwagForm.Last }
-                                , id = "LASTNAME"
-                                , title = "Your last name"
-                                , subtext = Html.nothing
-                                }
-                                { value = ""
-                                , error = Nothing
-                                , onInput = \value -> OnFormFieldInput { id = "LASTNAME", value = value }
-                                }
-                            , View.SwagForm.textInput
-                                { attributes =
-                                    [ name "EMAIL"
-                                    ]
-                                , column = { start = View.SwagForm.First, end = View.SwagForm.Last }
-                                , id = "EMAIL"
-                                , title = "Email"
-                                , subtext = Html.nothing
-                                }
-                                { value = ""
-                                , error = Nothing
-                                , onInput = \value -> OnFormFieldInput { id = "EMAIL", value = value }
-                                }
-                            , View.SwagForm.textInput
-                                { attributes =
-                                    [ name "COMPANY"
-                                    ]
-                                , column = { start = View.SwagForm.First, end = View.SwagForm.Last }
-                                , id = "COMPANY"
-                                , title = "Company name"
-                                , subtext = View.SwagForm.helpSubtext [] "Company or business name if this mailing address goes to an office"
-                                }
-                                { value = ""
-                                , error = Nothing
-                                , onInput = \value -> OnFormFieldInput { id = "COMPANY", value = value }
-                                }
-                            , View.SwagForm.textInput
-                                { attributes =
-                                    [ name "ADDRESS_STREET"
-                                    ]
-                                , column = { start = View.SwagForm.First, end = View.SwagForm.Column5 }
-                                , id = "ADDRESS_STREET"
-                                , title = "Street Address"
-                                , subtext = Html.nothing
-                                }
-                                { value = ""
-                                , error = Nothing
-                                , onInput = \value -> OnFormFieldInput { id = "ADDRESS_STREET", value = value }
-                                }
-                            , View.SwagForm.textInput
-                                { attributes =
-                                    [ name "ADDRESS_CITYSTATE"
-                                    ]
-                                , column = { start = View.SwagForm.Column5, end = View.SwagForm.Last }
-                                , id = "ADDRESS_CITYSTATE"
-                                , title = "City and State"
-                                , subtext = View.SwagForm.helpSubtext [] "e.g. “Vancour, BC”, or “Nixa, Missouri”"
-                                }
-                                { value = ""
-                                , error = Nothing
-                                , onInput = \value -> OnFormFieldInput { id = "ADDRESS_CITYSTATE", value = value }
-                                }
-                            , View.SwagForm.textInput
-                                { attributes =
-                                    [ name "ADDRESS_POSTAL"
-                                    ]
-                                , column = { start = View.SwagForm.First, end = View.SwagForm.Column4 }
-                                , id = "ADDRESS_POSTAL"
-                                , title = "Postal / ZIP Code"
-                                , subtext = Html.nothing
-                                }
-                                { value = ""
-                                , error = Nothing
-                                , onInput = \value -> OnFormFieldInput { id = "ADDRESS_POSTAL", value = value }
-                                }
-                            , View.SwagForm.textInput
-                                { attributes =
-                                    [ name "ADDRESS_COUNTRY"
-                                    ]
-                                , column = { start = View.SwagForm.Column4, end = View.SwagForm.Last }
-                                , id = "ADDRESS_COUNTRY"
-                                , title = "Country"
-                                , subtext = Html.nothing
-                                }
-                                { value = ""
-                                , error = Nothing
-                                , onInput = \value -> OnFormFieldInput { id = "ADDRESS_COUNTRY", value = value }
-                                }
-                            , View.SwagForm.callToActionButton
-                                { attributes = []
-                                , message = "Get some stickers!"
-                                }
-                            ]
+                \model ->
+                    View.SwagForm.swagPage
+                        { form =
+                            -- The hidden inputs and method + action attributes make it possible to submit with javascript turned off
+                            { attributes =
+                                [ method "POST"
+                                , action submissionUrl
+                                ]
+                            , onSubmit = OnFormSubmit { submissionUrl = submissionUrl }
+                            , content =
+                                [ Html.input [ type_ "hidden", name "locale", value "en" ] []
+                                , Html.input [ type_ "hidden", name "html_type", value "simple" ] []
+                                , View.SwagForm.textInput
+                                    { attributes =
+                                        [ autofocus True
+                                        , name "FIRSTNAME"
+                                        ]
+                                    , column = { start = View.SwagForm.First, end = View.SwagForm.Middle }
+                                    , id = "FIRSTNAME"
+                                    , title = "Your first name"
+                                    , subtext = Html.nothing
+                                    }
+                                    { value = ""
+                                    , error = Nothing
+                                    , onInput = \value -> OnFormFieldInput { id = "FIRSTNAME", value = value }
+                                    }
+                                , View.SwagForm.textInput
+                                    { attributes =
+                                        [ name "LASTNAME"
+                                        ]
+                                    , column = { start = View.SwagForm.Middle, end = View.SwagForm.Last }
+                                    , id = "LASTNAME"
+                                    , title = "Your last name"
+                                    , subtext = Html.nothing
+                                    }
+                                    { value = ""
+                                    , error = Nothing
+                                    , onInput = \value -> OnFormFieldInput { id = "LASTNAME", value = value }
+                                    }
+                                , View.SwagForm.textInput
+                                    { attributes =
+                                        [ name "EMAIL"
+                                        ]
+                                    , column = { start = View.SwagForm.First, end = View.SwagForm.Last }
+                                    , id = "EMAIL"
+                                    , title = "Email"
+                                    , subtext = Html.nothing
+                                    }
+                                    { value = ""
+                                    , error = Nothing
+                                    , onInput = \value -> OnFormFieldInput { id = "EMAIL", value = value }
+                                    }
+                                , View.SwagForm.textInput
+                                    { attributes =
+                                        [ name "COMPANY"
+                                        ]
+                                    , column = { start = View.SwagForm.First, end = View.SwagForm.Last }
+                                    , id = "COMPANY"
+                                    , title = "Company name"
+                                    , subtext = View.SwagForm.helpSubtext [] "Company or business name if this mailing address goes to an office"
+                                    }
+                                    { value = ""
+                                    , error = Nothing
+                                    , onInput = \value -> OnFormFieldInput { id = "COMPANY", value = value }
+                                    }
+                                , View.SwagForm.textInput
+                                    { attributes =
+                                        [ name "ADDRESS_STREET"
+                                        ]
+                                    , column = { start = View.SwagForm.First, end = View.SwagForm.Column5 }
+                                    , id = "ADDRESS_STREET"
+                                    , title = "Street Address"
+                                    , subtext = Html.nothing
+                                    }
+                                    { value = ""
+                                    , error = Nothing
+                                    , onInput = \value -> OnFormFieldInput { id = "ADDRESS_STREET", value = value }
+                                    }
+                                , View.SwagForm.textInput
+                                    { attributes =
+                                        [ name "ADDRESS_CITYSTATE"
+                                        ]
+                                    , column = { start = View.SwagForm.Column5, end = View.SwagForm.Last }
+                                    , id = "ADDRESS_CITYSTATE"
+                                    , title = "City and State"
+                                    , subtext = View.SwagForm.helpSubtext [] "e.g. “Vancour, BC”, or “Nixa, Missouri”"
+                                    }
+                                    { value = ""
+                                    , error = Nothing
+                                    , onInput = \value -> OnFormFieldInput { id = "ADDRESS_CITYSTATE", value = value }
+                                    }
+                                , View.SwagForm.textInput
+                                    { attributes =
+                                        [ name "ADDRESS_POSTAL"
+                                        ]
+                                    , column = { start = View.SwagForm.First, end = View.SwagForm.Column4 }
+                                    , id = "ADDRESS_POSTAL"
+                                    , title = "Postal / ZIP Code"
+                                    , subtext = Html.nothing
+                                    }
+                                    { value = ""
+                                    , error = Nothing
+                                    , onInput = \value -> OnFormFieldInput { id = "ADDRESS_POSTAL", value = value }
+                                    }
+                                , View.SwagForm.textInput
+                                    { attributes =
+                                        [ name "ADDRESS_COUNTRY"
+                                        ]
+                                    , column = { start = View.SwagForm.Column4, end = View.SwagForm.Last }
+                                    , id = "ADDRESS_COUNTRY"
+                                    , title = "Country"
+                                    , subtext = Html.nothing
+                                    }
+                                    { value = ""
+                                    , error = Nothing
+                                    , onInput = \value -> OnFormFieldInput { id = "ADDRESS_COUNTRY", value = value }
+                                    }
+                                , View.SwagForm.callToActionButton
+                                    { attributes = []
+                                    , message = "Get some stickers!"
+                                    }
+                                ]
+                            }
                         }
-                    }
     }
