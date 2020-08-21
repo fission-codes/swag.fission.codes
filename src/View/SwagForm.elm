@@ -1,4 +1,4 @@
-module SwagForm.View exposing (Alignment(..), callToActionButton, helpSubtext, swagPage, textInput)
+module View.SwagForm exposing (Alignment(..), callToActionButton, helpSubtext, swagPage, textInput)
 
 import Html exposing (..)
 import Html.Attributes exposing (action, alt, attribute, autofocus, class, for, height, href, id, method, name, placeholder, required, src, style, title, type_, value, width)

@@ -16,7 +16,6 @@ import Pages.PagePath exposing (PagePath)
 import Pages.Platform
 import Pages.StaticHttp as StaticHttp
 import State
-import SwagForm.View
 import Task
 import Types exposing (..)
 import View
