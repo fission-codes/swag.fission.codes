@@ -48,8 +48,7 @@ yamlDocument =
                             , Html.input [ type_ "hidden", name "html_type", value "simple" ] []
                             , View.SwagForm.textInput
                                 { attributes =
-                                    [ -- Not sufficient. Loses focus on hydration :/ Need to Dom.focus on init
-                                      autofocus True
+                                    [ autofocus True
                                     , name "FIRSTNAME"
                                     ]
                                 , column = { start = View.SwagForm.First, end = View.SwagForm.Middle }

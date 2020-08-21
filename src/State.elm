@@ -12,6 +12,9 @@ init : ( Model, Cmd Msg )
 init =
     ( { swagForm = Dict.empty
       }
+      -- We also need to focus the first form field here
+      -- setting 'autofocus' on the input is not sufficient:
+      -- It blurs when the content is hydrated.
     , Dom.focus "FIRSTNAME" |> Task.attempt (\_ -> FocusedForm)
     )
 
