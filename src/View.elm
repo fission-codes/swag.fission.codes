@@ -1,7 +1,7 @@
 module View exposing (swagPage)
 
 import Html exposing (..)
-import Html.Attributes exposing (alt, attribute, autofocus, class, for, height, href, id, placeholder, src, style, title, type_, value, width)
+import Html.Attributes exposing (action, alt, attribute, autofocus, class, for, height, href, id, method, name, placeholder, required, src, style, title, type_, value, width)
 import Html.Extra exposing (..)
 import Pages exposing (images, pages)
 import Pages.ImagePath as ImagePath
@@ -134,6 +134,10 @@ formSection =
         [ form
             [ class "flex flex-col container mx-auto"
             , class "lg:grid lg:grid-cols-11 lg:gap-3"
+
+            -- TODO Abstract
+            , method "POST"
+            , action "https://5d04d668.sibforms.com/serve/MUIEAAsJdB5yz-qPvb7s1V1ZJkwH7-LtSYPVg5IsKwQ6GxB2ivvxOo_DZgeaAiAb7k0KfeW8zh2FmedZJL-1fYaQxFOB0cqtEkOA2WkHJC6qjv3_UblKbZ0tq0MeIU3v_JsBmfSs8-B0YbOfm294bCWV2Fu7Cum5t6DAT6Ga7j8SDuLc7DZHIDETwR94aeWQNfsCAnYZsB14A4fN"
             ]
             [ div
                 [ class "flex flex-col w-full"
@@ -142,62 +146,86 @@ formSection =
                 [ textInput [ class "w-full lg:mr-6px" ]
                     { attributes =
                         [ autofocus True -- Not sufficient. Loses focus on hydration :/ Need to Dom.focus on init
+                        , name "FIRSTNAME"
+                        , required True
                         ]
-                    , id = "first-name"
+                    , id = "FIRSTNAME"
                     , title = "Your first name"
                     , subtext = nothing
                     , error = Nothing
                     }
                 , textInput [ class "w-full lg:ml-6px" ]
-                    { attributes = []
-                    , id = "last-name"
+                    { attributes =
+                        [ name "LASTNAME"
+                        , required True
+                        ]
+                    , id = "LASTNAME"
                     , title = "Your last name"
                     , subtext = nothing
                     , error = Nothing
                     }
                 ]
             , textInput [ class "lg:col-start-3 lg:col-end-10" ]
-                { attributes = []
-                , id = "email"
+                { attributes =
+                    [ name "EMAIL"
+                    , required True
+                    ]
+                , id = "EMAIL"
                 , title = "Email"
                 , subtext = nothing
                 , error = Nothing
                 }
             , textInput [ class "lg:col-start-3 lg:col-end-10" ]
-                { attributes = []
-                , id = "company-name"
+                { attributes =
+                    [ name "COMPANY"
+                    ]
+                , id = "COMPANY"
                 , title = "Company name"
                 , subtext = helpSubtext [] "Company or business name if this mailing address goes to an office"
                 , error = Nothing
                 }
             , textInput [ class "lg:col-start-3 lg:col-end-7" ]
-                { attributes = []
-                , id = "street-address"
+                { attributes =
+                    [ name "ADDRESS_STREET"
+                    , required True
+                    ]
+                , id = "ADDRESS_STREET"
                 , title = "Street Address"
                 , subtext = nothing
                 , error = Nothing
                 }
             , textInput [ class "lg:col-start-7 lg:col-end-10" ]
-                { attributes = []
-                , id = "city-and-state"
+                { attributes =
+                    [ name "ADDRESS_CITYSTATE"
+                    , required True
+                    ]
+                , id = "ADDRESS_CITYSTATE"
                 , title = "City and State"
                 , subtext = helpSubtext [] "e.g. “Vancour, BC”, or “Nixa, Missouri”"
                 , error = Nothing
                 }
             , textInput [ class "lg:col-start-3 lg:col-end-6" ]
-                { attributes = []
-                , id = "postal-code"
+                { attributes =
+                    [ name "ADDRESS_POSTAL"
+                    , required True
+                    ]
+                , id = "ADDRESS_POSTAL"
                 , title = "Postal / ZIP Code"
                 , subtext = nothing
                 , error = Nothing
                 }
             , textInput [ class "lg:col-start-6 lg:col-end-10" ]
-                { attributes = []
-                , id = "country"
+                { attributes =
+                    [ name "ADDRESS_COUNTRY"
+                    , required True
+                    ]
+                , id = "ADDRESS_COUNTRY"
                 , title = "Country"
                 , subtext = nothing
                 , error = Nothing
                 }
+            , input [ type_ "hidden", name "locale", value "en" ] []
+            , input [ type_ "hidden", name "html_type", value "simple" ] []
             , callToActionButton [] "Get some stickers!"
             ]
         ]
