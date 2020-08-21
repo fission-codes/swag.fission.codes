@@ -17,6 +17,7 @@ import Pages.Manifest as Manifest
 import Pages.StaticHttp as StaticHttp
 import State
 import Types exposing (..)
+import Validate
 import View.SwagForm
 
 
@@ -60,7 +61,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "FIRSTNAME"
-                                        (State.validateFilled "Please fill in this field")
+                                        (Validate.filled "Please fill in this field")
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "LASTNAME" ]
@@ -71,7 +72,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "LASTNAME"
-                                        (State.validateFilled "Please fill in this field")
+                                        (Validate.filled "Please fill in this field")
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "EMAIL" ]
@@ -82,7 +83,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "EMAIL"
-                                        State.validateEmail
+                                        Validate.email
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "COMPANY" ]
@@ -93,7 +94,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "COMPANY"
-                                        (State.validateAll [])
+                                        (Validate.all [])
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "ADDRESS_STREET" ]
@@ -104,7 +105,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "ADDRESS_STREET"
-                                        (State.validateFilled "Please fill in this field")
+                                        (Validate.filled "Please fill in this field")
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "ADDRESS_CITYSTATE" ]
@@ -115,7 +116,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "ADDRESS_CITYSTATE"
-                                        (State.validateFilled "Please fill in this field")
+                                        (Validate.filled "Please fill in this field")
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "ADDRESS_POSTAL" ]
@@ -126,7 +127,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "ADDRESS_POSTAL"
-                                        (State.validateFilled "Please fill in this field")
+                                        (Validate.filled "Please fill in this field")
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "ADDRESS_COUNTRY" ]
@@ -137,7 +138,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "ADDRESS_COUNTRY"
-                                        (State.validateFilled "Please fill in this field")
+                                        (Validate.filled "Please fill in this field")
                                     )
                                 , View.SwagForm.callToActionButton
                                     { attributes = []
