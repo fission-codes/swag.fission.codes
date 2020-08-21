@@ -21,6 +21,6 @@ type alias FormField =
 
 type Msg
     = OnFormFieldInput { id : String, value : String }
-    | OnFormSubmit
+    | OnFormSubmit { submissionUrl : String }
     | FocusedForm
     | GotFormSubmissionResponse (Result Http.Error ())

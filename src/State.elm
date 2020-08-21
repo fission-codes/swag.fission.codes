@@ -32,10 +32,10 @@ update msg model =
             , Cmd.none
             )
 
-        OnFormSubmit ->
+        OnFormSubmit { submissionUrl } ->
             ( model
             , Http.post
-                { url = "https://5d04d668.sibforms.com/serve/MUIEAAsJdB5yz-qPvb7s1V1ZJkwH7-LtSYPVg5IsKwQ6GxB2ivvxOo_DZgeaAiAb7k0KfeW8zh2FmedZJL-1fYaQxFOB0cqtEkOA2WkHJC6qjv3_UblKbZ0tq0MeIU3v_JsBmfSs8-B0YbOfm294bCWV2Fu7Cum5t6DAT6Ga7j8SDuLc7DZHIDETwR94aeWQNfsCAnYZsB14A4fN"
+                { url = submissionUrl
                 , body =
                     Http.multipartBody
                         (List.append

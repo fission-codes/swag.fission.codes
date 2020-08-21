@@ -30,13 +30,23 @@ yamlDocument =
     , body =
         \body ->
             -- TODO: Parse forms out of yaml
+            let
+                submissionUrl =
+                    "https://5d04d668.sibforms.com/serve/MUIEAAsJdB5yz-qPvb7s1V1ZJkwH7-LtSYPVg5IsKwQ6GxB2ivvxOo_DZgeaAiAb7k0KfeW8zh2FmedZJL-1fYaQxFOB0cqtEkOA2WkHJC6qjv3_UblKbZ0tq0MeIU3v_JsBmfSs8-B0YbOfm294bCWV2Fu7Cum5t6DAT6Ga7j8SDuLc7DZHIDETwR94aeWQNfsCAnYZsB14A4fN"
+            in
             Ok <|
                 View.SwagForm.swagPage
                     { form =
-                        { attributes = []
-                        , onSubmit = OnFormSubmit
+                        -- The hidden inputs and method + action attributes make it possible to submit with javascript turned off
+                        { attributes =
+                            [ method "POST"
+                            , action submissionUrl
+                            ]
+                        , onSubmit = OnFormSubmit { submissionUrl = submissionUrl }
                         , content =
-                            [ View.SwagForm.textInput
+                            [ Html.input [ type_ "hidden", name "locale", value "en" ] []
+                            , Html.input [ type_ "hidden", name "html_type", value "simple" ] []
+                            , View.SwagForm.textInput
                                 { attributes =
                                     [ -- Not sufficient. Loses focus on hydration :/ Need to Dom.focus on init
                                       autofocus True
@@ -142,8 +152,6 @@ yamlDocument =
                                 , error = Nothing
                                 , onInput = \value -> OnFormFieldInput { id = "ADDRESS_COUNTRY", value = value }
                                 }
-                            , Html.input [ type_ "hidden", name "locale", value "en" ] []
-                            , Html.input [ type_ "hidden", name "html_type", value "simple" ] []
                             , View.SwagForm.callToActionButton
                                 { attributes = []
                                 , message = "Get some stickers!"
