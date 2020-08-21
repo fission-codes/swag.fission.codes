@@ -8,7 +8,7 @@ import Types exposing (..)
 init : ( Model, Cmd Msg )
 init =
     ( Model
-    , Dom.focus "first-name" |> Task.attempt (\_ -> ())
+    , Dom.focus "FIRSTNAME" |> Task.attempt (\_ -> ())
     )
 
 

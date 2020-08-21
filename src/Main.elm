@@ -25,7 +25,7 @@ import View
 manifest : Manifest.Config Pages.PathKey
 manifest =
     { backgroundColor = Just Color.white
-    , categories = [ Pages.Manifest.Category.education ]
+    , categories = [ Pages.Manifest.Category.utilities ]
     , displayMode = Manifest.Standalone
     , orientation = Manifest.Portrait
     , description = "Order some swag from Fission"
