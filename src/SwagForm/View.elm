@@ -21,7 +21,7 @@ swagPage =
                 , name "FIRSTNAME"
                 , required True
                 ]
-            , column = { start = Column1, end = Middle }
+            , column = { start = First, end = Middle }
             , id = "FIRSTNAME"
             , title = "Your first name"
             , subtext = nothing
@@ -32,7 +32,7 @@ swagPage =
                 [ name "LASTNAME"
                 , required True
                 ]
-            , column = { start = Middle, end = Column8 }
+            , column = { start = Middle, end = Last }
             , id = "LASTNAME"
             , title = "Your last name"
             , subtext = nothing
@@ -43,7 +43,7 @@ swagPage =
                 [ name "EMAIL"
                 , required True
                 ]
-            , column = { start = Column1, end = Column8 }
+            , column = { start = First, end = Last }
             , id = "EMAIL"
             , title = "Email"
             , subtext = nothing
@@ -53,7 +53,7 @@ swagPage =
             { attributes =
                 [ name "COMPANY"
                 ]
-            , column = { start = Column1, end = Column8 }
+            , column = { start = First, end = Last }
             , id = "COMPANY"
             , title = "Company name"
             , subtext = helpSubtext [] "Company or business name if this mailing address goes to an office"
@@ -64,7 +64,7 @@ swagPage =
                 [ name "ADDRESS_STREET"
                 , required True
                 ]
-            , column = { start = Column1, end = Column5 }
+            , column = { start = First, end = Column5 }
             , id = "ADDRESS_STREET"
             , title = "Street Address"
             , subtext = nothing
@@ -75,7 +75,7 @@ swagPage =
                 [ name "ADDRESS_CITYSTATE"
                 , required True
                 ]
-            , column = { start = Column5, end = Column8 }
+            , column = { start = Column5, end = Last }
             , id = "ADDRESS_CITYSTATE"
             , title = "City and State"
             , subtext = helpSubtext [] "e.g. “Vancour, BC”, or “Nixa, Missouri”"
@@ -86,7 +86,7 @@ swagPage =
                 [ name "ADDRESS_POSTAL"
                 , required True
                 ]
-            , column = { start = Column1, end = Column4 }
+            , column = { start = First, end = Column4 }
             , id = "ADDRESS_POSTAL"
             , title = "Postal / ZIP Code"
             , subtext = nothing
@@ -97,7 +97,7 @@ swagPage =
                 [ name "ADDRESS_COUNTRY"
                 , required True
                 ]
-            , column = { start = Column4, end = Column8 }
+            , column = { start = Column4, end = Last }
             , id = "ADDRESS_COUNTRY"
             , title = "Country"
             , subtext = nothing
@@ -300,14 +300,14 @@ fissionLogo =
 
 
 type Alignment
-    = Column1
+    = First
     | Column2
     | Column3
     | Column4
     | Column5
     | Column6
     | Column7
-    | Column8
+    | Last
     | Middle
 
 
@@ -337,7 +337,7 @@ alignmentToGridColumn alignment =
                 |> convert11ColumnTo22Column
     in
     case alignment of
-        Column1 ->
+        First ->
             computeFromColumn 1
 
         Column2 ->
@@ -358,7 +358,7 @@ alignmentToGridColumn alignment =
         Column7 ->
             computeFromColumn 7
 
-        Column8 ->
+        Last ->
             computeFromColumn 8
 
         Middle ->
@@ -450,7 +450,7 @@ callToActionButton : List (Attribute msg) -> String -> Html msg
 callToActionButton attributes content =
     div
         [ class "mt-10 flex flex-col"
-        , gridColumnStyle { start = Column1, end = Column8 }
+        , gridColumnStyle { start = First, end = Last }
         ]
         [ input
             (class "mx-auto px-4 py-1 rounded-lg"
