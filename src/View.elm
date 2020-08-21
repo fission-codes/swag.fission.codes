@@ -36,36 +36,12 @@ yamlDocument =
         \body ->
             Yaml.fromString decodeData body
                 |> Result.mapError Yaml.errorToString
-                |> Result.map
-                    (\data model ->
-                        let
-                            submissionUrl =
-                                "https://5d04d668.sibforms.com/serve/MUIEAE1F1kMPvB_leq-apIe4FvZagp1EgtljkIf1EQ-BDERfIN98YQhjbWjdTi-2eKy9IPUovj6kMItaZTVAodVJlyoTX8BPhS0LjzVaP6XSMnXu6Xey9Ez4VGzSV62IuIsnDS55QQiwcA7oRtB8aPU0EQ3AJG0dyICWT82taqDKeisgU1jdlnvk2Fj5oRFUiwsqYVIsHCL5ASEN"
-                        in
-                        View.SwagForm.swagPage
-                            { form =
-                                -- The hidden inputs and method + action attributes make it possible to submit with javascript turned off
-                                { attributes =
-                                    [ method "POST"
-                                    , action submissionUrl
-                                    ]
-                                , onSubmit = OnFormSubmit { submissionUrl = submissionUrl }
-                                , content =
-                                    List.concat
-                                        [ [ Html.input [ type_ "hidden", name "locale", value "en" ] []
-                                          , Html.input [ type_ "hidden", name "html_type", value "simple" ] []
-                                          ]
-                                        , List.map (viewField model) data
-                                        , [ View.SwagForm.callToActionButton
-                                                { attributes = []
-                                                , message = "Get some stickers!"
-                                                }
-                                          ]
-                                        ]
-                                }
-                            }
-                    )
+                |> Result.map view
     }
+
+
+
+-- DATA DEFINITIONS
 
 
 type alias FieldData =
@@ -77,13 +53,86 @@ type alias FieldData =
     }
 
 
+type alias FormData =
+    { submissionUrl : String
+    , callToAction : String
+    , autofocus : String
+    , fields : List FieldData
+    }
+
+
 type alias Data =
-    List FieldData
+    { form : FormData }
+
+
+
+-- VIEWS
+
+
+view : Data -> Model -> Html Msg
+view data model =
+    View.SwagForm.swagPage
+        { form =
+            -- The hidden inputs and method + action attributes make it possible to submit with javascript turned off
+            { attributes =
+                [ method "POST"
+                , action data.form.submissionUrl
+                ]
+            , onSubmit = OnFormSubmit { submissionUrl = data.form.submissionUrl }
+            , content =
+                List.concat
+                    [ [ Html.input [ type_ "hidden", name "locale", value "en" ] []
+                      , Html.input [ type_ "hidden", name "html_type", value "simple" ] []
+                      ]
+                    , List.map (viewField model data.form.autofocus) data.form.fields
+                    , [ View.SwagForm.callToActionButton
+                            { attributes = []
+                            , message = data.form.callToAction
+                            }
+                      ]
+                    ]
+            }
+        }
+
+
+viewField : Model -> String -> FieldData -> Html Msg
+viewField model autofocusId { id, title, column, subtext, validation } =
+    View.SwagForm.textInput
+        { attributes =
+            [ autofocus (id == autofocusId)
+            , name id
+            ]
+        , column = column
+        , id = id
+        , title = title
+        , subtext =
+            case subtext of
+                Just text ->
+                    View.SwagForm.helpSubtext [] text
+
+                Nothing ->
+                    Html.nothing
+        }
+        (State.getFormFieldState model id validation)
+
+
+
+-- DECODERS
 
 
 decodeData : Yaml.Decoder Data
 decodeData =
-    Yaml.field "form" (Yaml.field "fields" (Yaml.list decodeFieldData))
+    Yaml.succeed Data
+        |> Yaml.andMap (Yaml.field "form" decodeFormData)
+
+
+decodeFormData : Yaml.Decoder FormData
+decodeFormData =
+    Yaml.succeed FormData
+        |> Yaml.andMap (Yaml.field "submission_url" Yaml.string)
+        |> Yaml.andMap (Yaml.field "call_to_action" Yaml.string)
+        |> Yaml.andMap (Yaml.field "autofocus" Yaml.string)
+        |> Yaml.andMap (Yaml.field "fields" (Yaml.list decodeFieldData))
 
 
 decodeFieldData : Yaml.Decoder FieldData
@@ -182,24 +231,3 @@ decodeAlignment =
                 )
         , Yaml.fail errorText
         ]
-
-
-viewField : Model -> FieldData -> Html Msg
-viewField model { id, title, column, subtext, validation } =
-    View.SwagForm.textInput
-        { attributes =
-            [ autofocus (id == "FIRSTNAME")
-            , name id
-            ]
-        , column = column
-        , id = id
-        , title = title
-        , subtext =
-            case subtext of
-                Just text ->
-                    View.SwagForm.helpSubtext [] text
-
-                Nothing ->
-                    Html.nothing
-        }
-        (State.getFormFieldState model id validation)
