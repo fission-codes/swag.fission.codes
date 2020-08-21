@@ -1,7 +1,22 @@
-module View.SwagForm exposing (Alignment(..), callToActionButton, helpSubtext, swagPage, textInput)
+module View.SwagForm exposing (Alignment(..), callToActionButton, footerLink, helpSubtext, swagPage, textInput)
 
 import Html exposing (..)
-import Html.Attributes exposing (action, alt, attribute, autofocus, class, for, height, href, id, method, name, placeholder, required, src, style, title, type_, value, width)
+import Html.Attributes
+    exposing
+        ( alt
+        , attribute
+        , class
+        , for
+        , height
+        , href
+        , id
+        , src
+        , style
+        , title
+        , type_
+        , value
+        , width
+        )
 import Html.Extra exposing (..)
 import Pages exposing (images, pages)
 import Pages.ImagePath as ImagePath
@@ -20,7 +35,7 @@ swagPage :
 swagPage element =
     [ hero
     , formSection element.form
-    , footer [] []
+    , footer []
     ]
 
 
@@ -49,8 +64,8 @@ header attributes =
 -- FOOTER
 
 
-footer : List (Attribute msg) -> List (Html msg) -> Html msg
-footer attributes content =
+footer : List (Html msg) -> Html msg
+footer content =
     div
         [ class "bg-white px-6" ]
         [ div
@@ -224,11 +239,6 @@ type Alignment
     | Column7
     | Last
     | Middle
-
-
-type StartOrEnd
-    = Start
-    | End
 
 
 alignmentToGridColumn : Alignment -> Int

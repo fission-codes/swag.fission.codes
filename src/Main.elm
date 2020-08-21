@@ -5,7 +5,6 @@ import Color
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
-import Json.Decode
 import Metadata exposing (Frontmatter)
 import MySitemap
 import Page.Index
@@ -16,7 +15,6 @@ import Pages.PagePath exposing (PagePath)
 import Pages.Platform
 import Pages.StaticHttp as StaticHttp
 import State
-import Task
 import Types exposing (..)
 import View
 

@@ -7,23 +7,14 @@
 module View exposing (yamlDocument)
 
 import Browser.Dom as Dom
-import Color
-import Head
 import Head.Seo as Seo
 import Html exposing (Html)
 import Html.Attributes exposing (action, autofocus, method, name, type_, value)
 import Html.Extra as Html
 import Json.Decode
 import Metadata exposing (Frontmatter)
-import MySitemap
-import Page.Index
-import Pages exposing (images, pages)
 import Pages.Manifest as Manifest
-import Pages.Manifest.Category
-import Pages.PagePath exposing (PagePath)
-import Pages.Platform
 import Pages.StaticHttp as StaticHttp
-import Task
 import Types exposing (..)
 import View.SwagForm
 
@@ -38,6 +29,7 @@ yamlDocument =
     , metadata = Json.Decode.succeed Metadata.PageSwagForm
     , body =
         \body ->
+            -- TODO: Parse forms out of yaml
             Ok <|
                 View.SwagForm.swagPage
                     { form =
