@@ -153,13 +153,17 @@ decodeFieldData =
                                                     Yaml.field "column_end" decodeAlignment
                                                         |> Yaml.andThen
                                                             (\end ->
-                                                                Yaml.succeed
-                                                                    { id = id
-                                                                    , title = title
-                                                                    , column = { start = start, end = end }
-                                                                    , subtext = subtext
-                                                                    , validation = Validate.all []
-                                                                    }
+                                                                Yaml.field "validation" decodeValidation
+                                                                    |> Yaml.andThen
+                                                                        (\validation ->
+                                                                            Yaml.succeed
+                                                                                { id = id
+                                                                                , title = title
+                                                                                , column = { start = start, end = end }
+                                                                                , subtext = subtext
+                                                                                , validation = validation
+                                                                                }
+                                                                        )
                                                             )
                                                 )
                                     )
@@ -231,3 +235,36 @@ decodeAlignment =
                 )
         , Yaml.fail errorText
         ]
+
+
+decodeValidation : Yaml.Decoder (String -> FieldErrorState)
+decodeValidation =
+    Yaml.list decodeValidationItem |> Yaml.map Validate.all
+
+
+decodeValidationItem : Yaml.Decoder (String -> FieldErrorState)
+decodeValidationItem =
+    let
+        errorText =
+            "Invalid validation test. Only 'email' and 'filled' are available at the moment."
+    in
+    Yaml.oneOf
+        [ decodeValidationFilled
+        , Yaml.string
+            |> Yaml.andThen
+                (\str ->
+                    case str of
+                        "email" ->
+                            Yaml.succeed Validate.email
+
+                        _ ->
+                            Yaml.fail errorText
+                )
+        , Yaml.fail errorText
+        ]
+
+
+decodeValidationFilled : Yaml.Decoder (String -> FieldErrorState)
+decodeValidationFilled =
+    Yaml.field "filled" (Yaml.field "description" Yaml.string)
+        |> Yaml.map Validate.filled
