@@ -1,5 +1,5 @@
 module State exposing
-    ( getSwagFieldState
+    ( getFormFieldState
     , init
     , subscriptions
     , update
@@ -94,7 +94,7 @@ clearFields fields =
         |> Dict.map (\_ _ -> formFieldInit)
 
 
-getSwagFieldState :
+getFormFieldState :
     Model
     -> String
     ->
@@ -102,7 +102,7 @@ getSwagFieldState :
         , error : Maybe { id : String, description : String }
         , onInput : String -> Msg
         }
-getSwagFieldState model fieldId =
+getFormFieldState model fieldId =
     let
         formFieldModel =
             model.swagForm
