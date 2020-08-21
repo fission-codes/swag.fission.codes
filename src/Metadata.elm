@@ -1,10 +1,21 @@
-module Metadata exposing (Frontmatter(..), decoder)
+module Metadata exposing
+    ( Frontmatter(..)
+    , canonicalSiteUrl
+    , decoder
+    , head
+    )
 
+import Head
+import Head.Seo as Seo
 import Json.Decode as Decode exposing (Decoder)
 import List.Extra
-import Pages
+import Pages exposing (images)
 import Pages.ImagePath as ImagePath
 import Types exposing (..)
+
+
+
+-- FRONTMATTER
 
 
 type Frontmatter
@@ -43,3 +54,47 @@ findMatchingImage imageAssetPath =
                 ImagePath.toString image
                     == imageAssetPath
             )
+
+
+
+-- HEAD METADATA
+
+
+canonicalSiteUrl : String
+canonicalSiteUrl =
+    "https://swag.fission.codes"
+
+
+siteTagline : String
+siteTagline =
+    "Order swag from Fission"
+
+
+
+{- Read more about the metadata specs:
+
+   <https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards>
+   <https://htmlhead.dev>
+   <https://html.spec.whatwg.org/multipage/semantics.html#standard-metadata-names>
+   <https://ogp.me/>
+-}
+
+
+head : Frontmatter -> List (Head.Tag Pages.PathKey)
+head metadata =
+    case metadata of
+        LandingPage ->
+            Seo.summaryLarge
+                { canonicalUrlOverride = Nothing
+                , siteName = siteTagline
+                , image =
+                    { url = images.swagLogoVertical
+                    , alt = "Fission Logo"
+                    , dimensions = Just { width = 390, height = 183 }
+                    , mimeType = Nothing
+                    }
+                , description = siteTagline
+                , locale = Nothing
+                , title = "Get Fission Swag"
+                }
+                |> Seo.website

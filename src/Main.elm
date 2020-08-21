@@ -44,7 +44,7 @@ main =
         , subscriptions = subscriptions
         , documents = [ yamlDocument ]
         , manifest = manifest
-        , canonicalSiteUrl = canonicalSiteUrl
+        , canonicalSiteUrl = Metadata.canonicalSiteUrl
         , onPageChange = Nothing
         , internals = Pages.internals
         }
@@ -70,7 +70,7 @@ generateFiles :
 generateFiles siteMetadata =
     StaticHttp.succeed
         [ MySitemap.build
-            { siteUrl = canonicalSiteUrl }
+            { siteUrl = Metadata.canonicalSiteUrl }
             siteMetadata
             |> Ok
         ]
@@ -139,7 +139,11 @@ view siteMetadata page =
                 { title = rendered.title
                 , body = Html.div [] rendered.body
                 }
-        , head = head page.frontmatter
+        , head =
+            List.concat
+                [ commonHeadTags
+                , Metadata.head page.frontmatter
+                ]
         }
 
 
@@ -147,45 +151,3 @@ commonHeadTags : List (Head.Tag Pages.PathKey)
 commonHeadTags =
     [ Head.sitemapLink "/sitemap.xml"
     ]
-
-
-
-{- Read more about the metadata specs:
-
-   <https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards>
-   <https://htmlhead.dev>
-   <https://html.spec.whatwg.org/multipage/semantics.html#standard-metadata-names>
-   <https://ogp.me/>
--}
-
-
-head : Frontmatter -> List (Head.Tag Pages.PathKey)
-head metadata =
-    commonHeadTags
-        ++ (case metadata of
-                Metadata.LandingPage ->
-                    Seo.summaryLarge
-                        { canonicalUrlOverride = Nothing
-                        , siteName = siteTagline
-                        , image =
-                            { url = images.swagLogoVertical
-                            , alt = "Fission Logo"
-                            , dimensions = Just { width = 390, height = 183 }
-                            , mimeType = Nothing
-                            }
-                        , description = siteTagline
-                        , locale = Nothing
-                        , title = "Get Fission Swag"
-                        }
-                        |> Seo.website
-           )
-
-
-canonicalSiteUrl : String
-canonicalSiteUrl =
-    "https://swag.fission.codes"
-
-
-siteTagline : String
-siteTagline =
-    "Order some swag from Fission"
