@@ -365,6 +365,15 @@ alignmentToGridColumn alignment =
             12
 
 
+gridColumnStyle : { start : Alignment, end : Alignment } -> Attribute msg
+gridColumnStyle { start, end } =
+    -- Using string manipulation with tailwind class names wouldn't play well with purging
+    [ start, end ]
+        |> List.map (alignmentToGridColumn >> String.fromInt)
+        |> String.join " / "
+        |> style "grid-column"
+
+
 textInput :
     { column : { start : Alignment, end : Alignment }
     , attributes : List (Attribute msg)
@@ -404,15 +413,7 @@ textInput info =
                     , errorSubtext = nothing
                     }
     in
-    div
-        [ -- Using string manipulation with tailwind class names wouldn't play well with purging
-          [ info.column.start
-          , info.column.end
-          ]
-            |> List.map (alignmentToGridColumn >> String.fromInt)
-            |> String.join " / "
-            |> style "grid-column"
-        ]
+    div [ gridColumnStyle info.column ]
         [ label
             [ for info.id
             , class "block font-body text-md text-gray-300 mt-2"
@@ -449,7 +450,7 @@ callToActionButton : List (Attribute msg) -> String -> Html msg
 callToActionButton attributes content =
     div
         [ class "mt-10 flex flex-col"
-        , class "lg:col-start-5 lg:col-end-20"
+        , gridColumnStyle { start = Column1, end = Column8 }
         ]
         [ input
             (class "mx-auto px-4 py-1 rounded-lg"
