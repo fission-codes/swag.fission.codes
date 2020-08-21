@@ -26,3 +26,4 @@ type Msg
     | OnFormSubmit { submissionUrl : String }
     | FocusedForm
     | GotFormSubmissionResponse (Result Http.Error ())
+    | OnFormFieldBlur { id : String }

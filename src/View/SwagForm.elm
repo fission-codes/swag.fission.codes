@@ -314,6 +314,7 @@ textInput :
     ->
         { value : String
         , onInput : String -> msg
+        , onBlur : msg
         , error : Maybe { id : String, description : String }
         }
     -> Html msg
@@ -360,6 +361,7 @@ textInput info state =
                       , class "form-input block w-full text-xl text-gray-200 sm:text-lg sm:leading-5"
                       , value state.value
                       , Events.onInput state.onInput
+                      , Events.onBlur state.onBlur
                       ]
                     , info.attributes
                     , errorInputAttributes

@@ -40,6 +40,19 @@ update msg model =
             , Cmd.none
             )
 
+        OnFormFieldBlur { id } ->
+            ( { model
+                | swagForm =
+                    model.swagForm
+                        |> Dict.update id
+                            (Maybe.withDefault formFieldInit
+                                >> updateFieldBlur
+                                >> Just
+                            )
+              }
+            , Cmd.none
+            )
+
         OnFormSubmit { submissionUrl } ->
             ( model
             , Http.post
@@ -88,6 +101,13 @@ updateFieldValue value formField =
     { formField | value = value }
 
 
+updateFieldBlur : FormField -> FormField
+updateFieldBlur formField =
+    { formField
+        | error = Nothing
+    }
+
+
 clearFields : Dict String FormField -> Dict String FormField
 clearFields fields =
     fields
@@ -101,6 +121,7 @@ getFormFieldState :
         { value : String
         , error : Maybe { id : String, description : String }
         , onInput : String -> Msg
+        , onBlur : Msg
         }
 getFormFieldState model fieldId =
     let
@@ -112,6 +133,7 @@ getFormFieldState model fieldId =
     { value = formFieldModel.value
     , error = formFieldModel.error
     , onInput = \value -> OnFormFieldInput { id = fieldId, value = value }
+    , onBlur = OnFormFieldBlur { id = fieldId }
     }
 
 
