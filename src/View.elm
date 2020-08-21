@@ -19,12 +19,13 @@ import State
 import Types exposing (..)
 import Validate
 import View.SwagForm
+import Yaml.Decode as Yaml
 
 
 yamlDocument :
     { extension : String
     , metadata : Json.Decode.Decoder Frontmatter
-    , body : String -> Result error (Model -> Html Msg)
+    , body : String -> Result String (Model -> Html Msg)
     }
 yamlDocument =
     { extension = "yml"
@@ -47,104 +48,91 @@ yamlDocument =
                                 ]
                             , onSubmit = OnFormSubmit { submissionUrl = submissionUrl }
                             , content =
-                                [ Html.input [ type_ "hidden", name "locale", value "en" ] []
-                                , Html.input [ type_ "hidden", name "html_type", value "simple" ] []
-                                , View.SwagForm.textInput
-                                    { attributes =
-                                        [ autofocus True
-                                        , name "FIRSTNAME"
+                                List.concat
+                                    [ [ Html.input [ type_ "hidden", name "locale", value "en" ] []
+                                      , Html.input [ type_ "hidden", name "html_type", value "simple" ] []
+                                      ]
+                                    , List.map
+                                        (\{ id, title, column, subtext, validation } ->
+                                            View.SwagForm.textInput
+                                                { attributes =
+                                                    [ autofocus (id == "FIRSTNAME")
+                                                    , name id
+                                                    ]
+                                                , column = column
+                                                , id = id
+                                                , title = title
+                                                , subtext =
+                                                    case subtext of
+                                                        Just text ->
+                                                            View.SwagForm.helpSubtext [] text
+
+                                                        Nothing ->
+                                                            Html.nothing
+                                                }
+                                                (State.getFormFieldState model id validation)
+                                        )
+                                        [ { column = { start = View.SwagForm.First, end = View.SwagForm.Middle }
+                                          , id = "FIRSTNAME"
+                                          , title = "Your first name"
+                                          , subtext = Nothing
+                                          , validation = Validate.filled "Please fill in this field"
+                                          }
+                                        , { id = "LASTNAME"
+                                          , title = "Your last name"
+                                          , column = { start = View.SwagForm.Middle, end = View.SwagForm.Last }
+                                          , subtext = Nothing
+                                          , validation =
+                                                Validate.filled "Please fill in this field"
+                                          }
+                                        , { id = "EMAIL"
+                                          , title = "Email"
+                                          , column = { start = View.SwagForm.First, end = View.SwagForm.Last }
+                                          , subtext = Nothing
+                                          , validation =
+                                                Validate.email
+                                          }
+                                        , { id = "COMPANY"
+                                          , title = "Company name"
+                                          , column = { start = View.SwagForm.First, end = View.SwagForm.Last }
+                                          , subtext = Just "Company or business name if this mailing address goes to an office"
+                                          , validation = Validate.all []
+                                          }
+                                        , { id = "ADDRESS_STREET"
+                                          , title = "Street Address"
+                                          , column = { start = View.SwagForm.First, end = View.SwagForm.Column5 }
+                                          , subtext = Nothing
+                                          , validation =
+                                                Validate.filled "Please fill in this field"
+                                          }
+                                        , { id = "ADDRESS_CITYSTATE"
+                                          , title = "City and State"
+                                          , column = { start = View.SwagForm.Column5, end = View.SwagForm.Last }
+                                          , subtext = Just "e.g. “Vancour, BC”, or “Nixa, Missouri”"
+                                          , validation =
+                                                Validate.filled "Please fill in this field"
+                                          }
+                                        , { id = "ADDRESS_POSTAL"
+                                          , title = "Postal / ZIP Code"
+                                          , column = { start = View.SwagForm.First, end = View.SwagForm.Column4 }
+                                          , subtext = Nothing
+                                          , validation =
+                                                Validate.filled "Please fill in this field"
+                                          }
+                                        , { id = "ADDRESS_COUNTRY"
+                                          , title = "Country"
+                                          , column = { start = View.SwagForm.Column4, end = View.SwagForm.Last }
+                                          , subtext = Nothing
+                                          , validation =
+                                                Validate.filled "Please fill in this field"
+                                          }
                                         ]
-                                    , column = { start = View.SwagForm.First, end = View.SwagForm.Middle }
-                                    , id = "FIRSTNAME"
-                                    , title = "Your first name"
-                                    , subtext = Html.nothing
-                                    }
-                                    (State.getFormFieldState model
-                                        "FIRSTNAME"
-                                        (Validate.filled "Please fill in this field")
-                                    )
-                                , View.SwagForm.textInput
-                                    { attributes = [ name "LASTNAME" ]
-                                    , column = { start = View.SwagForm.Middle, end = View.SwagForm.Last }
-                                    , id = "LASTNAME"
-                                    , title = "Your last name"
-                                    , subtext = Html.nothing
-                                    }
-                                    (State.getFormFieldState model
-                                        "LASTNAME"
-                                        (Validate.filled "Please fill in this field")
-                                    )
-                                , View.SwagForm.textInput
-                                    { attributes = [ name "EMAIL" ]
-                                    , column = { start = View.SwagForm.First, end = View.SwagForm.Last }
-                                    , id = "EMAIL"
-                                    , title = "Email"
-                                    , subtext = Html.nothing
-                                    }
-                                    (State.getFormFieldState model
-                                        "EMAIL"
-                                        Validate.email
-                                    )
-                                , View.SwagForm.textInput
-                                    { attributes = [ name "COMPANY" ]
-                                    , column = { start = View.SwagForm.First, end = View.SwagForm.Last }
-                                    , id = "COMPANY"
-                                    , title = "Company name"
-                                    , subtext = View.SwagForm.helpSubtext [] "Company or business name if this mailing address goes to an office"
-                                    }
-                                    (State.getFormFieldState model
-                                        "COMPANY"
-                                        (Validate.all [])
-                                    )
-                                , View.SwagForm.textInput
-                                    { attributes = [ name "ADDRESS_STREET" ]
-                                    , column = { start = View.SwagForm.First, end = View.SwagForm.Column5 }
-                                    , id = "ADDRESS_STREET"
-                                    , title = "Street Address"
-                                    , subtext = Html.nothing
-                                    }
-                                    (State.getFormFieldState model
-                                        "ADDRESS_STREET"
-                                        (Validate.filled "Please fill in this field")
-                                    )
-                                , View.SwagForm.textInput
-                                    { attributes = [ name "ADDRESS_CITYSTATE" ]
-                                    , column = { start = View.SwagForm.Column5, end = View.SwagForm.Last }
-                                    , id = "ADDRESS_CITYSTATE"
-                                    , title = "City and State"
-                                    , subtext = View.SwagForm.helpSubtext [] "e.g. “Vancour, BC”, or “Nixa, Missouri”"
-                                    }
-                                    (State.getFormFieldState model
-                                        "ADDRESS_CITYSTATE"
-                                        (Validate.filled "Please fill in this field")
-                                    )
-                                , View.SwagForm.textInput
-                                    { attributes = [ name "ADDRESS_POSTAL" ]
-                                    , column = { start = View.SwagForm.First, end = View.SwagForm.Column4 }
-                                    , id = "ADDRESS_POSTAL"
-                                    , title = "Postal / ZIP Code"
-                                    , subtext = Html.nothing
-                                    }
-                                    (State.getFormFieldState model
-                                        "ADDRESS_POSTAL"
-                                        (Validate.filled "Please fill in this field")
-                                    )
-                                , View.SwagForm.textInput
-                                    { attributes = [ name "ADDRESS_COUNTRY" ]
-                                    , column = { start = View.SwagForm.Column4, end = View.SwagForm.Last }
-                                    , id = "ADDRESS_COUNTRY"
-                                    , title = "Country"
-                                    , subtext = Html.nothing
-                                    }
-                                    (State.getFormFieldState model
-                                        "ADDRESS_COUNTRY"
-                                        (Validate.filled "Please fill in this field")
-                                    )
-                                , View.SwagForm.callToActionButton
-                                    { attributes = []
-                                    , message = "Get some stickers!"
-                                    }
-                                ]
+                                    , [ View.SwagForm.callToActionButton
+                                            { attributes = []
+                                            , message = "Get some stickers!"
+                                            }
+                                      ]
+                                    ]
                             }
                         }
     }

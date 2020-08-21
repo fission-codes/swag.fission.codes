@@ -7,6 +7,7 @@
     "elm-version": "0.19.1",
     "dependencies": {
         "direct": {
+            "MaybeJustJames/yaml": "1.1.0",
             "avh4/elm-color": "1.0.0",
             "dillonkearns/elm-pages": "6.0.0",
             "dillonkearns/elm-sitemap": "1.0.1",
