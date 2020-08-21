@@ -17,8 +17,12 @@ type alias Model =
 
 type alias FormField =
     { value : String
-    , error : Maybe { id : String, description : String }
+    , error : FieldErrorState
     }
+
+
+type alias FieldErrorState =
+    Maybe { id : String, description : String }
 
 
 type Msg
@@ -26,4 +30,4 @@ type Msg
     | OnFormSubmit { submissionUrl : String }
     | FocusedForm
     | GotFormSubmissionResponse (Result Http.Error ())
-    | OnFormFieldBlur { id : String }
+    | OnFormFieldBlur { id : String, validate : String -> FieldErrorState }

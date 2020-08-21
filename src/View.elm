@@ -58,7 +58,10 @@ yamlDocument =
                                     , title = "Your first name"
                                     , subtext = Html.nothing
                                     }
-                                    (State.getFormFieldState model "FIRSTNAME")
+                                    (State.getFormFieldState model
+                                        "FIRSTNAME"
+                                        (\_ -> Nothing)
+                                    )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "LASTNAME" ]
                                     , column = { start = View.SwagForm.Middle, end = View.SwagForm.Last }
@@ -66,7 +69,10 @@ yamlDocument =
                                     , title = "Your last name"
                                     , subtext = Html.nothing
                                     }
-                                    (State.getFormFieldState model "LASTNAME")
+                                    (State.getFormFieldState model
+                                        "LASTNAME"
+                                        (\_ -> Nothing)
+                                    )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "EMAIL" ]
                                     , column = { start = View.SwagForm.First, end = View.SwagForm.Last }
@@ -74,7 +80,10 @@ yamlDocument =
                                     , title = "Email"
                                     , subtext = Html.nothing
                                     }
-                                    (State.getFormFieldState model "EMAIL")
+                                    (State.getFormFieldState model
+                                        "EMAIL"
+                                        (\_ -> Nothing)
+                                    )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "COMPANY" ]
                                     , column = { start = View.SwagForm.First, end = View.SwagForm.Last }
@@ -82,7 +91,10 @@ yamlDocument =
                                     , title = "Company name"
                                     , subtext = View.SwagForm.helpSubtext [] "Company or business name if this mailing address goes to an office"
                                     }
-                                    (State.getFormFieldState model "COMPANY")
+                                    (State.getFormFieldState model
+                                        "COMPANY"
+                                        (\_ -> Nothing)
+                                    )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "ADDRESS_STREET" ]
                                     , column = { start = View.SwagForm.First, end = View.SwagForm.Column5 }
@@ -90,7 +102,10 @@ yamlDocument =
                                     , title = "Street Address"
                                     , subtext = Html.nothing
                                     }
-                                    (State.getFormFieldState model "ADDRESS_STREET")
+                                    (State.getFormFieldState model
+                                        "ADDRESS_STREET"
+                                        (\_ -> Nothing)
+                                    )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "ADDRESS_CITYSTATE" ]
                                     , column = { start = View.SwagForm.Column5, end = View.SwagForm.Last }
@@ -98,7 +113,10 @@ yamlDocument =
                                     , title = "City and State"
                                     , subtext = View.SwagForm.helpSubtext [] "e.g. “Vancour, BC”, or “Nixa, Missouri”"
                                     }
-                                    (State.getFormFieldState model "ADDRESS_CITYSTATE")
+                                    (State.getFormFieldState model
+                                        "ADDRESS_CITYSTATE"
+                                        (\_ -> Nothing)
+                                    )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "ADDRESS_POSTAL" ]
                                     , column = { start = View.SwagForm.First, end = View.SwagForm.Column4 }
@@ -106,7 +124,10 @@ yamlDocument =
                                     , title = "Postal / ZIP Code"
                                     , subtext = Html.nothing
                                     }
-                                    (State.getFormFieldState model "ADDRESS_POSTAL")
+                                    (State.getFormFieldState model
+                                        "ADDRESS_POSTAL"
+                                        (\_ -> Nothing)
+                                    )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "ADDRESS_COUNTRY" ]
                                     , column = { start = View.SwagForm.Column4, end = View.SwagForm.Last }
@@ -114,7 +135,10 @@ yamlDocument =
                                     , title = "Country"
                                     , subtext = Html.nothing
                                     }
-                                    (State.getFormFieldState model "ADDRESS_COUNTRY")
+                                    (State.getFormFieldState model
+                                        "ADDRESS_COUNTRY"
+                                        (\_ -> Nothing)
+                                    )
                                 , View.SwagForm.callToActionButton
                                     { attributes = []
                                     , message = "Get some stickers!"

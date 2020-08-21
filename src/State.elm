@@ -40,13 +40,13 @@ update msg model =
             , Cmd.none
             )
 
-        OnFormFieldBlur { id } ->
+        OnFormFieldBlur { id, validate } ->
             ( { model
                 | formFields =
                     model.formFields
                         |> Dict.update id
                             (Maybe.withDefault formFieldInit
-                                >> updateFieldBlur
+                                >> updateFieldBlur validate
                                 >> Just
                             )
               }
@@ -54,6 +54,7 @@ update msg model =
             )
 
         OnFormSubmit { submissionUrl } ->
+            -- TODO Make sure there are no errors in the form (also disable the submission button)
             ( model
             , Http.post
                 { url = submissionUrl
@@ -101,10 +102,10 @@ updateFieldValue value formField =
     { formField | value = value }
 
 
-updateFieldBlur : FormField -> FormField
-updateFieldBlur formField =
+updateFieldBlur : (String -> FieldErrorState) -> FormField -> FormField
+updateFieldBlur validate formField =
     { formField
-        | error = Nothing
+        | error = validate formField.value
     }
 
 
@@ -117,13 +118,14 @@ clearFields fields =
 getFormFieldState :
     Model
     -> String
+    -> (String -> FieldErrorState)
     ->
         { value : String
-        , error : Maybe { id : String, description : String }
+        , error : FieldErrorState
         , onInput : String -> Msg
         , onBlur : Msg
         }
-getFormFieldState model fieldId =
+getFormFieldState model fieldId validate =
     let
         formFieldModel =
             model.formFields
@@ -133,7 +135,7 @@ getFormFieldState model fieldId =
     { value = formFieldModel.value
     , error = formFieldModel.error
     , onInput = \value -> OnFormFieldInput { id = fieldId, value = value }
-    , onBlur = OnFormFieldBlur { id = fieldId }
+    , onBlur = OnFormFieldBlur { id = fieldId, validate = validate }
     }
 
 
