@@ -1,4 +1,4 @@
-module MySitemap exposing (build)
+module MySitemap exposing (build, path)
 
 import Metadata exposing (Frontmatter(..))
 import Pages
@@ -19,7 +19,7 @@ build :
         , content : String
         }
 build config siteMetadata =
-    { path = [ "sitemap.xml" ]
+    { path = path
     , content =
         Sitemap.build config
             (siteMetadata
@@ -31,3 +31,8 @@ build config siteMetadata =
                     )
             )
     }
+
+
+path : List String
+path =
+    [ "sitemap.xml" ]

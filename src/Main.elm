@@ -15,8 +15,11 @@ import Pages.Manifest.Category
 import Pages.PagePath exposing (PagePath)
 import Pages.Platform
 import Pages.StaticHttp as StaticHttp
+import State
 import SwagForm.View
 import Task
+import Types exposing (..)
+import View
 
 
 manifest : Manifest.Config Pages.PathKey
@@ -38,11 +41,11 @@ manifest =
 main : Pages.Platform.Program Model Msg Frontmatter (List (Html Msg))
 main =
     Pages.Platform.init
-        { init = \_ -> init
+        { init = \_ -> State.init
+        , update = State.update
+        , subscriptions = State.subscriptions
         , view = view
-        , update = update
-        , subscriptions = subscriptions
-        , documents = [ yamlDocument ]
+        , documents = [ View.yamlDocument ]
         , manifest = manifest
         , canonicalSiteUrl = Metadata.canonicalSiteUrl
         , onPageChange = Nothing
@@ -74,47 +77,6 @@ generateFiles siteMetadata =
             siteMetadata
             |> Ok
         ]
-
-
-yamlDocument :
-    { extension : String
-    , metadata : Json.Decode.Decoder Frontmatter
-    , body : String -> Result error (List (Html msg))
-    }
-yamlDocument =
-    { extension = "yml"
-    , metadata = Json.Decode.succeed Metadata.PageSwagForm
-    , body =
-        \body ->
-            Ok SwagForm.View.swagPage
-    }
-
-
-type alias Model =
-    {}
-
-
-init : ( Model, Cmd Msg )
-init =
-    ( Model
-    , Dom.focus "first-name" |> Task.attempt (\_ -> ())
-    )
-
-
-type alias Msg =
-    ()
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        () ->
-            ( model, Cmd.none )
-
-
-subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Sub.none
 
 
 view :
@@ -149,5 +111,5 @@ view siteMetadata page =
 
 commonHeadTags : List (Head.Tag Pages.PathKey)
 commonHeadTags =
-    [ Head.sitemapLink "/sitemap.xml"
+    [ Head.sitemapLink ("/" ++ String.join "/" MySitemap.path)
     ]
