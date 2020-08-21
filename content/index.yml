@@ -1,0 +1,80 @@
+submission_url:
+  # From the SIB UI as described here: https://talk.fission.codes/t/send-in-blue-for-swag-landing-page/966/4
+  "https://5d04d668.sibforms.com/serve/MUIEAE1F1kMPvB_leq-apIe4FvZagp1EgtljkIf1EQ-BDERfIN98YQhjbWjdTi-2eKy9IPUovj6kMItaZTVAodVJlyoTX8BPhS0LjzVaP6XSMnXu6Xey9Ez4VGzSV62IuIsnDS55QQiwcA7oRtB8aPU0EQ3AJG0dyICWT82taqDKeisgU1jdlnvk2Fj5oRFUiwsqYVIsHCL5ASEN"
+
+
+autofocus: "FIRSTNAME"
+
+
+form:
+
+  fields:
+
+    - id: "FIRSTNAME"
+      title: Your first name
+      column_start: first
+      column_end: middle
+      validation:
+        - filled:
+            description: Please fill in this field. # can be something custom / specific for this field, e.g. "We want to adress you personally, so please tell us your name."
+
+    - id: "LASTNAME"
+      title: Your last name
+      column_start: middle
+      column_end: last
+      validation:
+        - filled:
+            description: Please fill in this field.
+
+    - id: "EMAIL"
+      title: Email
+      column_start: first
+      column_end: last
+      validation:
+        - email
+
+    - id: "COMPANY"
+      title: "Company name"
+      column_start: first
+      column_end: last
+      subtext: Company or business name if this mailing address goes to an office
+      validation: []
+
+    - id: "ADDRESS_STREET"
+      title: Street Address
+      column_start: first
+      column_end: 5
+      validation:
+        - filled:
+            description: Please fill in this field
+
+
+    - id: "ADDRESS_CITYSTATE"
+      title: City and State
+      column_start: 5
+      column_end: last
+      subtext: e.g. “Vancour, BC”, or “Nixa, Missouri”
+      validation:
+        - filled:
+            description: Please fill in this field
+
+
+    - id: "ADDRESS_POSTAL"
+      title: Postal / ZIP Code
+      column_start: first
+      column_end: 4
+      validation:
+        - filled:
+            description: Please fill in this field
+
+
+    - id: "ADDRESS_COUNTRY"
+      title: Country
+      column_start: 4
+      column_end: last
+      validation:
+        - filled:
+            description: Please fill in this field
+
+
+call_to_action: Get some stickers!

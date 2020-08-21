@@ -22,6 +22,7 @@
             "elm-community/html-extra": "3.4.0",
             "elm-community/list-extra": "8.2.4",
             "elm-community/maybe-extra": "5.2.0",
+            "elm-community/result-extra": "2.4.0",
             "panthershark/email-parser": "1.0.2"
         },
         "indirect": {
@@ -33,7 +34,6 @@
             "elm/regex": "1.0.0",
             "elm/virtual-dom": "1.0.2",
             "elm-community/dict-extra": "2.4.0",
-            "elm-community/result-extra": "2.4.0",
             "fredcy/elm-parseint": "2.0.1",
             "lukewestby/elm-string-interpolate": "1.0.4",
             "mgold/elm-nonempty-list": "4.1.0",
