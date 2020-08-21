@@ -31,12 +31,13 @@ swagPage :
         , content : List (Html msg)
         }
     }
-    -> List (Html msg)
+    -> Html msg
 swagPage element =
-    [ hero
-    , formSection element.form
-    , footer []
-    ]
+    div []
+        [ hero
+        , formSection element.form
+        , footer []
+        ]
 
 
 

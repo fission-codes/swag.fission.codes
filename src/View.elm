@@ -22,7 +22,7 @@ import View.SwagForm
 yamlDocument :
     { extension : String
     , metadata : Json.Decode.Decoder Frontmatter
-    , body : String -> Result error (List (Html msg))
+    , body : String -> Result error (Html msg)
     }
 yamlDocument =
     { extension = "yml"

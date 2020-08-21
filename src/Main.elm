@@ -34,7 +34,7 @@ manifest =
     }
 
 
-main : Pages.Platform.Program Model Msg Frontmatter (List (Html Msg))
+main : Pages.Platform.Program Model Msg Frontmatter (Html Msg)
 main =
     Pages.Platform.init
         { init = \_ -> State.init
@@ -83,7 +83,7 @@ view :
         }
     ->
         StaticHttp.Request
-            { view : Model -> List (Html Msg) -> { title : String, body : Html Msg }
+            { view : Model -> Html Msg -> { title : String, body : Html Msg }
             , head : List (Head.Tag Pages.PathKey)
             }
 view siteMetadata page =
@@ -91,8 +91,7 @@ view siteMetadata page =
         { view =
             \model viewForPage ->
                 { title = Metadata.pageTitle page.frontmatter
-                , body =
-                    Html.div [] viewForPage
+                , body = viewForPage
                 }
         , head =
             List.concat
