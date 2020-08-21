@@ -52,26 +52,7 @@ yamlDocument =
                                     [ [ Html.input [ type_ "hidden", name "locale", value "en" ] []
                                       , Html.input [ type_ "hidden", name "html_type", value "simple" ] []
                                       ]
-                                    , List.map
-                                        (\{ id, title, column, subtext, validation } ->
-                                            View.SwagForm.textInput
-                                                { attributes =
-                                                    [ autofocus (id == "FIRSTNAME")
-                                                    , name id
-                                                    ]
-                                                , column = column
-                                                , id = id
-                                                , title = title
-                                                , subtext =
-                                                    case subtext of
-                                                        Just text ->
-                                                            View.SwagForm.helpSubtext [] text
-
-                                                        Nothing ->
-                                                            Html.nothing
-                                                }
-                                                (State.getFormFieldState model id validation)
-                                        )
+                                    , List.map (viewField model)
                                         [ { column = { start = View.SwagForm.First, end = View.SwagForm.Middle }
                                           , id = "FIRSTNAME"
                                           , title = "Your first name"
@@ -136,3 +117,33 @@ yamlDocument =
                             }
                         }
     }
+
+
+type alias FieldData =
+    { id : String
+    , title : String
+    , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
+    , subtext : Maybe String
+    , validation : String -> FieldErrorState
+    }
+
+
+viewField : Model -> FieldData -> Html Msg
+viewField model { id, title, column, subtext, validation } =
+    View.SwagForm.textInput
+        { attributes =
+            [ autofocus (id == "FIRSTNAME")
+            , name id
+            ]
+        , column = column
+        , id = id
+        , title = title
+        , subtext =
+            case subtext of
+                Just text ->
+                    View.SwagForm.helpSubtext [] text
+
+                Nothing ->
+                    Html.nothing
+        }
+        (State.getFormFieldState model id validation)
