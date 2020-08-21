@@ -1,6 +1,7 @@
 module Types exposing (..)
 
 import Dict exposing (Dict)
+import Http
 import Pages
 import Pages.ImagePath as Pages
 
@@ -22,3 +23,4 @@ type Msg
     = OnFormFieldInput { id : String, value : String }
     | OnFormSubmit
     | FocusedForm
+    | GotFormSubmissionResponse (Result Http.Error ())
