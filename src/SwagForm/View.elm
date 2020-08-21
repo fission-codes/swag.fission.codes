@@ -14,6 +14,99 @@ swagPage : List (Html msg)
 swagPage =
     [ hero
     , formSection
+        [ textInput
+            { attributes =
+                [ -- Not sufficient. Loses focus on hydration :/ Need to Dom.focus on init
+                  autofocus True
+                , name "FIRSTNAME"
+                , required True
+                ]
+            , column = { start = Column1, end = Middle }
+            , id = "FIRSTNAME"
+            , title = "Your first name"
+            , subtext = nothing
+            , error = Nothing
+            }
+        , textInput
+            { attributes =
+                [ name "LASTNAME"
+                , required True
+                ]
+            , column = { start = Middle, end = Column8 }
+            , id = "LASTNAME"
+            , title = "Your last name"
+            , subtext = nothing
+            , error = Nothing
+            }
+        , textInput
+            { attributes =
+                [ name "EMAIL"
+                , required True
+                ]
+            , column = { start = Column1, end = Column8 }
+            , id = "EMAIL"
+            , title = "Email"
+            , subtext = nothing
+            , error = Nothing
+            }
+        , textInput
+            { attributes =
+                [ name "COMPANY"
+                ]
+            , column = { start = Column1, end = Column8 }
+            , id = "COMPANY"
+            , title = "Company name"
+            , subtext = helpSubtext [] "Company or business name if this mailing address goes to an office"
+            , error = Nothing
+            }
+        , textInput
+            { attributes =
+                [ name "ADDRESS_STREET"
+                , required True
+                ]
+            , column = { start = Column1, end = Column5 }
+            , id = "ADDRESS_STREET"
+            , title = "Street Address"
+            , subtext = nothing
+            , error = Nothing
+            }
+        , textInput
+            { attributes =
+                [ name "ADDRESS_CITYSTATE"
+                , required True
+                ]
+            , column = { start = Column5, end = Column8 }
+            , id = "ADDRESS_CITYSTATE"
+            , title = "City and State"
+            , subtext = helpSubtext [] "e.g. “Vancour, BC”, or “Nixa, Missouri”"
+            , error = Nothing
+            }
+        , textInput
+            { attributes =
+                [ name "ADDRESS_POSTAL"
+                , required True
+                ]
+            , column = { start = Column1, end = Column4 }
+            , id = "ADDRESS_POSTAL"
+            , title = "Postal / ZIP Code"
+            , subtext = nothing
+            , error = Nothing
+            }
+        , textInput
+            { attributes =
+                [ name "ADDRESS_COUNTRY"
+                , required True
+                ]
+            , column = { start = Column4, end = Column8 }
+            , id = "ADDRESS_COUNTRY"
+            , title = "Country"
+            , subtext = nothing
+            , error = Nothing
+            }
+        , input [ type_ "hidden", name "locale", value "en" ] []
+        , input [ type_ "hidden", name "html_type", value "simple" ] []
+        , callToActionButton [] "Get some stickers!"
+        ]
     , footer [] []
     ]
 
@@ -94,11 +187,11 @@ hero =
         [ header []
         , div
             [ class "flex flex-col container mx-auto"
-            , class "lg:grid lg:grid-cols-22 lg:gap-3 lg:mt-10"
+            , class "lg:grid lg:grid-cols-11 lg:gap-3 lg:mt-10"
             ]
             [ image
                 [ class "mt-6"
-                , class "lg:col-start-1 lg:col-end-13 lg:row-span-2"
+                , class "lg:col-start-1 lg:col-end-7 lg:row-span-2"
                 ]
                 { src = images.headerIllustration
                 , alt = "Swag Stickers Illustration"
@@ -106,7 +199,7 @@ hero =
                 }
             , image
                 [ class "mt-6 w-48 mx-auto"
-                , class "lg:col-start-13 lg:col-end-20 lg:self-end lg:ml-0 lg:w-full"
+                , class "lg:col-start-7 lg:col-end-10 lg:self-end lg:ml-0 lg:w-full"
                 ]
                 { src = images.swagLogoVertical
                 , alt = "Swag Logo"
@@ -114,7 +207,7 @@ hero =
                 }
             , p
                 [ class "mt-6 text-center text-gray-300 font-body text-lg leading-relaxed"
-                , class "lg:col-start-13 lg:col-end-22 lg:text-left lg:text-lg"
+                , class "lg:col-start-7 lg:col-end-11 lg:text-left lg:text-lg"
                 ]
                 [ text "We've had fun creating some developer-centric memes, characters, and illustrations. Fill out your postal mail address below and we'll send you some stickers... plus we're going to sign you up for our Fission Product Updates newsletter :)" ]
             ]
@@ -125,8 +218,8 @@ hero =
 -- FORM SECTION
 
 
-formSection : Html msg
-formSection =
+formSection : List (Html msg) -> Html msg
+formSection content =
     div
         [ class "bg-white flex flex-col overflow-hidden px-8 py-10"
         , class "lg:py-24"
@@ -139,90 +232,7 @@ formSection =
             , method "POST"
             , action "https://5d04d668.sibforms.com/serve/MUIEAAsJdB5yz-qPvb7s1V1ZJkwH7-LtSYPVg5IsKwQ6GxB2ivvxOo_DZgeaAiAb7k0KfeW8zh2FmedZJL-1fYaQxFOB0cqtEkOA2WkHJC6qjv3_UblKbZ0tq0MeIU3v_JsBmfSs8-B0YbOfm294bCWV2Fu7Cum5t6DAT6Ga7j8SDuLc7DZHIDETwR94aeWQNfsCAnYZsB14A4fN"
             ]
-            [ textInput [ class "lg:col-start-5 lg-col-end-11" ]
-                { attributes =
-                    [ autofocus True -- Not sufficient. Loses focus on hydration :/ Need to Dom.focus on init
-                    , name "FIRSTNAME"
-                    , required True
-                    ]
-                , id = "FIRSTNAME"
-                , title = "Your first name"
-                , subtext = nothing
-                , error = Nothing
-                }
-            , textInput [ class "lg:col-start-11 lg:col-end-20" ]
-                { attributes =
-                    [ name "LASTNAME"
-                    , required True
-                    ]
-                , id = "LASTNAME"
-                , title = "Your last name"
-                , subtext = nothing
-                , error = Nothing
-                }
-            , textInput [ class "lg:col-start-5 lg:col-end-20" ]
-                { attributes =
-                    [ name "EMAIL"
-                    , required True
-                    ]
-                , id = "EMAIL"
-                , title = "Email"
-                , subtext = nothing
-                , error = Nothing
-                }
-            , textInput [ class "lg:col-start-5 lg:col-end-20" ]
-                { attributes =
-                    [ name "COMPANY"
-                    ]
-                , id = "COMPANY"
-                , title = "Company name"
-                , subtext = helpSubtext [] "Company or business name if this mailing address goes to an office"
-                , error = Nothing
-                }
-            , textInput [ class "lg:col-start-5 lg:col-end-13" ]
-                { attributes =
-                    [ name "ADDRESS_STREET"
-                    , required True
-                    ]
-                , id = "ADDRESS_STREET"
-                , title = "Street Address"
-                , subtext = nothing
-                , error = Nothing
-                }
-            , textInput [ class "lg:col-start-13 lg:col-end-20" ]
-                { attributes =
-                    [ name "ADDRESS_CITYSTATE"
-                    , required True
-                    ]
-                , id = "ADDRESS_CITYSTATE"
-                , title = "City and State"
-                , subtext = helpSubtext [] "e.g. “Vancour, BC”, or “Nixa, Missouri”"
-                , error = Nothing
-                }
-            , textInput [ class "lg:col-start-5 lg:col-end-11" ]
-                { attributes =
-                    [ name "ADDRESS_POSTAL"
-                    , required True
-                    ]
-                , id = "ADDRESS_POSTAL"
-                , title = "Postal / ZIP Code"
-                , subtext = nothing
-                , error = Nothing
-                }
-            , textInput [ class "lg:col-start-11 lg:col-end-20" ]
-                { attributes =
-                    [ name "ADDRESS_COUNTRY"
-                    , required True
-                    ]
-                , id = "ADDRESS_COUNTRY"
-                , title = "Country"
-                , subtext = nothing
-                , error = Nothing
-                }
-            , input [ type_ "hidden", name "locale", value "en" ] []
-            , input [ type_ "hidden", name "html_type", value "simple" ] []
-            , callToActionButton [] "Get some stickers!"
-            ]
+            content
         ]
 
 
@@ -289,17 +299,82 @@ fissionLogo =
 -- FORMS
 
 
+type Alignment
+    = Column1
+    | Column2
+    | Column3
+    | Column4
+    | Column5
+    | Column6
+    | Column7
+    | Column8
+    | Middle
+
+
+type StartOrEnd
+    = Start
+    | End
+
+
+alignmentToGridColumn : Alignment -> Int
+alignmentToGridColumn alignment =
+    let
+        -- The design is 11-column based, with 2 columns padding
+        -- (resulting in the 7 columns)
+        columnPadding =
+            2
+
+        -- converts from a 11-based grid to a 22-based grid
+        convert11ColumnTo22Column n =
+            -- start indices work differently,
+            -- they start at "1".
+            -- column 1 in 11-based should be the same in 22-based
+            (n - 1) * 2 + 1
+
+        computeFromColumn n =
+            columnPadding
+                + n
+                |> convert11ColumnTo22Column
+    in
+    case alignment of
+        Column1 ->
+            computeFromColumn 1
+
+        Column2 ->
+            computeFromColumn 2
+
+        Column3 ->
+            computeFromColumn 3
+
+        Column4 ->
+            computeFromColumn 4
+
+        Column5 ->
+            computeFromColumn 5
+
+        Column6 ->
+            computeFromColumn 6
+
+        Column7 ->
+            computeFromColumn 7
+
+        Column8 ->
+            computeFromColumn 8
+
+        Middle ->
+            12
+
+
 textInput :
-    List (Attribute msg)
-    ->
-        { attributes : List (Attribute msg)
-        , id : String
-        , title : String
-        , subtext : Html msg
-        , error : Maybe { id : String, description : String }
-        }
+    { column : { start : Alignment, end : Alignment }
+    , attributes : List (Attribute msg)
+    , id : String
+    , title : String
+    , subtext : Html msg
+    , error : Maybe { id : String, description : String }
+    }
     -> Html msg
-textInput attributes info =
+textInput info =
     let
         warningIcon =
             Svg.svg [ attribute "class" "h-5 w-5 text-red", SvgA.fill "currentColor", SvgA.viewBox "0 0 20 20" ]
@@ -329,7 +404,15 @@ textInput attributes info =
                     , errorSubtext = nothing
                     }
     in
-    div attributes
+    div
+        [ -- Using string manipulation with tailwind class names wouldn't play well with purging
+          [ info.column.start
+          , info.column.end
+          ]
+            |> List.map (alignmentToGridColumn >> String.fromInt)
+            |> String.join " / "
+            |> style "grid-column"
+        ]
         [ label
             [ for info.id
             , class "block font-body text-md text-gray-300 mt-2"
