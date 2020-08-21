@@ -3,6 +3,7 @@ module Metadata exposing
     , canonicalSiteUrl
     , decoder
     , head
+    , pageTitle
     )
 
 import Head
@@ -54,6 +55,11 @@ findMatchingImage imageAssetPath =
                 ImagePath.toString image
                     == imageAssetPath
             )
+
+
+pageTitle : Frontmatter -> String
+pageTitle PageSwagForm =
+    "Get Fission Swag"
 
 
 

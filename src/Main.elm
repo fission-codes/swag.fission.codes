@@ -7,7 +7,6 @@ import Head.Seo as Seo
 import Html exposing (Html)
 import Metadata exposing (Frontmatter)
 import MySitemap
-import Page.Index
 import Pages exposing (images, pages)
 import Pages.Manifest as Manifest
 import Pages.Manifest.Category
@@ -91,12 +90,9 @@ view siteMetadata page =
     StaticHttp.succeed
         { view =
             \model viewForPage ->
-                let
-                    rendered =
-                        Page.Index.view page.frontmatter viewForPage
-                in
-                { title = rendered.title
-                , body = Html.div [] rendered.body
+                { title = Metadata.pageTitle page.frontmatter
+                , body =
+                    Html.div [] viewForPage
                 }
         , head =
             List.concat
