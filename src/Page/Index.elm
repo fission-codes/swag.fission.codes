@@ -5,7 +5,7 @@ import Metadata exposing (Frontmatter(..))
 
 
 view : Frontmatter -> List (Html msg) -> { title : String, body : List (Html msg) }
-view LandingPage viewForPage =
+view PageSwagForm viewForPage =
     { title = "Get Fission Swag"
     , body =
         viewForPage

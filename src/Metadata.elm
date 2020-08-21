@@ -19,12 +19,12 @@ import Types exposing (..)
 
 
 type Frontmatter
-    = LandingPage
+    = PageSwagForm
 
 
 decoder : Decoder Frontmatter
 decoder =
-    Decode.succeed LandingPage
+    Decode.succeed PageSwagForm
 
 
 imageDecoder : Decoder ImagePath
@@ -83,7 +83,7 @@ siteTagline =
 head : Frontmatter -> List (Head.Tag Pages.PathKey)
 head metadata =
     case metadata of
-        LandingPage ->
+        PageSwagForm ->
             Seo.summaryLarge
                 { canonicalUrlOverride = Nothing
                 , siteName = siteTagline
