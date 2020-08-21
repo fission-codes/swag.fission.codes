@@ -15,6 +15,7 @@ import Json.Decode
 import Metadata exposing (Frontmatter)
 import Pages.Manifest as Manifest
 import Pages.StaticHttp as StaticHttp
+import State
 import Types exposing (..)
 import View.SwagForm
 
@@ -57,101 +58,63 @@ yamlDocument =
                                     , title = "Your first name"
                                     , subtext = Html.nothing
                                     }
-                                    { value = ""
-                                    , error = Nothing
-                                    , onInput = \value -> OnFormFieldInput { id = "FIRSTNAME", value = value }
-                                    }
+                                    (State.getSwagFieldState model "FIRSTNAME")
                                 , View.SwagForm.textInput
-                                    { attributes =
-                                        [ name "LASTNAME"
-                                        ]
+                                    { attributes = [ name "LASTNAME" ]
                                     , column = { start = View.SwagForm.Middle, end = View.SwagForm.Last }
                                     , id = "LASTNAME"
                                     , title = "Your last name"
                                     , subtext = Html.nothing
                                     }
-                                    { value = ""
-                                    , error = Nothing
-                                    , onInput = \value -> OnFormFieldInput { id = "LASTNAME", value = value }
-                                    }
+                                    (State.getSwagFieldState model "LASTNAME")
                                 , View.SwagForm.textInput
-                                    { attributes =
-                                        [ name "EMAIL"
-                                        ]
+                                    { attributes = [ name "EMAIL" ]
                                     , column = { start = View.SwagForm.First, end = View.SwagForm.Last }
                                     , id = "EMAIL"
                                     , title = "Email"
                                     , subtext = Html.nothing
                                     }
-                                    { value = ""
-                                    , error = Nothing
-                                    , onInput = \value -> OnFormFieldInput { id = "EMAIL", value = value }
-                                    }
+                                    (State.getSwagFieldState model "EMAIL")
                                 , View.SwagForm.textInput
-                                    { attributes =
-                                        [ name "COMPANY"
-                                        ]
+                                    { attributes = [ name "COMPANY" ]
                                     , column = { start = View.SwagForm.First, end = View.SwagForm.Last }
                                     , id = "COMPANY"
                                     , title = "Company name"
                                     , subtext = View.SwagForm.helpSubtext [] "Company or business name if this mailing address goes to an office"
                                     }
-                                    { value = ""
-                                    , error = Nothing
-                                    , onInput = \value -> OnFormFieldInput { id = "COMPANY", value = value }
-                                    }
+                                    (State.getSwagFieldState model "COMPANY")
                                 , View.SwagForm.textInput
-                                    { attributes =
-                                        [ name "ADDRESS_STREET"
-                                        ]
+                                    { attributes = [ name "ADDRESS_STREET" ]
                                     , column = { start = View.SwagForm.First, end = View.SwagForm.Column5 }
                                     , id = "ADDRESS_STREET"
                                     , title = "Street Address"
                                     , subtext = Html.nothing
                                     }
-                                    { value = ""
-                                    , error = Nothing
-                                    , onInput = \value -> OnFormFieldInput { id = "ADDRESS_STREET", value = value }
-                                    }
+                                    (State.getSwagFieldState model "ADDRESS_STREET")
                                 , View.SwagForm.textInput
-                                    { attributes =
-                                        [ name "ADDRESS_CITYSTATE"
-                                        ]
+                                    { attributes = [ name "ADDRESS_CITYSTATE" ]
                                     , column = { start = View.SwagForm.Column5, end = View.SwagForm.Last }
                                     , id = "ADDRESS_CITYSTATE"
                                     , title = "City and State"
                                     , subtext = View.SwagForm.helpSubtext [] "e.g. “Vancour, BC”, or “Nixa, Missouri”"
                                     }
-                                    { value = ""
-                                    , error = Nothing
-                                    , onInput = \value -> OnFormFieldInput { id = "ADDRESS_CITYSTATE", value = value }
-                                    }
+                                    (State.getSwagFieldState model "ADDRESS_CITYSTATE")
                                 , View.SwagForm.textInput
-                                    { attributes =
-                                        [ name "ADDRESS_POSTAL"
-                                        ]
+                                    { attributes = [ name "ADDRESS_POSTAL" ]
                                     , column = { start = View.SwagForm.First, end = View.SwagForm.Column4 }
                                     , id = "ADDRESS_POSTAL"
                                     , title = "Postal / ZIP Code"
                                     , subtext = Html.nothing
                                     }
-                                    { value = ""
-                                    , error = Nothing
-                                    , onInput = \value -> OnFormFieldInput { id = "ADDRESS_POSTAL", value = value }
-                                    }
+                                    (State.getSwagFieldState model "ADDRESS_POSTAL")
                                 , View.SwagForm.textInput
-                                    { attributes =
-                                        [ name "ADDRESS_COUNTRY"
-                                        ]
+                                    { attributes = [ name "ADDRESS_COUNTRY" ]
                                     , column = { start = View.SwagForm.Column4, end = View.SwagForm.Last }
                                     , id = "ADDRESS_COUNTRY"
                                     , title = "Country"
                                     , subtext = Html.nothing
                                     }
-                                    { value = ""
-                                    , error = Nothing
-                                    , onInput = \value -> OnFormFieldInput { id = "ADDRESS_COUNTRY", value = value }
-                                    }
+                                    (State.getSwagFieldState model "ADDRESS_COUNTRY")
                                 , View.SwagForm.callToActionButton
                                     { attributes = []
                                     , message = "Get some stickers!"

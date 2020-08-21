@@ -16,7 +16,9 @@ type alias Model =
 
 
 type alias FormField =
-    String
+    { value : String
+    , error : Maybe { id : String, description : String }
+    }
 
 
 type Msg

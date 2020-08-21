@@ -1,4 +1,9 @@
-module State exposing (init, subscriptions, update)
+module State exposing
+    ( getSwagFieldState
+    , init
+    , subscriptions
+    , update
+    )
 
 import Browser.Dom as Dom
 import Dict exposing (Dict)
@@ -44,7 +49,7 @@ update msg model =
                         (List.append
                             (model.swagForm
                                 |> Dict.toList
-                                |> List.map (\( id, value ) -> Http.stringPart id value)
+                                |> List.map formFieldSubmissionPart
                             )
                             [ Http.stringPart "html_type" "simple"
                             , Http.stringPart "locale" "en"
@@ -68,18 +73,46 @@ update msg model =
 
 formFieldInit : FormField
 formFieldInit =
-    ""
+    { value = ""
+    , error = Nothing
+    }
+
+
+formFieldSubmissionPart : ( String, FormField ) -> Http.Part
+formFieldSubmissionPart ( fieldId, { value } ) =
+    Http.stringPart fieldId value
 
 
 updateFieldValue : String -> FormField -> FormField
 updateFieldValue value formField =
-    value
+    { formField | value = value }
 
 
 clearFields : Dict String FormField -> Dict String FormField
 clearFields fields =
     fields
-        |> Dict.map (\_ _ -> "")
+        |> Dict.map (\_ _ -> formFieldInit)
+
+
+getSwagFieldState :
+    Model
+    -> String
+    ->
+        { value : String
+        , error : Maybe { id : String, description : String }
+        , onInput : String -> Msg
+        }
+getSwagFieldState model fieldId =
+    let
+        formFieldModel =
+            model.swagForm
+                |> Dict.get fieldId
+                |> Maybe.withDefault formFieldInit
+    in
+    { value = formFieldModel.value
+    , error = formFieldModel.error
+    , onInput = \value -> OnFormFieldInput { id = fieldId, value = value }
+    }
 
 
 subscriptions : Model -> Sub Msg
