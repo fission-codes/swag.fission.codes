@@ -15,7 +15,7 @@ import Types exposing (..)
 
 init : ( Model, Cmd Msg )
 init =
-    ( { swagForm = Dict.empty
+    ( { formFields = Dict.empty
       }
       -- We also need to focus the first form field here
       -- setting 'autofocus' on the input is not sufficient:
@@ -29,8 +29,8 @@ update msg model =
     case msg of
         OnFormFieldInput { id, value } ->
             ( { model
-                | swagForm =
-                    model.swagForm
+                | formFields =
+                    model.formFields
                         |> Dict.update id
                             (Maybe.withDefault formFieldInit
                                 >> updateFieldValue value
@@ -42,8 +42,8 @@ update msg model =
 
         OnFormFieldBlur { id } ->
             ( { model
-                | swagForm =
-                    model.swagForm
+                | formFields =
+                    model.formFields
                         |> Dict.update id
                             (Maybe.withDefault formFieldInit
                                 >> updateFieldBlur
@@ -60,7 +60,7 @@ update msg model =
                 , body =
                     Http.multipartBody
                         (List.append
-                            (model.swagForm
+                            (model.formFields
                                 |> Dict.toList
                                 |> List.map formFieldSubmissionPart
                             )
@@ -76,7 +76,7 @@ update msg model =
         GotFormSubmissionResponse response ->
             -- TODO handle errors
             -- TODO handle success: show 'thank you'
-            ( { model | swagForm = clearFields model.swagForm }
+            ( { model | formFields = clearFields model.formFields }
             , Cmd.none
             )
 
@@ -126,7 +126,7 @@ getFormFieldState :
 getFormFieldState model fieldId =
     let
         formFieldModel =
-            model.swagForm
+            model.formFields
                 |> Dict.get fieldId
                 |> Maybe.withDefault formFieldInit
     in

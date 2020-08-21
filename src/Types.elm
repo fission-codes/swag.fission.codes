@@ -11,7 +11,7 @@ type alias ImagePath =
 
 
 type alias Model =
-    { swagForm : Dict String FormField
+    { formFields : Dict String FormField
     }
 
 
