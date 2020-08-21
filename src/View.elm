@@ -60,7 +60,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "FIRSTNAME"
-                                        (\_ -> Nothing)
+                                        (State.validateFilled "Please fill in this field")
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "LASTNAME" ]
@@ -71,7 +71,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "LASTNAME"
-                                        (\_ -> Nothing)
+                                        (State.validateFilled "Please fill in this field")
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "EMAIL" ]
@@ -82,7 +82,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "EMAIL"
-                                        (\_ -> Nothing)
+                                        State.validateEmail
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "COMPANY" ]
@@ -93,7 +93,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "COMPANY"
-                                        (\_ -> Nothing)
+                                        (State.validateAll [])
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "ADDRESS_STREET" ]
@@ -104,7 +104,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "ADDRESS_STREET"
-                                        (\_ -> Nothing)
+                                        (State.validateFilled "Please fill in this field")
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "ADDRESS_CITYSTATE" ]
@@ -115,7 +115,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "ADDRESS_CITYSTATE"
-                                        (\_ -> Nothing)
+                                        (State.validateFilled "Please fill in this field")
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "ADDRESS_POSTAL" ]
@@ -126,7 +126,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "ADDRESS_POSTAL"
-                                        (\_ -> Nothing)
+                                        (State.validateFilled "Please fill in this field")
                                     )
                                 , View.SwagForm.textInput
                                     { attributes = [ name "ADDRESS_COUNTRY" ]
@@ -137,7 +137,7 @@ yamlDocument =
                                     }
                                     (State.getFormFieldState model
                                         "ADDRESS_COUNTRY"
-                                        (\_ -> Nothing)
+                                        (State.validateFilled "Please fill in this field")
                                     )
                                 , View.SwagForm.callToActionButton
                                     { attributes = []

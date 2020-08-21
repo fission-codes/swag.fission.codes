@@ -3,12 +3,16 @@ module State exposing
     , init
     , subscriptions
     , update
+    , validateAll
+    , validateEmail
+    , validateFilled
     )
 
 import Browser.Dom as Dom
 import Dict exposing (Dict)
 import Email
 import Http
+import Maybe.Extra as Maybe
 import Task
 import Types exposing (..)
 
@@ -137,6 +141,38 @@ getFormFieldState model fieldId validate =
     , onInput = \value -> OnFormFieldInput { id = fieldId, value = value }
     , onBlur = OnFormFieldBlur { id = fieldId, validate = validate }
     }
+
+
+validateEmail : String -> FieldErrorState
+validateEmail value =
+    if Email.isValid value then
+        Nothing
+
+    else
+        Just
+            { id = "invalid"
+            , description = "Please enter a valid email address."
+            }
+
+
+validateFilled : String -> String -> FieldErrorState
+validateFilled description value =
+    if String.isEmpty value then
+        Just { id = "required", description = description }
+
+    else
+        Nothing
+
+
+validateAll : List (String -> FieldErrorState) -> String -> FieldErrorState
+validateAll validators value =
+    List.foldl
+        (\validator errorState ->
+            errorState
+                |> Maybe.orElse (validator value)
+        )
+        Nothing
+        validators
 
 
 subscriptions : Model -> Sub Msg

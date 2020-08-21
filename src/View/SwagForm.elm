@@ -329,8 +329,12 @@ textInput info state =
         { errorInputAttributes, errorIcon, errorSubtext } =
             case state.error of
                 Just error ->
+                    let
+                        errorId =
+                            info.id ++ "-" ++ error.id
+                    in
                     { errorInputAttributes =
-                        [ attribute "aria-describedby" error.id
+                        [ attribute "aria-describedby" errorId
                         , attribute "aria-invalid" "true"
                         , class "pr-10 border-red text-red placeholder-red focus:border-red focus:shadow-outline-red"
                         ]
@@ -338,7 +342,7 @@ textInput info state =
                         div [ class "absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" ]
                             [ warningIcon ]
                     , errorSubtext =
-                        p [ class "mt-2 text-mds text-red", id error.id ]
+                        p [ class "mt-2 text-mds text-red", id errorId ]
                             [ text error.description ]
                     }
 
