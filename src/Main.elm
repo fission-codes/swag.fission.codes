@@ -6,7 +6,7 @@ import Head
 import Head.Seo as Seo
 import Html exposing (Html)
 import Json.Decode
-import Metadata exposing (Metadata)
+import Metadata exposing (Frontmatter)
 import MySitemap
 import Page.Index
 import Pages exposing (images, pages)
@@ -35,7 +35,7 @@ manifest =
     }
 
 
-main : Pages.Platform.Program Model Msg Metadata (List (Html Msg))
+main : Pages.Platform.Program Model Msg Frontmatter (List (Html Msg))
 main =
     Pages.Platform.init
         { init = \_ -> init
@@ -55,7 +55,7 @@ main =
 generateFiles :
     List
         { path : PagePath Pages.PathKey
-        , frontmatter : Metadata
+        , frontmatter : Frontmatter
         , body : String
         }
     ->
@@ -78,7 +78,7 @@ generateFiles siteMetadata =
 
 yamlDocument :
     { extension : String
-    , metadata : Json.Decode.Decoder Metadata
+    , metadata : Json.Decode.Decoder Frontmatter
     , body : String -> Result error (List (Html msg))
     }
 yamlDocument =
@@ -118,10 +118,10 @@ subscriptions _ =
 
 
 view :
-    List ( PagePath Pages.PathKey, Metadata )
+    List ( PagePath Pages.PathKey, Frontmatter )
     ->
         { path : PagePath Pages.PathKey
-        , frontmatter : Metadata
+        , frontmatter : Frontmatter
         }
     ->
         StaticHttp.Request
@@ -159,7 +159,7 @@ commonHeadTags =
 -}
 
 
-head : Metadata -> List (Head.Tag Pages.PathKey)
+head : Frontmatter -> List (Head.Tag Pages.PathKey)
 head metadata =
     commonHeadTags
         ++ (case metadata of

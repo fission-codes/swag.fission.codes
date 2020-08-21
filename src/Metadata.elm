@@ -1,4 +1,4 @@
-module Metadata exposing (Metadata(..), decoder)
+module Metadata exposing (Frontmatter(..), decoder)
 
 import Json.Decode as Decode exposing (Decoder)
 import List.Extra
@@ -7,11 +7,11 @@ import Pages.ImagePath as ImagePath
 import Types exposing (..)
 
 
-type Metadata
+type Frontmatter
     = LandingPage
 
 
-decoder : Decoder Metadata
+decoder : Decoder Frontmatter
 decoder =
     Decode.succeed LandingPage
 
