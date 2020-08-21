@@ -94,11 +94,11 @@ hero =
         [ header []
         , div
             [ class "flex flex-col container mx-auto"
-            , class "lg:grid lg:grid-cols-11 lg:gap-3 lg:mt-10"
+            , class "lg:grid lg:grid-cols-22 lg:gap-3 lg:mt-10"
             ]
             [ image
                 [ class "mt-6"
-                , class "lg:col-start-1 lg:col-end-7 lg:row-span-2"
+                , class "lg:col-start-1 lg:col-end-13 lg:row-span-2"
                 ]
                 { src = images.headerIllustration
                 , alt = "Swag Stickers Illustration"
@@ -106,7 +106,7 @@ hero =
                 }
             , image
                 [ class "mt-6 w-48 mx-auto"
-                , class "lg:col-start-7 lg:col-end-10 lg:self-end lg:ml-0 lg:w-full"
+                , class "lg:col-start-13 lg:col-end-20 lg:self-end lg:ml-0 lg:w-full"
                 ]
                 { src = images.swagLogoVertical
                 , alt = "Swag Logo"
@@ -114,7 +114,7 @@ hero =
                 }
             , p
                 [ class "mt-6 text-center text-gray-300 font-body text-lg leading-relaxed"
-                , class "lg:col-start-7 lg:col-end-11 lg:text-left lg:text-lg"
+                , class "lg:col-start-13 lg:col-end-22 lg:text-left lg:text-lg"
                 ]
                 [ text "We've had fun creating some developer-centric memes, characters, and illustrations. Fill out your postal mail address below and we'll send you some stickers... plus we're going to sign you up for our Fission Product Updates newsletter :)" ]
             ]
@@ -133,39 +133,34 @@ formSection =
         ]
         [ form
             [ class "flex flex-col container mx-auto"
-            , class "lg:grid lg:grid-cols-11 lg:gap-3"
+            , class "lg:grid lg:grid-cols-22 lg:gap-3"
 
             -- TODO Abstract
             , method "POST"
             , action "https://5d04d668.sibforms.com/serve/MUIEAAsJdB5yz-qPvb7s1V1ZJkwH7-LtSYPVg5IsKwQ6GxB2ivvxOo_DZgeaAiAb7k0KfeW8zh2FmedZJL-1fYaQxFOB0cqtEkOA2WkHJC6qjv3_UblKbZ0tq0MeIU3v_JsBmfSs8-B0YbOfm294bCWV2Fu7Cum5t6DAT6Ga7j8SDuLc7DZHIDETwR94aeWQNfsCAnYZsB14A4fN"
             ]
-            [ div
-                [ class "flex flex-col w-full"
-                , class "lg:flex-row lg:col-start-3 lg:col-end-10"
-                ]
-                [ textInput [ class "w-full lg:mr-6px" ]
-                    { attributes =
-                        [ autofocus True -- Not sufficient. Loses focus on hydration :/ Need to Dom.focus on init
-                        , name "FIRSTNAME"
-                        , required True
-                        ]
-                    , id = "FIRSTNAME"
-                    , title = "Your first name"
-                    , subtext = nothing
-                    , error = Nothing
-                    }
-                , textInput [ class "w-full lg:ml-6px" ]
-                    { attributes =
-                        [ name "LASTNAME"
-                        , required True
-                        ]
-                    , id = "LASTNAME"
-                    , title = "Your last name"
-                    , subtext = nothing
-                    , error = Nothing
-                    }
-                ]
-            , textInput [ class "lg:col-start-3 lg:col-end-10" ]
+            [ textInput [ class "lg:col-start-5 lg-col-end-11" ]
+                { attributes =
+                    [ autofocus True -- Not sufficient. Loses focus on hydration :/ Need to Dom.focus on init
+                    , name "FIRSTNAME"
+                    , required True
+                    ]
+                , id = "FIRSTNAME"
+                , title = "Your first name"
+                , subtext = nothing
+                , error = Nothing
+                }
+            , textInput [ class "lg:col-start-11 lg:col-end-20" ]
+                { attributes =
+                    [ name "LASTNAME"
+                    , required True
+                    ]
+                , id = "LASTNAME"
+                , title = "Your last name"
+                , subtext = nothing
+                , error = Nothing
+                }
+            , textInput [ class "lg:col-start-5 lg:col-end-20" ]
                 { attributes =
                     [ name "EMAIL"
                     , required True
@@ -175,7 +170,7 @@ formSection =
                 , subtext = nothing
                 , error = Nothing
                 }
-            , textInput [ class "lg:col-start-3 lg:col-end-10" ]
+            , textInput [ class "lg:col-start-5 lg:col-end-20" ]
                 { attributes =
                     [ name "COMPANY"
                     ]
@@ -184,7 +179,7 @@ formSection =
                 , subtext = helpSubtext [] "Company or business name if this mailing address goes to an office"
                 , error = Nothing
                 }
-            , textInput [ class "lg:col-start-3 lg:col-end-7" ]
+            , textInput [ class "lg:col-start-5 lg:col-end-13" ]
                 { attributes =
                     [ name "ADDRESS_STREET"
                     , required True
@@ -194,7 +189,7 @@ formSection =
                 , subtext = nothing
                 , error = Nothing
                 }
-            , textInput [ class "lg:col-start-7 lg:col-end-10" ]
+            , textInput [ class "lg:col-start-13 lg:col-end-20" ]
                 { attributes =
                     [ name "ADDRESS_CITYSTATE"
                     , required True
@@ -204,7 +199,7 @@ formSection =
                 , subtext = helpSubtext [] "e.g. “Vancour, BC”, or “Nixa, Missouri”"
                 , error = Nothing
                 }
-            , textInput [ class "lg:col-start-3 lg:col-end-6" ]
+            , textInput [ class "lg:col-start-5 lg:col-end-11" ]
                 { attributes =
                     [ name "ADDRESS_POSTAL"
                     , required True
@@ -214,7 +209,7 @@ formSection =
                 , subtext = nothing
                 , error = Nothing
                 }
-            , textInput [ class "lg:col-start-6 lg:col-end-10" ]
+            , textInput [ class "lg:col-start-11 lg:col-end-20" ]
                 { attributes =
                     [ name "ADDRESS_COUNTRY"
                     , required True
@@ -371,7 +366,7 @@ callToActionButton : List (Attribute msg) -> String -> Html msg
 callToActionButton attributes content =
     div
         [ class "mt-10 flex flex-col"
-        , class "lg:col-start-3 lg:col-end-10"
+        , class "lg:col-start-5 lg:col-end-20"
         ]
         [ input
             (class "mx-auto px-4 py-1 rounded-lg"
