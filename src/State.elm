@@ -7,6 +7,7 @@ module State exposing
 
 import Browser.Dom as Dom
 import Dict exposing (Dict)
+import FormField
 import Http
 import Maybe.Extra as Maybe
 import Task
@@ -28,12 +29,12 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OnFormFieldInput { id, value } ->
-            ( updateFormField model id (updateFieldValue value)
+            ( updateFormField model id (FormField.onInput value)
             , Cmd.none
             )
 
         OnFormFieldBlur { id, validate } ->
-            ( updateFormField model id (updateFieldBlur validate)
+            ( updateFormField model id (FormField.onBlur validate)
             , Cmd.none
             )
 
@@ -47,7 +48,7 @@ update msg model =
                         (List.append
                             (model.formFields
                                 |> Dict.toList
-                                |> List.map formFieldSubmissionPart
+                                |> List.map FormField.submissionPart
                             )
                             [ Http.stringPart "html_type" "simple"
                             , Http.stringPart "locale" "en"
@@ -61,7 +62,10 @@ update msg model =
         GotFormSubmissionResponse response ->
             -- TODO handle errors
             -- TODO handle success: show 'thank you'
-            ( { model | formFields = clearFields model.formFields }
+            ( { model
+                -- this resets all form field states
+                | formFields = Dict.empty
+              }
             , Cmd.none
             )
 
@@ -75,41 +79,11 @@ updateFormField model fieldId updater =
         | formFields =
             model.formFields
                 |> Dict.update fieldId
-                    (Maybe.withDefault formFieldInit
+                    (Maybe.withDefault FormField.init
                         >> updater
                         >> Just
                     )
     }
-
-
-formFieldInit : FormField
-formFieldInit =
-    { value = ""
-    , error = Nothing
-    }
-
-
-formFieldSubmissionPart : ( String, FormField ) -> Http.Part
-formFieldSubmissionPart ( fieldId, { value } ) =
-    Http.stringPart fieldId value
-
-
-updateFieldValue : String -> FormField -> FormField
-updateFieldValue value formField =
-    { formField | value = value }
-
-
-updateFieldBlur : (String -> FieldErrorState) -> FormField -> FormField
-updateFieldBlur validate formField =
-    { formField
-        | error = validate formField.value
-    }
-
-
-clearFields : Dict String FormField -> Dict String FormField
-clearFields fields =
-    fields
-        |> Dict.map (\_ _ -> formFieldInit)
 
 
 getFormFieldState :
@@ -127,7 +101,7 @@ getFormFieldState model fieldId validate =
         formFieldModel =
             model.formFields
                 |> Dict.get fieldId
-                |> Maybe.withDefault formFieldInit
+                |> Maybe.withDefault FormField.init
     in
     { value = formFieldModel.value
     , error = formFieldModel.error
