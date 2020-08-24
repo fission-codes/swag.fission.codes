@@ -45,7 +45,14 @@ yamlDocument =
 
 
 type alias Data =
-    { form : FormData }
+    { hero : HeroData
+    , form : FormData
+    }
+
+
+type alias HeroData =
+    { message : String
+    }
 
 
 type alias FormData =
@@ -80,7 +87,8 @@ type alias CallToActionData =
 view : Data -> Model -> Html Msg
 view data model =
     View.SwagForm.swagPage
-        { form =
+        { hero = data.hero.message
+        , form =
             -- The hidden inputs and method + action attributes make it possible to submit with javascript turned off
             { attributes =
                 [ method "POST"
@@ -150,7 +158,14 @@ viewField model autofocusId { id, title, column, subtext, validation } =
 decodeData : Yaml.Decoder Data
 decodeData =
     Yaml.succeed Data
+        |> Yaml.andMap (Yaml.field "hero" decodeHeroData)
         |> Yaml.andMap (Yaml.field "form" decodeFormData)
+
+
+decodeHeroData : Yaml.Decoder HeroData
+decodeHeroData =
+    Yaml.succeed HeroData
+        |> Yaml.andMap (Yaml.field "message" Yaml.string)
 
 
 decodeFormData : Yaml.Decoder FormData

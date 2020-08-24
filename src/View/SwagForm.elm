@@ -22,12 +22,14 @@ import Html.Extra exposing (..)
 import Pages exposing (images, pages)
 import Pages.ImagePath as ImagePath
 import Pages.PagePath as PagePath
+import String
 import Svg
 import Svg.Attributes as SvgA
 
 
 swagPage :
-    { form :
+    { hero : String
+    , form :
         { attributes : List (Attribute msg)
         , content : List (Html msg)
         , onSubmit : msg
@@ -36,7 +38,7 @@ swagPage :
     -> Html msg
 swagPage element =
     div []
-        [ hero
+        [ hero element.hero
         , formSection element.form
         , footer []
         ]
@@ -109,8 +111,8 @@ footerLink label url =
 -- HERO
 
 
-hero : Html msg
-hero =
+hero : String -> Html msg
+hero message =
     div
         [ class "bg-gray-600 flex flex-col overflow-hidden px-8 pb-16"
         , class "lg:pb-24"
@@ -139,8 +141,14 @@ hero =
             , p
                 [ class "mt-6 text-center text-gray-300 font-body text-lg leading-relaxed"
                 , class "lg:col-start-7 lg:col-end-11 lg:text-left lg:text-lg"
+                , class "prose"
                 ]
-                [ text "We've had fun creating some developer-centric memes, characters, and illustrations. Fill out your postal mail address below and we'll send you some stickers... plus we're going to sign you up for our Fission Product Updates newsletter :)" ]
+                (message
+                    |> String.trim
+                    |> String.split "\n"
+                    |> List.map text
+                    |> List.intersperse (br [] [])
+                )
             ]
         ]
 
