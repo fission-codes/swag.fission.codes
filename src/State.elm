@@ -28,28 +28,12 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OnFormFieldInput { id, value } ->
-            ( { model
-                | formFields =
-                    model.formFields
-                        |> Dict.update id
-                            (Maybe.withDefault formFieldInit
-                                >> updateFieldValue value
-                                >> Just
-                            )
-              }
+            ( updateFormField model id (updateFieldValue value)
             , Cmd.none
             )
 
         OnFormFieldBlur { id, validate } ->
-            ( { model
-                | formFields =
-                    model.formFields
-                        |> Dict.update id
-                            (Maybe.withDefault formFieldInit
-                                >> updateFieldBlur validate
-                                >> Just
-                            )
-              }
+            ( updateFormField model id (updateFieldBlur validate)
             , Cmd.none
             )
 
@@ -83,6 +67,19 @@ update msg model =
 
         FocusedForm ->
             ( model, Cmd.none )
+
+
+updateFormField : Model -> String -> (FormField -> FormField) -> Model
+updateFormField model fieldId updater =
+    { model
+        | formFields =
+            model.formFields
+                |> Dict.update fieldId
+                    (Maybe.withDefault formFieldInit
+                        >> updater
+                        >> Just
+                    )
+    }
 
 
 formFieldInit : FormField
