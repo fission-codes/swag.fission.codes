@@ -50,7 +50,7 @@ type alias Data =
 
 type alias FormData =
     { submissionUrl : String
-    , callToAction : String
+    , callToAction : CallToActionData
     , autofocus : String
     , fields : List FieldData
     }
@@ -62,6 +62,14 @@ type alias FieldData =
     , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
     , subtext : Maybe String
     , validation : String -> FieldErrorState
+    }
+
+
+type alias CallToActionData =
+    { waiting : String
+    , submitting : String
+    , error : String
+    , submitted : String
     }
 
 
@@ -97,16 +105,16 @@ view data model =
                             , message =
                                 case model.submissionStatus of
                                     Waiting ->
-                                        data.form.callToAction
+                                        data.form.callToAction.waiting
 
                                     Submitting ->
-                                        "Submitting …"
+                                        data.form.callToAction.submitting
 
                                     Error ->
-                                        "Submit failed, please try again"
+                                        data.form.callToAction.error
 
                                     Submitted ->
-                                        "Thank you!"
+                                        data.form.callToAction.submitted
                             }
                       ]
                     ]
@@ -149,9 +157,18 @@ decodeFormData : Yaml.Decoder FormData
 decodeFormData =
     Yaml.succeed FormData
         |> Yaml.andMap (Yaml.field "submission_url" Yaml.string)
-        |> Yaml.andMap (Yaml.field "call_to_action" Yaml.string)
+        |> Yaml.andMap (Yaml.field "call_to_action" callToActionData)
         |> Yaml.andMap (Yaml.field "autofocus" Yaml.string)
         |> Yaml.andMap (Yaml.field "fields" (Yaml.list decodeFieldData))
+
+
+callToActionData : Yaml.Decoder CallToActionData
+callToActionData =
+    Yaml.succeed CallToActionData
+        |> Yaml.andMap (Yaml.field "waiting" Yaml.string)
+        |> Yaml.andMap (Yaml.field "submitting" Yaml.string)
+        |> Yaml.andMap (Yaml.field "error" Yaml.string)
+        |> Yaml.andMap (Yaml.field "submitted" Yaml.string)
 
 
 decodeFieldData : Yaml.Decoder FieldData
