@@ -6,7 +6,6 @@ module State exposing
     )
 
 import Browser.Dom as Dom
-import Browser.Events
 import Dict exposing (Dict)
 import FormField
 import Http
@@ -18,7 +17,6 @@ import Types exposing (..)
 init : ( Model, Cmd Msg )
 init =
     ( { formFields = Dict.empty
-      , blurToDebounce = Nothing
       }
       -- We also need to focus the first form field here
       -- setting 'autofocus' on the input is not sufficient:
@@ -35,14 +33,8 @@ update msg model =
             , Cmd.none
             )
 
-        OnFormFieldBlur info ->
-            ( { model | blurToDebounce = Just info }
-            , Cmd.none
-            )
-
-        OnDebouncedFieldBlur { id, validate } ->
+        OnFormFieldBlur { id, validate } ->
             ( updateFormField model id (FormField.checkValidation validate)
-                |> clearDebounce
             , Cmd.none
             )
 
@@ -100,11 +92,6 @@ updateFormField model fieldId updater =
     }
 
 
-clearDebounce : Model -> Model
-clearDebounce model =
-    { model | blurToDebounce = Nothing }
-
-
 getFormFieldState :
     Model
     -> String
@@ -159,10 +146,5 @@ formFieldErrors model fields =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
-    case model.blurToDebounce of
-        Just info ->
-            Browser.Events.onAnimationFrame (\_ -> OnDebouncedFieldBlur info)
-
-        Nothing ->
-            Sub.none
+subscriptions _ =
+    Sub.none

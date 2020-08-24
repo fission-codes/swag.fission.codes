@@ -12,7 +12,6 @@ type alias ImagePath =
 
 type alias Model =
     { formFields : Dict String FormField
-    , blurToDebounce : Maybe { id : String, validate : String -> FieldErrorState }
     }
 
 
@@ -32,4 +31,3 @@ type Msg
     | FocusedForm
     | GotFormSubmissionResponse (Result Http.Error ())
     | OnFormFieldBlur { id : String, validate : String -> FieldErrorState }
-    | OnDebouncedFieldBlur { id : String, validate : String -> FieldErrorState }
