@@ -94,7 +94,19 @@ view data model =
                     , List.map (viewField model data.form.autofocus) data.form.fields
                     , [ View.SwagForm.callToActionButton
                             { attributes = []
-                            , message = data.form.callToAction
+                            , message =
+                                case model.submissionStatus of
+                                    Waiting ->
+                                        data.form.callToAction
+
+                                    Submitting ->
+                                        "Submitting …"
+
+                                    Error ->
+                                        "Something went wrong. Please try again."
+
+                                    Submitted ->
+                                        "Thank you!"
                             }
                       ]
                     ]

@@ -401,7 +401,7 @@ callToActionButton { attributes, message } =
         [ input
             (class "mx-auto px-4 py-1 rounded-lg"
                 :: class "appearance-none bg-gray-200 cursor-pointer"
-                :: class "text-lg font-display font-medium leading-relaxed text-gray-600"
+                :: class "text-lg text-center font-display font-medium leading-relaxed text-gray-600"
                 :: class "hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-300"
                 :: type_ "submit"
                 :: value message
