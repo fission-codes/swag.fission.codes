@@ -18,7 +18,15 @@ submissionPart ( fieldId, { value } ) =
 
 onInput : String -> FormField -> FormField
 onInput value formField =
-    { formField | value = value }
+    { formField
+        | value = value
+        , error =
+            if value /= formField.value then
+                Nothing
+
+            else
+                formField.error
+    }
 
 
 checkValidation : (String -> FieldErrorState) -> FormField -> FormField
