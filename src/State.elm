@@ -17,6 +17,7 @@ import Types exposing (..)
 init : ( Model, Cmd Msg )
 init =
     ( { formFields = Dict.empty
+      , submissionStatus = Waiting
       }
       -- We also need to focus the first form field here
       -- setting 'autofocus' on the input is not sufficient:
@@ -28,6 +29,9 @@ init =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        FocusedForm ->
+            ( model, Cmd.none )
+
         OnFormFieldInput { id, value } ->
             ( updateFormField model id (FormField.onInput value)
             , Cmd.none
@@ -41,7 +45,7 @@ update msg model =
         OnFormSubmit { submissionUrl, fields } ->
             case formFieldErrors model fields of
                 Nothing ->
-                    ( model
+                    ( { model | submissionStatus = Submitting }
                     , sendSubmit submissionUrl model
                     )
 
@@ -56,12 +60,10 @@ update msg model =
             ( { model
                 -- this resets all form field states
                 | formFields = Dict.empty
+                , submissionStatus = Submitted
               }
             , Cmd.none
             )
-
-        FocusedForm ->
-            ( model, Cmd.none )
 
 
 updateFormField : Model -> String -> (FormField -> FormField) -> Model

@@ -12,6 +12,7 @@ type alias ImagePath =
 
 type alias Model =
     { formFields : Dict String FormField
+    , submissionStatus : Status
     }
 
 
@@ -19,6 +20,13 @@ type alias FormField =
     { value : String
     , error : FieldErrorState
     }
+
+
+type Status
+    = Waiting
+    | Submitting
+    | Submitted
+    | Error
 
 
 type alias FieldErrorState =
