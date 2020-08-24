@@ -43,16 +43,23 @@ update msg model =
             )
 
         OnFormSubmit { submissionUrl, fields } ->
-            case formFieldErrors model fields of
-                Nothing ->
-                    ( { model | submissionStatus = Submitting }
-                    , sendSubmit submissionUrl model
-                    )
+            -- Don't send multiple submissions when the user clicks multiple times.
+            if model.submissionStatus == Submitting then
+                ( model
+                , Cmd.none
+                )
 
-                Just modelWithErrors ->
-                    ( modelWithErrors
-                    , Cmd.none
-                    )
+            else
+                case formFieldErrors model fields of
+                    Nothing ->
+                        ( { model | submissionStatus = Submitting }
+                        , sendSubmit submissionUrl model
+                        )
+
+                    Just modelWithErrors ->
+                        ( modelWithErrors
+                        , Cmd.none
+                        )
 
         GotFormSubmissionResponse response ->
             case response of
