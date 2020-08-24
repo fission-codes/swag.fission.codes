@@ -27,7 +27,7 @@ type alias FieldErrorState =
 
 type Msg
     = OnFormFieldInput { id : String, value : String }
-    | OnFormSubmit { submissionUrl : String }
+    | OnFormSubmit { submissionUrl : String, fields : List { id : String, validate : String -> FieldErrorState } }
     | FocusedForm
     | GotFormSubmissionResponse (Result Http.Error ())
     | OnFormFieldBlur { id : String, validate : String -> FieldErrorState }

@@ -38,26 +38,32 @@ update msg model =
             , Cmd.none
             )
 
-        OnFormSubmit { submissionUrl } ->
-            -- TODO Make sure there are no errors in the form (also disable the submission button)
-            ( model
-            , Http.post
-                { url = submissionUrl
-                , body =
-                    Http.multipartBody
-                        (List.append
-                            (model.formFields
-                                |> Dict.toList
-                                |> List.map FormField.submissionPart
-                            )
-                            [ Http.stringPart "html_type" "simple"
-                            , Http.stringPart "locale" "en"
-                            ]
-                        )
-                , expect =
-                    Http.expectWhatever GotFormSubmissionResponse
-                }
-            )
+        OnFormSubmit { submissionUrl, fields } ->
+            case formFieldErrors model fields of
+                Nothing ->
+                    ( model
+                    , Http.post
+                        { url = submissionUrl
+                        , body =
+                            Http.multipartBody
+                                (List.append
+                                    (model.formFields
+                                        |> Dict.toList
+                                        |> List.map FormField.submissionPart
+                                    )
+                                    [ Http.stringPart "html_type" "simple"
+                                    , Http.stringPart "locale" "en"
+                                    ]
+                                )
+                        , expect =
+                            Http.expectWhatever GotFormSubmissionResponse
+                        }
+                    )
+
+                Just modelWithErrors ->
+                    ( modelWithErrors
+                    , Cmd.none
+                    )
 
         GotFormSubmissionResponse response ->
             -- TODO handle errors
@@ -108,6 +114,35 @@ getFormFieldState model fieldId validate =
     , onInput = \value -> OnFormFieldInput { id = fieldId, value = value }
     , onBlur = OnFormFieldBlur { id = fieldId, validate = validate }
     }
+
+
+formFieldErrors : Model -> List { id : String, validate : String -> FieldErrorState } -> Maybe Model
+formFieldErrors model fields =
+    fields
+        |> List.foldl
+            (\field modelWithErrors ->
+                let
+                    updatedField =
+                        model.formFields
+                            |> Dict.get field.id
+                            |> Maybe.withDefault FormField.init
+                            |> FormField.checkValidation field.validate
+
+                    updatedModel =
+                        Maybe.withDefault model modelWithErrors
+                in
+                if Maybe.isJust updatedField.error then
+                    Just
+                        { updatedModel
+                            | formFields =
+                                updatedModel.formFields
+                                    |> Dict.insert field.id updatedField
+                        }
+
+                else
+                    modelWithErrors
+            )
+            Nothing
 
 
 subscriptions : Model -> Sub Msg

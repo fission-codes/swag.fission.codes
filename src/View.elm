@@ -44,13 +44,8 @@ yamlDocument =
 -- DATA DEFINITIONS
 
 
-type alias FieldData =
-    { id : String
-    , title : String
-    , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
-    , subtext : Maybe String
-    , validation : String -> FieldErrorState
-    }
+type alias Data =
+    { form : FormData }
 
 
 type alias FormData =
@@ -61,8 +56,13 @@ type alias FormData =
     }
 
 
-type alias Data =
-    { form : FormData }
+type alias FieldData =
+    { id : String
+    , title : String
+    , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
+    , subtext : Maybe String
+    , validation : String -> FieldErrorState
+    }
 
 
 
@@ -78,7 +78,14 @@ view data model =
                 [ method "POST"
                 , action data.form.submissionUrl
                 ]
-            , onSubmit = OnFormSubmit { submissionUrl = data.form.submissionUrl }
+            , onSubmit =
+                OnFormSubmit
+                    { submissionUrl = data.form.submissionUrl
+                    , fields =
+                        data.form.fields
+                            |> List.map
+                                (\field -> { id = field.id, validate = field.validation })
+                    }
             , content =
                 List.concat
                     [ [ Html.input [ type_ "hidden", name "locale", value "en" ] []
