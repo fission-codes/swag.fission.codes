@@ -8,14 +8,14 @@
 * `npm run build`
 * All assets are static and built in `dist/`
 
-If you want to look at the production site locally, use `npm run serve` and open [`https://localhost:3000`](https://localhost:3000).
+If you want to look at the production site locally, use `npm run serve` and open [`http://localhost:3000`](http://localhost:3000).
 
 
 ### develop
 
 * `npm i`
 * `npm start`
-* Open [`https://localhost:3000`](https://localhost:3000)
+* Open [`http://localhost:3000`](http://localhost:3000)
 
 
 ### adjust content
