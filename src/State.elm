@@ -42,22 +42,7 @@ update msg model =
             case formFieldErrors model fields of
                 Nothing ->
                     ( model
-                    , Http.post
-                        { url = submissionUrl
-                        , body =
-                            Http.multipartBody
-                                (List.append
-                                    (model.formFields
-                                        |> Dict.toList
-                                        |> List.map FormField.submissionPart
-                                    )
-                                    [ Http.stringPart "html_type" "simple"
-                                    , Http.stringPart "locale" "en"
-                                    ]
-                                )
-                        , expect =
-                            Http.expectWhatever GotFormSubmissionResponse
-                        }
+                    , sendSubmit submissionUrl model
                     )
 
                 Just modelWithErrors ->
@@ -143,6 +128,26 @@ formFieldErrors model fields =
                     modelWithErrors
             )
             Nothing
+
+
+sendSubmit : String -> Model -> Cmd Msg
+sendSubmit submissionUrl model =
+    Http.post
+        { url = submissionUrl
+        , body =
+            Http.multipartBody
+                (List.append
+                    (model.formFields
+                        |> Dict.toList
+                        |> List.map FormField.submissionPart
+                    )
+                    [ Http.stringPart "html_type" "simple"
+                    , Http.stringPart "locale" "en"
+                    ]
+                )
+        , expect =
+            Http.expectWhatever GotFormSubmissionResponse
+        }
 
 
 subscriptions : Model -> Sub Msg
