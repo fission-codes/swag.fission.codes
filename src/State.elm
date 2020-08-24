@@ -55,15 +55,30 @@ update msg model =
                     )
 
         GotFormSubmissionResponse response ->
-            -- TODO handle errors
-            -- TODO handle success: show 'thank you'
-            ( { model
-                -- this resets all form field states
-                | formFields = Dict.empty
-                , submissionStatus = Submitted
-              }
-            , Cmd.none
-            )
+            case response of
+                Ok () ->
+                    ( submitSuccessful model
+                    , Cmd.none
+                    )
+
+                Err (Http.BadStatus status) ->
+                    -- A statuscode of 3xx is only a redirect,
+                    -- the request has been successfull anyway.
+                    if 200 <= status && status < 400 then
+                        ( submitSuccessful model
+                        , Cmd.none
+                        )
+
+                    else
+                        ( submitUnsuccessful model
+                        , Cmd.none
+                        )
+
+                Err _ ->
+                    -- We don't inform the user about the exact error that happened.
+                    ( submitUnsuccessful model
+                    , Cmd.none
+                    )
 
 
 updateFormField : Model -> String -> (FormField -> FormField) -> Model
@@ -150,6 +165,22 @@ sendSubmit submissionUrl model =
         , expect =
             Http.expectWhatever GotFormSubmissionResponse
         }
+
+
+submitSuccessful : Model -> Model
+submitSuccessful model =
+    { model
+      -- this resets all form field states
+        | formFields = Dict.empty
+        , submissionStatus = Submitted
+    }
+
+
+submitUnsuccessful : Model -> Model
+submitUnsuccessful model =
+    { model
+        | submissionStatus = Error
+    }
 
 
 subscriptions : Model -> Sub Msg

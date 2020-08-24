@@ -103,7 +103,7 @@ view data model =
                                         "Submitting …"
 
                                     Error ->
-                                        "Something went wrong. Please try again."
+                                        "Submit failed, please try again."
 
                                     Submitted ->
                                         "Thank you!"
