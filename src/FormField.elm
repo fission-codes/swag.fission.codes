@@ -21,8 +21,8 @@ onInput value formField =
     { formField | value = value }
 
 
-onBlur : (String -> FieldErrorState) -> FormField -> FormField
-onBlur validate formField =
+checkValidation : (String -> FieldErrorState) -> FormField -> FormField
+checkValidation validate formField =
     { formField
         | error = validate formField.value
     }

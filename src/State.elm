@@ -34,7 +34,7 @@ update msg model =
             )
 
         OnFormFieldBlur { id, validate } ->
-            ( updateFormField model id (FormField.onBlur validate)
+            ( updateFormField model id (FormField.checkValidation validate)
             , Cmd.none
             )
 
