@@ -1,6 +1,6 @@
 hero:
 
-  message:
+  message: # you can use some markup, like **bold**, _italic_ or line breaks with <br />
     We've had fun creating some developer-centric memes, characters, and illustrations.
     Fill out your postal mail address below and we'll send you some stickers...
     plus we're going to sign you up for our Fission Product Updates newsletter :)
@@ -24,6 +24,7 @@ form:
     submitted: Thank you!
 
 
+  # Not quite functional. Changing this will only change what field gets autofocused, if the user has javascript disabled.
   autofocus: "FIRSTNAME"
 
   fields:

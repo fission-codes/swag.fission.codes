@@ -28,7 +28,7 @@ import Svg.Attributes as SvgA
 
 
 swagPage :
-    { hero : String
+    { hero : List (Html msg)
     , form :
         { attributes : List (Attribute msg)
         , content : List (Html msg)
@@ -111,7 +111,7 @@ footerLink label url =
 -- HERO
 
 
-hero : String -> Html msg
+hero : List (Html msg) -> Html msg
 hero message =
     div
         [ class "bg-gray-600 flex flex-col overflow-hidden px-8 pb-16"
@@ -143,12 +143,7 @@ hero message =
                 , class "lg:col-start-7 lg:col-end-11 lg:text-left lg:text-lg"
                 , class "prose"
                 ]
-                (message
-                    |> String.trim
-                    |> String.split "\n"
-                    |> List.map text
-                    |> List.intersperse (br [] [])
-                )
+                message
             ]
         ]
 

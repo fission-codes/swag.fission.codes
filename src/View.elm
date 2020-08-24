@@ -51,7 +51,7 @@ type alias Data =
 
 
 type alias HeroData =
-    { message : String
+    { message : List (Html Msg)
     }
 
 
@@ -165,7 +165,7 @@ decodeData =
 decodeHeroData : Yaml.Decoder HeroData
 decodeHeroData =
     Yaml.succeed HeroData
-        |> Yaml.andMap (Yaml.field "message" Yaml.string)
+        |> Yaml.andMap (Yaml.field "message" Yaml.markdownString)
 
 
 decodeFormData : Yaml.Decoder FormData

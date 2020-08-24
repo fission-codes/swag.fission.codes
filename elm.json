@@ -23,6 +23,7 @@
             "elm-community/list-extra": "8.2.4",
             "elm-community/maybe-extra": "5.2.0",
             "elm-community/result-extra": "2.4.0",
+            "pablohirafuji/elm-markdown": "2.0.5",
             "panthershark/email-parser": "1.0.2"
         },
         "indirect": {
