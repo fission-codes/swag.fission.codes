@@ -1,4 +1,4 @@
-module View.SwagForm exposing (Alignment(..), callToActionButton, footerLink, helpSubtext, swagPage, textInput)
+module View.SwagForm exposing (Alignment(..), callToActionButton, checkbox, footerLink, helpSubtext, swagPage, textInput, toggle)
 
 import Html exposing (..)
 import Html.Attributes
@@ -12,11 +12,13 @@ import Html.Attributes
         , id
         , src
         , style
+        , tabindex
         , title
         , type_
         , value
         , width
         )
+import Html.Attributes.Extra exposing (role)
 import Html.Events as Events
 import Html.Extra exposing (..)
 import Pages exposing (images, pages)
@@ -389,6 +391,60 @@ helpSubtext attributes content =
             :: attributes
         )
         [ text content ]
+
+
+checkbox : Html msg
+checkbox =
+    label
+        [ gridColumnStyle { start = First, end = Last }
+        , class "my-4 inline-flex items-center"
+        ]
+        [ input
+            [ type_ "checkbox"
+            , class "m-2 h-6 w-6 form-checkbox text-purple"
+            ]
+            []
+        , span [ class "ml-2" ] [ text "Yes, I understand that I'm opting in to sign up for the Fission product email list. Send me stickers!" ]
+        ]
+
+
+toggle : List (Attribute msg) -> Bool -> Html msg
+toggle attributes isOn =
+    let
+        isOnString =
+            if isOn then
+                "true"
+
+            else
+                "false"
+    in
+    span
+        (List.append attributes
+            [ role "checkbox"
+            , tabindex 0
+            , attribute "aria-checked" isOnString
+            , class "relative inline-flex flex-shrink-0"
+            , class "h-6 w-11 border-2 border-transparent rounded-full cursor-pointer"
+            , class "transition-colors ease-in-out duration-200"
+            , class "focus:outline-none focus:shadow-outline"
+            , if isOn then
+                class "bg-indigo-600"
+
+              else
+                class "bg-gray-200"
+            ]
+        )
+        [ span
+            [ attribute "aria-hidden" "true"
+            , class "inline-block h-5 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200"
+            , if isOn then
+                class "translate-x-5"
+
+              else
+                class "translate-x-0"
+            ]
+            []
+        ]
 
 
 callToActionButton :

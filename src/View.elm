@@ -108,7 +108,8 @@ view data model =
                       , Html.input [ type_ "hidden", name "html_type", value "simple" ] []
                       ]
                     , List.map (viewField model data.form.autofocus) data.form.fields
-                    , [ View.SwagForm.callToActionButton
+                    , [ View.SwagForm.checkbox
+                      , View.SwagForm.callToActionButton
                             { attributes = []
                             , message =
                                 case model.submissionStatus of

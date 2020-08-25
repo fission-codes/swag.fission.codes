@@ -36,6 +36,9 @@ const tailwindConfig = {
             gridTemplateColumns: {
                 '22': 'repeat(22, minmax(0, 1fr))',
             },
+            boxShadow: {
+                outline: `0 0 0 3px rgba(100, 70, 250, 0.5)`, // kit.colors.purple wiht 50% transparency
+            },
         },
 
         customForms: theme => ({
@@ -49,6 +52,12 @@ const tailwindConfig = {
                         boxShadow: undefined,
                     }
                 },
+                checkbox: {
+                    '&:focus': {
+                        boxShadow: theme('boxShadow.outline'),
+                        borderColor: kit.colors.purple,
+                    },
+                },
             },
         }),
     },
@@ -58,10 +67,7 @@ const tailwindConfig = {
     ],
 };
 
-export default process.env["NODE_ENV"] === "production" ?
-    [
-        tailwindcss(tailwindConfig),
-        autoprefixer,
-    ] : [
-        tailwindcss(tailwindConfig),
-    ];
+export default [
+    tailwindcss(tailwindConfig),
+    autoprefixer,
+];
