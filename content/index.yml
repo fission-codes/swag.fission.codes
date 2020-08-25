@@ -104,8 +104,11 @@ form:
         - filled:
             description: Please fill in this field
 
+
     - type: checkbox
       id: "ACCEPTED"
       column_start: first
       column_end: last
       description: Yes, I understand that I'm opting in to sign up for the Fission product email list. Send me stickers!
+      require_checked: Please check this checkmark # or just false
+

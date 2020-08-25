@@ -145,7 +145,7 @@ getFormFieldState model fieldId validate =
     }
 
 
-getCheckboxState : Model -> String -> { checked : Bool, onCheck : Bool -> Msg }
+getCheckboxState : Model -> String -> { checked : Bool, onCheck : Bool -> Msg, error : Maybe String }
 getCheckboxState model fieldId =
     let
         formCheckboxModel =
@@ -155,6 +155,7 @@ getCheckboxState model fieldId =
     in
     { checked = formCheckboxModel.value
     , onCheck = \checked -> OnFormFieldCheck { id = fieldId, checked = checked }
+    , error = Just "Yo just fill this, okay?"
     }
 
 

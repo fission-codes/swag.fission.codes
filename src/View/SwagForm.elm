@@ -326,13 +326,7 @@ textInput :
     -> Html msg
 textInput info state =
     let
-        warningIcon =
-            Svg.svg [ attribute "class" "h-5 w-5 text-red", SvgA.fill "currentColor", SvgA.viewBox "0 0 20 20" ]
-                [ Svg.path [ attribute "clip-rule" "evenodd", SvgA.d "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z", attribute "fill-rule" "evenodd" ]
-                    []
-                ]
-
-        { errorInputAttributes, errorIcon, errorSubtext } =
+        { errorInputAttributes, errorIcon, errorMessage } =
             case state.error of
                 Just error ->
                     let
@@ -346,8 +340,8 @@ textInput info state =
                         ]
                     , errorIcon =
                         div [ class "absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" ]
-                            [ warningIcon ]
-                    , errorSubtext =
+                            [ warningIcon [] ]
+                    , errorMessage =
                         p [ class "mt-2 text-mds text-red", id errorId ]
                             [ text error.description ]
                     }
@@ -355,7 +349,7 @@ textInput info state =
                 Nothing ->
                     { errorInputAttributes = []
                     , errorIcon = nothing
-                    , errorSubtext = nothing
+                    , errorMessage = nothing
                     }
     in
     div [ gridColumnStyle info.column ]
@@ -380,7 +374,7 @@ textInput info state =
                 []
             , errorIcon
             ]
-        , errorSubtext
+        , errorMessage
         , info.description
         ]
 
@@ -401,21 +395,34 @@ checkbox :
     ->
         { checked : Bool
         , onCheck : Bool -> msg
+        , error : Maybe String
         }
     -> Html msg
 checkbox info state =
-    label
+    div
         [ gridColumnStyle info.column
-        , class "my-4 inline-flex items-center"
+        , class "my-4"
         ]
-        [ input
-            [ type_ "checkbox"
-            , class "m-2 h-6 w-6 form-checkbox text-purple"
-            , checked state.checked
-            , Events.onCheck state.onCheck
+        [ label [ class "inline-flex items-center" ]
+            [ input
+                [ type_ "checkbox"
+                , class "m-2 h-6 w-6 form-checkbox text-purple"
+                , checked state.checked
+                , Events.onCheck state.onCheck
+                ]
+                []
+            , span [ class "ml-2" ] info.description
             ]
-            []
-        , span [ class "ml-2" ] info.description
+        , case state.error of
+            Just message ->
+                p [ class "flex flex-row items-center text-mds text-red" ]
+                    [ span [ class "flex m-2 w-6 h-6 items-center" ]
+                        [ warningIcon [ SvgA.class "m-auto" ] ]
+                    , text message
+                    ]
+
+            Nothing ->
+                nothing
         ]
 
 
@@ -482,5 +489,17 @@ submitButton { attributes, message } =
                 :: value message
                 :: attributes
             )
+            []
+        ]
+
+
+
+-- OTHER
+
+
+warningIcon : List (Svg.Attribute msg) -> Html msg
+warningIcon attributes =
+    Svg.svg (List.append attributes [ SvgA.class "h-5 w-5 text-red", SvgA.fill "currentColor", SvgA.viewBox "0 0 20 20" ])
+        [ Svg.path [ attribute "clip-rule" "evenodd", SvgA.d "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z", attribute "fill-rule" "evenodd" ]
             []
         ]
