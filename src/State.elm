@@ -145,7 +145,7 @@ getFormFieldState model fieldId validate =
     }
 
 
-getCheckboxState : Model -> String -> Bool
+getCheckboxState : Model -> String -> { checked : Bool, onCheck : Bool -> Msg }
 getCheckboxState model fieldId =
     let
         formCheckboxModel =
@@ -153,7 +153,9 @@ getCheckboxState model fieldId =
                 |> Dict.get fieldId
                 |> Maybe.withDefault FormField.initCheckbox
     in
-    formCheckboxModel.value
+    { checked = formCheckboxModel.value
+    , onCheck = \checked -> OnFormFieldCheck { id = fieldId, checked = checked }
+    }
 
 
 formFieldErrors : Model -> List { id : String, validate : String -> FieldErrorState } -> Maybe Model

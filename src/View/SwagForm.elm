@@ -396,12 +396,14 @@ helpSubtext attributes content =
 
 checkbox :
     { column : { start : Alignment, end : Alignment }
-    , checked : Bool
-    , onCheck : Bool -> msg
     , description : List (Html msg)
     }
+    ->
+        { checked : Bool
+        , onCheck : Bool -> msg
+        }
     -> Html msg
-checkbox info =
+checkbox info state =
     label
         [ gridColumnStyle info.column
         , class "my-4 inline-flex items-center"
@@ -409,8 +411,8 @@ checkbox info =
         [ input
             [ type_ "checkbox"
             , class "m-2 h-6 w-6 form-checkbox text-purple"
-            , checked info.checked
-            , Events.onCheck info.onCheck
+            , checked state.checked
+            , Events.onCheck state.onCheck
             ]
             []
         , span [ class "ml-2" ] info.description
