@@ -389,7 +389,8 @@ helpDescription attributes content =
 
 
 checkbox :
-    { column : { start : Alignment, end : Alignment }
+    { id : String
+    , column : { start : Alignment, end : Alignment }
     , description : List (Html msg)
     }
     ->
@@ -399,30 +400,52 @@ checkbox :
         }
     -> Html msg
 checkbox info state =
+    let
+        errorId =
+            info.id ++ "-require-checked"
+
+        error =
+            case state.error of
+                Just message ->
+                    { checkboxAttributes =
+                        [ attribute "aria-describedby" errorId
+                        , attribute "aria-invalid" "true"
+                        ]
+                    , message =
+                        p
+                            [ id errorId
+                            , class "flex flex-row items-center text-mds text-red"
+                            ]
+                            [ span [ class "flex m-2 w-6 h-6 items-center" ]
+                                [ warningIcon [ SvgA.class "m-auto" ] ]
+                            , text message
+                            ]
+                    }
+
+                Nothing ->
+                    { checkboxAttributes = []
+                    , message = nothing
+                    }
+    in
     div
         [ gridColumnStyle info.column
         , class "my-4"
         ]
         [ label [ class "inline-flex items-center" ]
             [ input
-                [ type_ "checkbox"
-                , class "m-2 h-6 w-6 form-checkbox text-purple"
-                , checked state.checked
-                , Events.onCheck state.onCheck
-                ]
+                (List.append
+                    [ id info.id
+                    , type_ "checkbox"
+                    , class "m-2 h-6 w-6 form-checkbox text-purple"
+                    , checked state.checked
+                    , Events.onCheck state.onCheck
+                    ]
+                    error.checkboxAttributes
+                )
                 []
             , span [ class "ml-2" ] info.description
             ]
-        , case state.error of
-            Just message ->
-                p [ class "flex flex-row items-center text-mds text-red" ]
-                    [ span [ class "flex m-2 w-6 h-6 items-center" ]
-                        [ warningIcon [ SvgA.class "m-auto" ] ]
-                    , text message
-                    ]
-
-            Nothing ->
-                nothing
+        , error.message
         ]
 
 

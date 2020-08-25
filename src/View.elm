@@ -158,7 +158,8 @@ viewField model autofocusId field =
 
         CheckboxField { id, column, description } ->
             View.SwagForm.checkbox
-                { column = column
+                { id = id
+                , column = column
                 , description = View.SwagForm.checkboxDescription description
                 }
                 (State.getCheckboxState model id)
