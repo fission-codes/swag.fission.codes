@@ -148,7 +148,7 @@ viewField model autofocusId field =
                 , description =
                     case description of
                         Just text ->
-                            View.SwagForm.helpSubtext [] text
+                            View.SwagForm.helpDescription [] text
 
                         Nothing ->
                             Html.nothing

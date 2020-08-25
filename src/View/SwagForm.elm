@@ -1,4 +1,4 @@
-module View.SwagForm exposing (Alignment(..), checkbox, checkboxDescription, footerLink, helpSubtext, submitButton, swagPage, textInput, toggle)
+module View.SwagForm exposing (Alignment(..), checkbox, checkboxDescription, footerLink, helpDescription, submitButton, swagPage, textInput, toggle)
 
 import Html exposing (..)
 import Html.Attributes
@@ -385,8 +385,8 @@ textInput info state =
         ]
 
 
-helpSubtext : List (Attribute msg) -> String -> Html msg
-helpSubtext attributes content =
+helpDescription : List (Attribute msg) -> String -> Html msg
+helpDescription attributes content =
     p
         (class "mt-2 text-mds text-gray-300"
             :: attributes
