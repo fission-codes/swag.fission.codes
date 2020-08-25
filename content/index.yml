@@ -60,7 +60,7 @@ form:
       title: "Company name"
       column_start: first
       column_end: last
-      subtext: Company or business name if this mailing address goes to an office
+      description: Company or business name if this mailing address goes to an office
       validation: []
 
     - type: text
@@ -68,7 +68,7 @@ form:
       title: Street Address
       column_start: first
       column_end: 5
-      subtext: 1234 Main Street, Apt 56
+      description: 1234 Main Street, Apt 56
       validation:
         - filled:
             description: Please fill in this field
@@ -79,7 +79,7 @@ form:
       title: City and State
       column_start: 5
       column_end: last
-      subtext: e.g. “Vancour, BC”, or “Nixa, Missouri”
+      description: e.g. “Vancour, BC”, or “Nixa, Missouri”
       validation:
         - filled:
             description: Please fill in this field

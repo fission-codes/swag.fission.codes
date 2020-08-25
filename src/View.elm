@@ -68,7 +68,7 @@ type FieldData
         { id : String
         , title : String
         , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
-        , subtext : Maybe String
+        , description : Maybe String
         , validation : String -> FieldErrorState
         }
     | CheckboxField
@@ -136,7 +136,7 @@ view data model =
 viewField : Model -> String -> FieldData -> Html Msg
 viewField model autofocusId field =
     case field of
-        InputField { id, title, column, subtext, validation } ->
+        InputField { id, title, column, description, validation } ->
             View.SwagForm.textInput
                 { attributes =
                     [ autofocus (id == autofocusId)
@@ -145,8 +145,8 @@ viewField model autofocusId field =
                 , column = column
                 , id = id
                 , title = title
-                , subtext =
-                    case subtext of
+                , description =
+                    case description of
                         Just text ->
                             View.SwagForm.helpSubtext [] text
 
@@ -233,7 +233,7 @@ decodeInputField :
         { id : String
         , title : String
         , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
-        , subtext : Maybe String
+        , description : Maybe String
         , validation : String -> FieldErrorState
         }
 decodeInputField =
@@ -245,7 +245,7 @@ decodeInputField =
                         (\title ->
                             decodeSubtext
                                 |> Yaml.andThen
-                                    (\subtext ->
+                                    (\description ->
                                         decodeColumn
                                             |> Yaml.andThen
                                                 (\column ->
@@ -255,7 +255,7 @@ decodeInputField =
                                                                 { id = id
                                                                 , title = title
                                                                 , column = column
-                                                                , subtext = subtext
+                                                                , description = description
                                                                 , validation = validation
                                                                 }
                                                             )
@@ -300,7 +300,7 @@ decodeColumn =
 decodeSubtext : Yaml.Decoder (Maybe String)
 decodeSubtext =
     Yaml.oneOf
-        [ Yaml.field "subtext" (Yaml.map Just Yaml.string)
+        [ Yaml.field "description" (Yaml.map Just Yaml.string)
         , Yaml.succeed Nothing
         ]
 

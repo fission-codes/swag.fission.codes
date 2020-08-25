@@ -315,7 +315,7 @@ textInput :
     , attributes : List (Attribute msg)
     , id : String
     , title : String
-    , subtext : Html msg
+    , description : Html msg
     }
     ->
         { value : String
@@ -381,7 +381,7 @@ textInput info state =
             , errorIcon
             ]
         , errorSubtext
-        , info.subtext
+        , info.description
         ]
 
 
