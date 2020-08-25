@@ -13,7 +13,7 @@ form:
     # From the SIB UI as described here: https://talk.fission.codes/t/send-in-blue-for-swag-landing-page/966/4
     "https://5d04d668.sibforms.com/serve/MUIEAE1F1kMPvB_leq-apIe4FvZagp1EgtljkIf1EQ-BDERfIN98YQhjbWjdTi-2eKy9IPUovj6kMItaZTVAodVJlyoTX8BPhS0LjzVaP6XSMnXu6Xey9Ez4VGzSV62IuIsnDS55QQiwcA7oRtB8aPU0EQ3AJG0dyICWT82taqDKeisgU1jdlnvk2Fj5oRFUiwsqYVIsHCL5ASEN"
 
-  call_to_action:
+  submit_button:
 
     waiting: Get some stickers!
 

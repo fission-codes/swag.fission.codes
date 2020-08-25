@@ -1,4 +1,4 @@
-module View.SwagForm exposing (Alignment(..), callToActionButton, checkbox, footerLink, helpSubtext, swagPage, textInput, toggle)
+module View.SwagForm exposing (Alignment(..), checkbox, footerLink, helpSubtext, submitButton, swagPage, textInput, toggle)
 
 import Html exposing (..)
 import Html.Attributes
@@ -458,12 +458,12 @@ toggle attributes isOn =
         ]
 
 
-callToActionButton :
+submitButton :
     { attributes : List (Attribute msg)
     , message : String
     }
     -> Html msg
-callToActionButton { attributes, message } =
+submitButton { attributes, message } =
     div
         [ class "mt-10 flex flex-col"
         , gridColumnStyle { start = First, end = Last }

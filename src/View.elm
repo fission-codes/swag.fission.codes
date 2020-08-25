@@ -57,7 +57,7 @@ type alias HeroData =
 
 type alias FormData =
     { submissionUrl : String
-    , callToAction : CallToActionData
+    , submitButton : SubmitButtonData
     , autofocus : String
     , fields : List FieldData
     }
@@ -72,7 +72,7 @@ type alias FieldData =
     }
 
 
-type alias CallToActionData =
+type alias SubmitButtonData =
     { waiting : String
     , submitting : String
     , error : String
@@ -113,21 +113,21 @@ view data model =
                             , description = [] -- [ Html.Styled.text "Yes, I understand that I'm opting in to sign up for the Fission product email list. Send me stickers!" ]
                             }
                             (State.getCheckboxState model "accept")
-                      , View.SwagForm.callToActionButton
+                      , View.SwagForm.submitButton
                             { attributes = []
                             , message =
                                 case model.submissionStatus of
                                     Waiting ->
-                                        data.form.callToAction.waiting
+                                        data.form.submitButton.waiting
 
                                     Submitting ->
-                                        data.form.callToAction.submitting
+                                        data.form.submitButton.submitting
 
                                     Error ->
-                                        data.form.callToAction.error
+                                        data.form.submitButton.error
 
                                     Submitted ->
-                                        data.form.callToAction.submitted
+                                        data.form.submitButton.submitted
                             }
                       ]
                     ]
@@ -177,14 +177,14 @@ decodeFormData : Yaml.Decoder FormData
 decodeFormData =
     Yaml.succeed FormData
         |> Yaml.andMap (Yaml.field "submission_url" Yaml.string)
-        |> Yaml.andMap (Yaml.field "call_to_action" callToActionData)
+        |> Yaml.andMap (Yaml.field "submit_button" submitButtonData)
         |> Yaml.andMap (Yaml.field "autofocus" Yaml.string)
         |> Yaml.andMap (Yaml.field "fields" (Yaml.list decodeFieldData))
 
 
-callToActionData : Yaml.Decoder CallToActionData
-callToActionData =
-    Yaml.succeed CallToActionData
+submitButtonData : Yaml.Decoder SubmitButtonData
+submitButtonData =
+    Yaml.succeed SubmitButtonData
         |> Yaml.andMap (Yaml.field "waiting" Yaml.string)
         |> Yaml.andMap (Yaml.field "submitting" Yaml.string)
         |> Yaml.andMap (Yaml.field "error" Yaml.string)
