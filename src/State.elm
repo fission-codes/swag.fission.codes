@@ -158,31 +158,41 @@ getCheckboxState model fieldId =
     }
 
 
-formFieldErrors : Model -> List { id : String, validate : String -> FieldErrorState } -> Maybe Model
+formFieldErrors : Model -> List FieldDataInfo -> Maybe Model
 formFieldErrors model fields =
+    let
+        checkInputField field modelWithErrors =
+            let
+                updatedField =
+                    model.formFields
+                        |> Dict.get field.id
+                        |> Maybe.withDefault FormField.init
+                        |> FormField.checkValidation field.validate
+
+                updatedModel =
+                    Maybe.withDefault model modelWithErrors
+            in
+            if Maybe.isJust updatedField.error then
+                Just
+                    { updatedModel
+                        | formFields =
+                            updatedModel.formFields
+                                |> Dict.insert field.id updatedField
+                    }
+
+            else
+                modelWithErrors
+    in
     fields
         |> List.foldl
-            (\field modelWithErrors ->
-                let
-                    updatedField =
-                        model.formFields
-                            |> Dict.get field.id
-                            |> Maybe.withDefault FormField.init
-                            |> FormField.checkValidation field.validate
+            (\fieldInfo modelWithErrors ->
+                case fieldInfo of
+                    FieldInfoInput field ->
+                        checkInputField field modelWithErrors
 
-                    updatedModel =
-                        Maybe.withDefault model modelWithErrors
-                in
-                if Maybe.isJust updatedField.error then
-                    Just
-                        { updatedModel
-                            | formFields =
-                                updatedModel.formFields
-                                    |> Dict.insert field.id updatedField
-                        }
-
-                else
-                    modelWithErrors
+                    FieldInfoCheckbox field ->
+                        -- TODO skipped for now
+                        modelWithErrors
             )
             Nothing
 

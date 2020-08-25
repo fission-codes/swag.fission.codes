@@ -29,7 +29,8 @@ form:
 
   fields:
 
-    - id: "FIRSTNAME"
+    - type: text
+      id: "FIRSTNAME"
       title: Your first name
       column_start: first
       column_end: middle
@@ -37,7 +38,8 @@ form:
         - filled:
             description: Please fill in this field. # can be something custom / specific for this field, e.g. "We want to adress you personally, so please tell us your name."
 
-    - id: "LASTNAME"
+    - type: text
+      id: "LASTNAME"
       title: Your last name
       column_start: middle
       column_end: last
@@ -45,21 +47,24 @@ form:
         - filled:
             description: Please fill in this field.
 
-    - id: "EMAIL"
+    - type: text
+      id: "EMAIL"
       title: Email
       column_start: first
       column_end: last
       validation:
         - email
 
-    - id: "COMPANY"
+    - type: text
+      id: "COMPANY"
       title: "Company name"
       column_start: first
       column_end: last
       subtext: Company or business name if this mailing address goes to an office
       validation: []
 
-    - id: "ADDRESS_STREET"
+    - type: text
+      id: "ADDRESS_STREET"
       title: Street Address
       column_start: first
       column_end: 5
@@ -69,7 +74,8 @@ form:
             description: Please fill in this field
 
 
-    - id: "ADDRESS_CITYSTATE"
+    - type: text
+      id: "ADDRESS_CITYSTATE"
       title: City and State
       column_start: 5
       column_end: last
@@ -79,7 +85,8 @@ form:
             description: Please fill in this field
 
 
-    - id: "ADDRESS_POSTAL"
+    - type: text
+      id: "ADDRESS_POSTAL"
       title: Postal / ZIP Code
       column_start: first
       column_end: 4
@@ -88,7 +95,8 @@ form:
             description: Please fill in this field
 
 
-    - id: "ADDRESS_COUNTRY"
+    - type: text
+      id: "ADDRESS_COUNTRY"
       title: Country
       column_start: 4
       column_end: last
@@ -96,3 +104,8 @@ form:
         - filled:
             description: Please fill in this field
 
+    - type: checkbox
+      id: "ACCEPTED"
+      column_start: first
+      column_end: last
+      description: Yes, I understand that I'm opting in to sign up for the Fission product email list. Send me stickers!

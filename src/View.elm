@@ -63,13 +63,19 @@ type alias FormData =
     }
 
 
-type alias FieldData =
-    { id : String
-    , title : String
-    , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
-    , subtext : Maybe String
-    , validation : String -> FieldErrorState
-    }
+type FieldData
+    = InputField
+        { id : String
+        , title : String
+        , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
+        , subtext : Maybe String
+        , validation : String -> FieldErrorState
+        }
+    | CheckboxField
+        { id : String
+        , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
+        , description : String
+        }
 
 
 type alias SubmitButtonData =
@@ -97,10 +103,7 @@ view data model =
             , onSubmit =
                 OnFormSubmit
                     { submissionUrl = data.form.submissionUrl
-                    , fields =
-                        data.form.fields
-                            |> List.map
-                                (\field -> { id = field.id, validate = field.validation })
+                    , fields = data.form.fields |> List.map extractFieldInfo
                     }
             , content =
                 List.concat
@@ -108,12 +111,7 @@ view data model =
                       , Html.input [ type_ "hidden", name "html_type", value "simple" ] []
                       ]
                     , List.map (viewField model data.form.autofocus) data.form.fields
-                    , [ View.SwagForm.checkbox
-                            { column = { start = View.SwagForm.First, end = View.SwagForm.Last }
-                            , description = [] -- [ Html.Styled.text "Yes, I understand that I'm opting in to sign up for the Fission product email list. Send me stickers!" ]
-                            }
-                            (State.getCheckboxState model "accept")
-                      , View.SwagForm.submitButton
+                    , [ View.SwagForm.submitButton
                             { attributes = []
                             , message =
                                 case model.submissionStatus of
@@ -136,24 +134,43 @@ view data model =
 
 
 viewField : Model -> String -> FieldData -> Html Msg
-viewField model autofocusId { id, title, column, subtext, validation } =
-    View.SwagForm.textInput
-        { attributes =
-            [ autofocus (id == autofocusId)
-            , name id
-            ]
-        , column = column
-        , id = id
-        , title = title
-        , subtext =
-            case subtext of
-                Just text ->
-                    View.SwagForm.helpSubtext [] text
+viewField model autofocusId field =
+    case field of
+        InputField { id, title, column, subtext, validation } ->
+            View.SwagForm.textInput
+                { attributes =
+                    [ autofocus (id == autofocusId)
+                    , name id
+                    ]
+                , column = column
+                , id = id
+                , title = title
+                , subtext =
+                    case subtext of
+                        Just text ->
+                            View.SwagForm.helpSubtext [] text
 
-                Nothing ->
-                    Html.nothing
-        }
-        (State.getFormFieldState model id validation)
+                        Nothing ->
+                            Html.nothing
+                }
+                (State.getFormFieldState model id validation)
+
+        CheckboxField { id, column, description } ->
+            View.SwagForm.checkbox
+                { column = column
+                , description = View.SwagForm.checkboxDescription description
+                }
+                (State.getCheckboxState model id)
+
+
+extractFieldInfo : FieldData -> FieldDataInfo
+extractFieldInfo fieldData =
+    case fieldData of
+        InputField field ->
+            FieldInfoInput { id = field.id, validate = field.validation }
+
+        CheckboxField field ->
+            FieldInfoCheckbox { id = field.id }
 
 
 
@@ -194,6 +211,32 @@ submitButtonData =
 decodeFieldData : Yaml.Decoder FieldData
 decodeFieldData =
     -- Let's hope this style gets fixed in elm-format 1.0.0
+    Yaml.field "type" Yaml.string
+        |> Yaml.andThen
+            (\type_ ->
+                case type_ of
+                    "text" ->
+                        decodeInputField
+                            |> Yaml.map InputField
+
+                    "checkbox" ->
+                        decodeCheckboxField
+                            |> Yaml.map CheckboxField
+
+                    _ ->
+                        Yaml.fail "The 'type' field must be either 'text' or 'checkbox'"
+            )
+
+
+decodeInputField :
+    Yaml.Decoder
+        { id : String
+        , title : String
+        , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
+        , subtext : Maybe String
+        , validation : String -> FieldErrorState
+        }
+decodeInputField =
     Yaml.field "id" Yaml.string
         |> Yaml.andThen
             (\id ->
@@ -203,28 +246,55 @@ decodeFieldData =
                             decodeSubtext
                                 |> Yaml.andThen
                                     (\subtext ->
-                                        Yaml.field "column_start" decodeAlignment
+                                        decodeColumn
                                             |> Yaml.andThen
-                                                (\start ->
-                                                    Yaml.field "column_end" decodeAlignment
-                                                        |> Yaml.andThen
-                                                            (\end ->
-                                                                Yaml.field "validation" decodeValidation
-                                                                    |> Yaml.andThen
-                                                                        (\validation ->
-                                                                            Yaml.succeed
-                                                                                { id = id
-                                                                                , title = title
-                                                                                , column = { start = start, end = end }
-                                                                                , subtext = subtext
-                                                                                , validation = validation
-                                                                                }
-                                                                        )
+                                                (\column ->
+                                                    Yaml.field "validation" decodeValidation
+                                                        |> Yaml.map
+                                                            (\validation ->
+                                                                { id = id
+                                                                , title = title
+                                                                , column = column
+                                                                , subtext = subtext
+                                                                , validation = validation
+                                                                }
                                                             )
                                                 )
                                     )
                         )
             )
+
+
+decodeCheckboxField :
+    Yaml.Decoder
+        { id : String
+        , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
+        , description : String
+        }
+decodeCheckboxField =
+    Yaml.field "id" Yaml.string
+        |> Yaml.andThen
+            (\id ->
+                decodeColumn
+                    |> Yaml.andThen
+                        (\column ->
+                            Yaml.field "description" Yaml.string
+                                |> Yaml.map
+                                    (\description ->
+                                        { id = id
+                                        , column = column
+                                        , description = description
+                                        }
+                                    )
+                        )
+            )
+
+
+decodeColumn : Yaml.Decoder { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
+decodeColumn =
+    Yaml.succeed (\start end -> { start = start, end = end })
+        |> Yaml.andMap (Yaml.field "column_start" decodeAlignment)
+        |> Yaml.andMap (Yaml.field "column_end" decodeAlignment)
 
 
 decodeSubtext : Yaml.Decoder (Maybe String)

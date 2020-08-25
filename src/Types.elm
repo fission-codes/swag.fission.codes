@@ -43,7 +43,12 @@ type alias FieldErrorState =
 type Msg
     = OnFormFieldInput { id : String, value : String }
     | OnFormFieldBlur { id : String, validate : String -> FieldErrorState }
+    | OnFormSubmit { submissionUrl : String, fields : List FieldDataInfo }
     | OnFormFieldCheck { id : String, checked : Bool }
-    | OnFormSubmit { submissionUrl : String, fields : List { id : String, validate : String -> FieldErrorState } }
     | FocusedForm
     | GotFormSubmissionResponse (Result Http.Error ())
+
+
+type FieldDataInfo
+    = FieldInfoInput { id : String, validate : String -> FieldErrorState }
+    | FieldInfoCheckbox { id : String }

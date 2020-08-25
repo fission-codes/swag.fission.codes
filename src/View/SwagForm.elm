@@ -1,4 +1,4 @@
-module View.SwagForm exposing (Alignment(..), checkbox, footerLink, helpSubtext, submitButton, swagPage, textInput, toggle)
+module View.SwagForm exposing (Alignment(..), checkbox, checkboxDescription, footerLink, helpSubtext, submitButton, swagPage, textInput, toggle)
 
 import Html exposing (..)
 import Html.Attributes
@@ -417,6 +417,11 @@ checkbox info state =
             []
         , span [ class "ml-2" ] info.description
         ]
+
+
+checkboxDescription : String -> List (Html msg)
+checkboxDescription description =
+    [ text description ]
 
 
 toggle : List (Attribute msg) -> Bool -> Html msg
