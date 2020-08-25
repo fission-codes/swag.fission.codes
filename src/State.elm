@@ -155,7 +155,7 @@ getCheckboxState model fieldId =
     in
     { checked = formCheckboxModel.value
     , onCheck = \checked -> OnFormFieldCheck { id = fieldId, checked = checked }
-    , error = Just "Yo just fill this, okay?"
+    , error = formCheckboxModel.error
     }
 
 
@@ -164,14 +164,14 @@ formFieldErrors model fields =
     let
         checkInputField field modelWithErrors =
             let
+                updatedModel =
+                    Maybe.withDefault model modelWithErrors
+
                 updatedField =
-                    model.formFields
+                    updatedModel.formFields
                         |> Dict.get field.id
                         |> Maybe.withDefault FormField.init
                         |> FormField.checkValidation field.validate
-
-                updatedModel =
-                    Maybe.withDefault model modelWithErrors
             in
             if Maybe.isJust updatedField.error then
                 Just
@@ -192,8 +192,34 @@ formFieldErrors model fields =
                         checkInputField field modelWithErrors
 
                     FieldInfoCheckbox field ->
-                        -- TODO skipped for now
-                        modelWithErrors
+                        case field.requireChecked of
+                            Just message ->
+                                let
+                                    updatedModel =
+                                        Maybe.withDefault model modelWithErrors
+
+                                    updatedCheckbox =
+                                        updatedModel.formCheckboxes
+                                            |> Dict.get field.id
+                                            |> Maybe.withDefault FormField.initCheckbox
+                                            |> checkCheckbox
+
+                                    checkCheckbox checkbox =
+                                        if checkbox.value then
+                                            { checkbox | error = Nothing }
+
+                                        else
+                                            { checkbox | error = Just message }
+                                in
+                                Just
+                                    { updatedModel
+                                        | formCheckboxes =
+                                            updatedModel.formCheckboxes
+                                                |> Dict.insert field.id updatedCheckbox
+                                    }
+
+                            Nothing ->
+                                modelWithErrors
             )
             Nothing
 

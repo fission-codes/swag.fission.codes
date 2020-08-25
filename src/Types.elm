@@ -25,7 +25,7 @@ type alias FormField =
 
 type alias FormCheckbox =
     { value : Bool
-    , error : FieldErrorState
+    , error : Maybe String
     }
 
 
@@ -51,4 +51,4 @@ type Msg
 
 type FieldDataInfo
     = FieldInfoInput { id : String, validate : String -> FieldErrorState }
-    | FieldInfoCheckbox { id : String }
+    | FieldInfoCheckbox { id : String, requireChecked : Maybe String }

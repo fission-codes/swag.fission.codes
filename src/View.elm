@@ -75,6 +75,7 @@ type FieldData
         { id : String
         , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
         , description : String
+        , requireChecked : Maybe String
         }
 
 
@@ -170,7 +171,7 @@ extractFieldInfo fieldData =
             FieldInfoInput { id = field.id, validate = field.validation }
 
         CheckboxField field ->
-            FieldInfoCheckbox { id = field.id }
+            FieldInfoCheckbox { id = field.id, requireChecked = field.requireChecked }
 
 
 
@@ -270,6 +271,7 @@ decodeCheckboxField :
         { id : String
         , column : { start : View.SwagForm.Alignment, end : View.SwagForm.Alignment }
         , description : String
+        , requireChecked : Maybe String
         }
 decodeCheckboxField =
     Yaml.field "id" Yaml.string
@@ -279,12 +281,31 @@ decodeCheckboxField =
                     |> Yaml.andThen
                         (\column ->
                             Yaml.field "description" Yaml.string
-                                |> Yaml.map
+                                |> Yaml.andThen
                                     (\description ->
-                                        { id = id
-                                        , column = column
-                                        , description = description
-                                        }
+                                        Yaml.field "require_checked"
+                                            (Yaml.oneOf
+                                                [ Yaml.string |> Yaml.map Just
+                                                , Yaml.bool
+                                                    |> Yaml.andThen
+                                                        (\isRequired ->
+                                                            if isRequired then
+                                                                Yaml.fail ""
+
+                                                            else
+                                                                Yaml.succeed Nothing
+                                                        )
+                                                , Yaml.fail "requireChecked must be either false or a string containing an error message"
+                                                ]
+                                            )
+                                            |> Yaml.map
+                                                (\requireChecked ->
+                                                    { id = id
+                                                    , column = column
+                                                    , description = description
+                                                    , requireChecked = requireChecked
+                                                    }
+                                                )
                                     )
                         )
             )
