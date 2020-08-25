@@ -109,6 +109,11 @@ view data model =
                       ]
                     , List.map (viewField model data.form.autofocus) data.form.fields
                     , [ View.SwagForm.checkbox
+                            { column = { start = View.SwagForm.First, end = View.SwagForm.Last }
+                            , checked = model.checkbox
+                            , onCheck = \checked -> OnFormFieldCheck { checked = checked }
+                            , description = [] -- [ Html.Styled.text "Yes, I understand that I'm opting in to sign up for the Fission product email list. Send me stickers!" ]
+                            }
                       , View.SwagForm.callToActionButton
                             { attributes = []
                             , message =

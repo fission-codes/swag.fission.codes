@@ -13,6 +13,7 @@ type alias ImagePath =
 type alias Model =
     { formFields : Dict String FormField
     , submissionStatus : Status
+    , checkbox : Bool
     }
 
 
@@ -37,5 +38,6 @@ type Msg
     = OnFormFieldInput { id : String, value : String }
     | OnFormFieldBlur { id : String, validate : String -> FieldErrorState }
     | OnFormSubmit { submissionUrl : String, fields : List { id : String, validate : String -> FieldErrorState } }
+    | OnFormFieldCheck { checked : Bool }
     | FocusedForm
     | GotFormSubmissionResponse (Result Http.Error ())

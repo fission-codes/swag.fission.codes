@@ -5,6 +5,7 @@ import Html.Attributes
     exposing
         ( alt
         , attribute
+        , checked
         , class
         , for
         , height
@@ -393,18 +394,26 @@ helpSubtext attributes content =
         [ text content ]
 
 
-checkbox : Html msg
-checkbox =
+checkbox :
+    { column : { start : Alignment, end : Alignment }
+    , checked : Bool
+    , onCheck : Bool -> msg
+    , description : List (Html msg)
+    }
+    -> Html msg
+checkbox info =
     label
-        [ gridColumnStyle { start = First, end = Last }
+        [ gridColumnStyle info.column
         , class "my-4 inline-flex items-center"
         ]
         [ input
             [ type_ "checkbox"
             , class "m-2 h-6 w-6 form-checkbox text-purple"
+            , checked info.checked
+            , Events.onCheck info.onCheck
             ]
             []
-        , span [ class "ml-2" ] [ text "Yes, I understand that I'm opting in to sign up for the Fission product email list. Send me stickers!" ]
+        , span [ class "ml-2" ] info.description
         ]
 
 

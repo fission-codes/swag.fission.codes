@@ -18,6 +18,7 @@ init : ( Model, Cmd Msg )
 init =
     ( { formFields = Dict.empty
       , submissionStatus = Waiting
+      , checkbox = False
       }
       -- We also need to focus the first form field here
       -- setting 'autofocus' on the input is not sufficient:
@@ -39,6 +40,11 @@ update msg model =
 
         OnFormFieldBlur { id, validate } ->
             ( updateFormField model id (FormField.checkValidation validate)
+            , Cmd.none
+            )
+
+        OnFormFieldCheck { checked } ->
+            ( { model | checkbox = checked }
             , Cmd.none
             )
 
