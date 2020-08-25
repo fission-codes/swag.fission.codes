@@ -11,6 +11,13 @@ init =
     }
 
 
+initCheckbox : FormCheckbox
+initCheckbox =
+    { value = False
+    , error = Nothing
+    }
+
+
 submissionPart : ( String, FormField ) -> Http.Part
 submissionPart ( fieldId, { value } ) =
     Http.stringPart fieldId value

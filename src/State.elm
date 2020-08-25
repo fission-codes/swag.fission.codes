@@ -1,5 +1,6 @@
 module State exposing
-    ( getFormFieldState
+    ( getCheckboxState
+    , getFormFieldState
     , init
     , subscriptions
     , update
@@ -17,8 +18,8 @@ import Types exposing (..)
 init : ( Model, Cmd Msg )
 init =
     ( { formFields = Dict.empty
+      , formCheckboxes = Dict.empty
       , submissionStatus = Waiting
-      , checkbox = False
       }
       -- We also need to focus the first form field here
       -- setting 'autofocus' on the input is not sufficient:
@@ -43,8 +44,8 @@ update msg model =
             , Cmd.none
             )
 
-        OnFormFieldCheck { checked } ->
-            ( { model | checkbox = checked }
+        OnFormFieldCheck { id, checked } ->
+            ( updateFormCheckbox model id (\checkbox -> { checkbox | value = checked })
             , Cmd.none
             )
 
@@ -107,6 +108,19 @@ updateFormField model fieldId updater =
     }
 
 
+updateFormCheckbox : Model -> String -> (FormCheckbox -> FormCheckbox) -> Model
+updateFormCheckbox model fieldId updater =
+    { model
+        | formCheckboxes =
+            model.formCheckboxes
+                |> Dict.update fieldId
+                    (Maybe.withDefault FormField.initCheckbox
+                        >> updater
+                        >> Just
+                    )
+    }
+
+
 getFormFieldState :
     Model
     -> String
@@ -129,6 +143,17 @@ getFormFieldState model fieldId validate =
     , onInput = \value -> OnFormFieldInput { id = fieldId, value = value }
     , onBlur = OnFormFieldBlur { id = fieldId, validate = validate }
     }
+
+
+getCheckboxState : Model -> String -> Bool
+getCheckboxState model fieldId =
+    let
+        formCheckboxModel =
+            model.formCheckboxes
+                |> Dict.get fieldId
+                |> Maybe.withDefault FormField.initCheckbox
+    in
+    formCheckboxModel.value
 
 
 formFieldErrors : Model -> List { id : String, validate : String -> FieldErrorState } -> Maybe Model
