@@ -37,7 +37,7 @@ const tailwindConfig = {
                 '22': 'repeat(22, minmax(0, 1fr))',
             },
             boxShadow: {
-                outline: `0 0 0 3px rgba(100, 70, 250, 0.5)`, // kit.colors.purple wiht 50% transparency
+                outline: `0 0 0 3px rgba(100, 70, 250, 0.5)`, // kit.colors.purple with 50% transparency
             },
         },
 
@@ -53,6 +53,8 @@ const tailwindConfig = {
                     }
                 },
                 checkbox: {
+                    borderWidth: '2px',
+                    borderColor: kit.colors.gray_300,
                     '&:focus': {
                         boxShadow: theme('boxShadow.outline'),
                         borderColor: kit.colors.purple,
