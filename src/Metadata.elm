@@ -9,8 +9,9 @@ module Metadata exposing
 import Head
 import Head.Seo as Seo
 import Json.Decode as Decode exposing (Decoder)
+import Json.Decode.Extra as Decode
 import List.Extra
-import Pages exposing (images)
+import Pages
 import Pages.ImagePath as ImagePath
 import Types exposing (..)
 
@@ -20,12 +21,31 @@ import Types exposing (..)
 
 
 type Frontmatter
-    = PageSwagForm
+    = PageSwagForm MetaInfo
+
+
+type alias MetaInfo =
+    { title : String
+    , siteName : String
+    , description : String
+    , image : ImagePath
+    , imageAlt : String
+    }
 
 
 decoder : Decoder Frontmatter
 decoder =
-    Decode.succeed PageSwagForm
+    Decode.map PageSwagForm decoderMetaInfo
+
+
+decoderMetaInfo : Decoder MetaInfo
+decoderMetaInfo =
+    Decode.succeed MetaInfo
+        |> Decode.andMap (Decode.field "title" Decode.string)
+        |> Decode.andMap (Decode.field "site_name" Decode.string)
+        |> Decode.andMap (Decode.field "description" Decode.string)
+        |> Decode.andMap (Decode.field "image" imageDecoder)
+        |> Decode.andMap (Decode.field "image_alt" Decode.string)
 
 
 imageDecoder : Decoder ImagePath
@@ -58,8 +78,8 @@ findMatchingImage imageAssetPath =
 
 
 pageTitle : Frontmatter -> String
-pageTitle PageSwagForm =
-    "Get Fission Swag"
+pageTitle (PageSwagForm { title }) =
+    title
 
 
 
@@ -69,11 +89,6 @@ pageTitle PageSwagForm =
 canonicalSiteUrl : String
 canonicalSiteUrl =
     "https://swag.fission.codes"
-
-
-siteTagline : String
-siteTagline =
-    "Order swag from Fission"
 
 
 
@@ -89,18 +104,18 @@ siteTagline =
 head : Frontmatter -> List (Head.Tag Pages.PathKey)
 head metadata =
     case metadata of
-        PageSwagForm ->
-            Seo.summaryLarge
+        PageSwagForm metaInfo ->
+            Seo.summary
                 { canonicalUrlOverride = Nothing
-                , siteName = siteTagline
+                , siteName = metaInfo.siteName
+                , title = metaInfo.title
+                , description = metaInfo.description
                 , image =
-                    { url = images.swagLogoVertical
-                    , alt = "Fission Logo"
-                    , dimensions = Just { width = 390, height = 183 }
+                    { url = metaInfo.image
+                    , alt = metaInfo.imageAlt
+                    , dimensions = ImagePath.dimensions metaInfo.image
                     , mimeType = Nothing
                     }
-                , description = siteTagline
                 , locale = Nothing
-                , title = "Get Fission Swag"
                 }
                 |> Seo.website

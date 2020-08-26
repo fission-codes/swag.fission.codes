@@ -31,7 +31,7 @@ yamlDocument :
     }
 yamlDocument =
     { extension = "yml"
-    , metadata = Json.Decode.succeed Metadata.PageSwagForm
+    , metadata = Metadata.decoder
     , body =
         \body ->
             Yaml.fromString decodeData body
