@@ -4,6 +4,7 @@ site_name: Get Fission Swag?
 description: Get swag, you know?
 image: images/swag-logo-vertical.png
 image_alt: Fission Logo
+summary_type: normal
 ---
 hero:
 

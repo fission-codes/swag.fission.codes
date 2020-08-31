@@ -30,7 +30,13 @@ type alias MetaInfo =
     , description : String
     , image : ImagePath
     , imageAlt : String
+    , summaryType : SummaryType
     }
+
+
+type SummaryType
+    = SummaryLarge
+    | SummaryNormal
 
 
 decoder : Decoder Frontmatter
@@ -46,6 +52,24 @@ decoderMetaInfo =
         |> Decode.andMap (Decode.field "description" Decode.string)
         |> Decode.andMap (Decode.field "image" imageDecoder)
         |> Decode.andMap (Decode.field "image_alt" Decode.string)
+        |> Decode.andMap (Decode.field "summary_type" decodeSummaryType)
+
+
+decodeSummaryType : Decoder SummaryType
+decodeSummaryType =
+    Decode.string
+        |> Decode.andThen
+            (\summary ->
+                case summary of
+                    "normal" ->
+                        Decode.succeed SummaryNormal
+
+                    "large" ->
+                        Decode.succeed SummaryLarge
+
+                    other ->
+                        Decode.fail ("Unrecognized summary_type: " ++ other ++ ".")
+            )
 
 
 imageDecoder : Decoder ImagePath
@@ -105,7 +129,16 @@ head : Frontmatter -> List (Head.Tag Pages.PathKey)
 head metadata =
     case metadata of
         PageSwagForm metaInfo ->
-            Seo.summary
+            let
+                summary =
+                    case metaInfo.summaryType of
+                        SummaryNormal ->
+                            Seo.summary
+
+                        SummaryLarge ->
+                            Seo.summaryLarge
+            in
+            summary
                 { canonicalUrlOverride = Nothing
                 , siteName = metaInfo.siteName
                 , title = metaInfo.title
