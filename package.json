@@ -4,7 +4,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "build": "npm run styles:build && npm run pages:build",
+    "build": "NODE_ENV=production npm run styles:build && npm run pages:build",
     "start": "npm run styles:build && npm run pages:dev & npm run styles:watch",
     "serve": "http-server -p 3000 dist/",
     "pages:build": "elm-pages build",
